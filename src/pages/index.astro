@@ -1,0 +1,1239 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base
+  title="lawreview.tools — Bluebook Citation & Archiving Suite"
+  description="A free, private suite of Bluebook tools for law review editors and legal scholars. Built at NYU Law."
+>
+
+<!-- ══════════════════════════════════════════════════════════
+     MODULE 1: NAVBAR
+══════════════════════════════════════════════════════════ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo" aria-label="lawreview.tools home">
+      <span class="nav-logo-icon" aria-hidden="true">⚖</span>
+      <span class="nav-logo-text">lawreview.tools</span>
+    </a>
+    <div class="nav-right">
+      <a href="#tools" class="nav-link nav-tools-link">Tools</a>
+      <a
+        href="https://github.com/kirinccchang"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="nav-link nav-github"
+        aria-label="GitHub"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+      </a>
+      <button class="nav-theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════
+     MODULE 2: HERO
+══════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-bg-gradient" aria-hidden="true"></div>
+  <div class="container hero-inner">
+
+    <!-- Left column: copy -->
+    <div class="hero-copy">
+      <h1 class="hero-h1 anim-1">
+        Stop Losing Citations<br>
+        to <span class="accent-text">Human Error.</span>
+      </h1>
+
+      <p class="hero-subtitle anim-2">
+        A free, private suite of Bluebook tools<br>
+        for law review editors and legal scholars.<br>
+        <span class="built-at-nyu" tabindex="0">Built at NYU Law.</span>
+      </p>
+      <div class="built-at-tooltip" aria-hidden="true">
+        by Kirin Chang, Research Fellow, U.S.-Asia Law Institute
+      </div>
+
+      <div class="hero-badge anim-3" aria-label="Privacy guarantee">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        100% In-Browser · Your files never leave your device
+      </div>
+
+      <div class="hero-ctas anim-4">
+        <a href="#tools" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+          Explore the Tools
+        </a>
+        <a
+          href="https://github.com/kirinccchang"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-ghost"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          Star on GitHub
+        </a>
+      </div>
+    </div>
+
+    <!-- Right column: mock UI card -->
+    <div class="hero-visual anim-5" aria-hidden="true">
+      <div class="mock-card">
+        <div class="mock-card-header">
+          <span class="mock-warn-icon">⚠</span>
+          <span>3 issues found in <strong>Article.docx</strong></span>
+        </div>
+        <div class="mock-card-body">
+          <div class="mock-issue">
+            <span class="mock-x">✗</span>
+            <span><span class="mock-fn">fn.47</span> <code>supra note 12</code> → target not found</span>
+          </div>
+          <div class="mock-issue">
+            <span class="mock-x">✗</span>
+            <span><span class="mock-fn">fn.83</span> <code>Id.</code> follows multi-source fn.81</span>
+          </div>
+          <div class="mock-issue mock-issue-warning">
+            <span class="mock-x mock-x-warn">!</span>
+            <span><span class="mock-fn">fn.91</span> <code>"see also"</code> signal — consider <code>"cf."</code></span>
+          </div>
+        </div>
+        <div class="mock-card-footer">
+          <span class="mock-status">SupraDrop · 94 footnotes scanned</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     MODULE 3: TOOL LAUNCHER
+══════════════════════════════════════════════════════════ -->
+<section class="tools-section" id="tools">
+  <div class="container">
+    <div class="section-divider"></div>
+    <h2 class="section-title">Choose Your Workflow Stage</h2>
+
+    <div class="tools-grid">
+
+      <!-- Card 1: Zotero Perma Archiver -->
+      <div class="tool-card">
+        <div class="tool-phase-label">WRITING PHASE</div>
+        <h3 class="tool-name">Zotero Perma Archiver</h3>
+        <p class="tool-tagline">Save it once, archived forever.</p>
+        <p class="tool-desc">
+          An open-source Zotero plugin that automatically generates
+          perma.cc archive links in the background as you build
+          your research library — before the URL ever breaks.
+        </p>
+        <div class="tool-ctas">
+          <a
+            href="https://github.com/kirinccchang/zotero-perma-archiver/releases/download/v1.3.2/perma-archiver_v1.3.2.xpi"
+            class="btn-primary btn-sm"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download .xpi
+          </a>
+          <a href="/zotero" class="btn-text-link">Read Docs →</a>
+        </div>
+      </div>
+
+      <!-- Card 2: PermaDrop -->
+      <div class="tool-card">
+        <div class="tool-phase-label">SUBMISSION PHASE · ARCHIVING</div>
+        <div class="tool-name-row">
+          <h3 class="tool-name">PermaDrop</h3>
+          <span class="badge badge-live">Live</span>
+        </div>
+        <p class="tool-tagline">Batch-archive every URL in your manuscript.</p>
+        <p class="tool-desc">
+          Drag in your .docx, select the URLs you want archived,
+          and get back a Bluebook Rule 18.2-compliant document —
+          with perma.cc links inserted directly into footnotes.
+          Clean copy or Track Changes redline.
+        </p>
+        <div class="tool-ctas">
+          <a href="/permadrop/" class="btn-primary btn-sm" target="_blank" rel="noopener">
+            Launch App →
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 3: SupraDrop (dark card) -->
+      <div class="tool-card tool-card-dark">
+        <div class="tool-phase-label tool-phase-label-dark">SUBMISSION PHASE · AUDITING</div>
+        <div class="tool-name-row">
+          <h3 class="tool-name">SupraDrop</h3>
+          <span class="badge badge-new">New</span>
+        </div>
+        <p class="tool-tagline">Find citation logic errors before your editor does.</p>
+        <p class="tool-desc">
+          Automatically audits supra, Id., signal parentheticals,
+          hereinafter, and pincite patterns across all footnotes
+          in your Word document. No installation. No uploads.
+        </p>
+        <div class="tool-ctas">
+          <a href="/supradrop/" class="btn-primary btn-sm btn-light" target="_blank" rel="noopener">
+            Launch App →
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     MODULE 4: PRIVACY GUARANTEE
+══════════════════════════════════════════════════════════ -->
+<section class="privacy-banner">
+  <div class="container privacy-inner">
+    <h2 class="privacy-title">Your manuscripts never leave your computer.</h2>
+    <p class="privacy-body">
+      PermaDrop and SupraDrop are built with 100% client-side
+      JavaScript and WebAssembly. Your .docx files are parsed
+      entirely in your browser's memory.
+    </p>
+    <p class="privacy-body">
+      We transmit nothing to any server — except the URLs you
+      explicitly choose to archive, which are sent directly to
+      the perma.cc API using your own API key.
+    </p>
+    <p class="privacy-proof">
+      Don't believe us? Disconnect your internet after the
+      page loads. Everything still works.
+    </p>
+
+    <div class="privacy-features">
+      <div class="privacy-feature">
+        <div class="privacy-feature-icon">🔒</div>
+        <div class="privacy-feature-title">No Server Upload</div>
+        <div class="privacy-feature-desc">Files never leave your browser</div>
+      </div>
+      <div class="privacy-feature">
+        <div class="privacy-feature-icon">🔑</div>
+        <div class="privacy-feature-title">Your API Key</div>
+        <div class="privacy-feature-desc">Direct to perma.cc, not proxied</div>
+      </div>
+      <div class="privacy-feature">
+        <div class="privacy-feature-icon">📂</div>
+        <div class="privacy-feature-title">Open Source</div>
+        <div class="privacy-feature-desc">AGPL v3 · Audit the code yourself</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     MODULE 5: TECH CREDIBILITY
+══════════════════════════════════════════════════════════ -->
+<section class="tech-section">
+  <div class="container tech-inner">
+    <div class="tech-copy">
+      <h2 class="tech-title">How it works, technically.</h2>
+      <p class="tech-body">
+        Both web apps parse .docx files using JSZip to extract
+        the raw XML, then run citation logic checks entirely
+        in your browser — no frameworks, no telemetry, no
+        dependency on external services beyond perma.cc.
+      </p>
+      <p class="tech-body">
+        The source code for every tool is publicly available
+        on GitHub under the AGPL v3 license. You can read
+        exactly what runs on your machine.
+      </p>
+      <div class="tech-links">
+        <a href="https://github.com/kirinccchang/supradrop" target="_blank" rel="noopener" class="btn-text-link">SupraDrop source →</a>
+        <a href="https://github.com/kirinccchang/permadrop" target="_blank" rel="noopener" class="btn-text-link">PermaDrop source →</a>
+      </div>
+    </div>
+    <div class="tech-code-wrap">
+      <div class="code-chrome">
+        <div class="code-chrome-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <span class="code-chrome-filename">citation-audit.js</span>
+      </div>
+      <pre class="code-block"><code><span class="c-comment">// JSZip parses the .docx (a ZIP archive)</span>
+<span class="c-kw">const</span> zip = <span class="c-kw">await</span> JSZip.<span class="c-fn">loadAsync</span>(file);
+<span class="c-kw">const</span> xml = <span class="c-kw">await</span> zip
+  .<span class="c-fn">file</span>(<span class="c-str">'word/footnotes.xml'</span>)
+  .<span class="c-fn">async</span>(<span class="c-str">'string'</span>);
+
+<span class="c-comment">// Parse footnote XML nodes in-browser</span>
+<span class="c-kw">const</span> parser = <span class="c-kw">new</span> DOMParser();
+<span class="c-kw">const</span> doc = parser.<span class="c-fn">parseFromString</span>(
+  xml, <span class="c-str">'text/xml'</span>
+);
+<span class="c-kw">const</span> footnotes = doc
+  .<span class="c-fn">querySelectorAll</span>(<span class="c-str">'w\\:footnote'</span>);
+
+<span class="c-comment">// No data leaves the browser</span>
+footnotes.<span class="c-fn">forEach</span>(fn =&gt; {
+  <span class="c-fn">validateSupraChain</span>(fn, index);
+  <span class="c-fn">validateIdUsage</span>(fn, prev);
+  <span class="c-fn">validateSignals</span>(fn);
+});</code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     MODULE 6: AUTHOR TRUST
+══════════════════════════════════════════════════════════ -->
+<section class="author-section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="author-inner">
+      <img
+        src="/avatar.jpg"
+        alt="Kirin Chang"
+        class="author-avatar"
+        width="80"
+        height="80"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+      />
+      <div class="author-avatar-fallback" style="display:none" aria-hidden="true">KC</div>
+
+      <div class="author-body">
+        <h2 class="author-name">Built by Kirin Chang</h2>
+        <p class="author-roles">
+          Research Fellow, U.S.-Asia Law Institute · NYU School of Law<br>
+          Affiliate Research Fellow, AI &amp; the Future of Work · Emory Law<br>
+          Member of the New York and Texas Bars
+        </p>
+        <p class="author-pubs">
+          Published in <em>NYU Law Review</em>, <em>UCLA Law Review</em>,
+          <em>Minnesota Law Review</em>, <em>Georgetown Law Journal</em>,
+          and <em>Vanderbilt Journal of Transnational Law</em>.
+        </p>
+        <div class="author-links">
+          <a href="https://kirinchang.com" target="_blank" rel="noopener" class="author-link">kirinchang.com</a>
+          <span class="author-link-sep">·</span>
+          <a href="https://github.com/kirinccchang" target="_blank" rel="noopener" class="author-link">GitHub</a>
+          <span class="author-link-sep">·</span>
+          <a href="https://kirin.law" target="_blank" rel="noopener" class="author-link">kirin.law</a>
+          <span class="author-link-sep">·</span>
+          <a href="https://twitter.com/chengchi_chang" target="_blank" rel="noopener" class="author-link">@chengchi_chang</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     MODULE 7: FOOTER
+══════════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <span aria-hidden="true">⚖</span> lawreview.tools
+        </div>
+        <p class="footer-tagline">
+          Free, private Bluebook tools<br>for law review editors<br>and legal scholars.
+        </p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Tools</div>
+        <a href="/permadrop/" class="footer-link" target="_blank" rel="noopener">PermaDrop</a>
+        <a href="/supradrop/" class="footer-link" target="_blank" rel="noopener">SupraDrop</a>
+        <a href="/zotero" class="footer-link">Zotero Plugin</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Resources</div>
+        <a href="https://github.com/kirinccchang" target="_blank" rel="noopener" class="footer-link">GitHub</a>
+        <a href="/zotero" class="footer-link">Docs</a>
+        <a href="https://github.com/kirinccchang/zotero-perma-archiver/releases" target="_blank" rel="noopener" class="footer-link">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener" class="footer-link">AGPL v3 License</a>
+        <a href="/privacy" class="footer-link">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 Kirin Chang · lawreview.tools · Open source under AGPL v3
+    </div>
+  </div>
+</footer>
+
+</Base>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════════════════════ -->
+<script>
+  // Navbar: add scrolled class after 100px
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar?.classList.toggle('scrolled', window.scrollY > 100);
+  }, { passive: true });
+
+  // Dark mode toggle
+  const toggle = document.getElementById('themeToggle');
+  toggle?.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+</script>
+
+<!-- ══════════════════════════════════════════════════════════
+     STYLES
+══════════════════════════════════════════════════════════ -->
+<style>
+/* ── NAVBAR ─────────────────────────────────────────────── */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 56px;
+  background: var(--bg);
+  transition: border-color 0.2s ease, backdrop-filter 0.2s ease, background 0.2s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.navbar.scrolled {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  border-bottom-color: var(--border);
+}
+
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.nav-logo-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.nav-logo-text {
+  font-family: var(--font-display);
+  font-size: 17px;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-link {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.nav-link:hover { color: var(--text); }
+
+.nav-github {
+  display: flex;
+  align-items: center;
+  color: var(--text-muted);
+  transition: color 0.15s ease;
+}
+
+.nav-github:hover { color: var(--text); }
+
+.nav-theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.nav-theme-toggle:hover {
+  color: var(--text);
+  background: var(--bg-alt);
+}
+
+/* Show/hide sun/moon based on theme */
+[data-theme="dark"] .icon-moon { display: none; }
+[data-theme="light"] .icon-sun,
+:root:not([data-theme="dark"]) .icon-sun { display: none; }
+
+@media (max-width: 767px) {
+  .nav-tools-link { display: none; }
+}
+
+/* ── HERO ───────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hero-bg-gradient {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 80% 20%, #EDE8E0, var(--bg) 60%);
+  pointer-events: none;
+}
+
+[data-theme="dark"] .hero-bg-gradient {
+  background: radial-gradient(ellipse 80% 60% at 80% 20%, #1a1a2e, var(--bg) 60%);
+}
+
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+@media (max-width: 900px) {
+  .hero-inner {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  .hero-visual { display: none; }
+}
+
+.hero-h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+
+.accent-text { color: var(--accent); }
+
+.hero-subtitle {
+  font-size: 18px;
+  color: var(--text-muted);
+  line-height: 1.65;
+  margin-bottom: 24px;
+}
+
+.built-at-nyu {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  cursor: default;
+  display: inline-block;
+}
+
+.built-at-tooltip {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 6px);
+  background: var(--text);
+  color: var(--bg);
+  font-size: 12px;
+  font-family: var(--font-body);
+  padding: 6px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 10;
+}
+
+/* Tooltip arrow */
+.built-at-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 16px;
+  border: 4px solid transparent;
+  border-top-color: var(--text);
+}
+
+.built-at-nyu:hover + .built-at-tooltip,
+.built-at-nyu:focus + .built-at-tooltip { opacity: 1; }
+
+/* Position tooltip relative to its container */
+.hero-subtitle {
+  position: relative;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: #F0FDF4;
+  border: 1px solid #86EFAC;
+  color: #166534;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 32px;
+}
+
+[data-theme="dark"] .hero-badge {
+  background: rgba(22, 101, 52, 0.2);
+  border-color: #166534;
+  color: #86EFAC;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ── Buttons ────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border: 1.5px solid var(--accent);
+  color: var(--accent);
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.btn-ghost:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-sm {
+  padding: 9px 18px;
+  font-size: 14px;
+}
+
+.btn-light {
+  background: #fff;
+  color: #0F172A;
+}
+
+.btn-light:hover {
+  background: #F4F4F5;
+  transform: translateY(-2px);
+}
+
+.btn-text-link {
+  font-size: 14px;
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.15s ease;
+}
+
+.btn-text-link:hover { opacity: 0.75; }
+
+/* ── Mock card ──────────────────────────────────────────── */
+.hero-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.mock-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  transform: rotate(3deg);
+  min-width: 360px;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mock-card:hover {
+  transform: rotate(1deg) translateY(-4px);
+  box-shadow: 0 32px 64px rgba(0,0,0,0.18);
+}
+
+.mock-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  background: #FEF3C7;
+  border-bottom: 1px solid #FDE68A;
+  color: #92400E;
+  font-weight: 500;
+}
+
+[data-theme="dark"] .mock-card-header {
+  background: rgba(146, 64, 14, 0.2);
+  border-color: rgba(146, 64, 14, 0.3);
+  color: #FDE68A;
+}
+
+.mock-warn-icon { font-size: 16px; }
+
+.mock-card-body {
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mock-issue {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  color: var(--text-muted);
+}
+
+.mock-issue code {
+  background: var(--bg-alt);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+}
+
+.mock-x {
+  color: #DC2626;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.mock-x-warn { color: #D97706; }
+
+.mock-fn {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.mock-card-footer {
+  padding: 10px 18px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-alt);
+}
+
+.mock-status {
+  font-size: 11px;
+  color: var(--text-subtle);
+  letter-spacing: 0.02em;
+}
+
+/* ── TOOL LAUNCHER ──────────────────────────────────────── */
+.tools-section {
+  padding: 80px 0 96px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 48px;
+  letter-spacing: -0.02em;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .tools-grid { grid-template-columns: 1fr; }
+}
+
+.tool-card {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px 28px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-left: 4px solid var(--accent);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.tool-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.tool-card-dark {
+  background: #0F172A;
+  border-color: #1E293B;
+  border-left-color: #FCA5A5;
+  color: #F4F4F5;
+}
+
+[data-theme="dark"] .tool-card-dark {
+  background: #09090B;
+  border-color: #27272A;
+}
+
+.tool-phase-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  margin-bottom: 14px;
+}
+
+.tool-phase-label-dark {
+  color: #64748B;
+}
+
+.tool-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.tool-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+
+.tool-card-dark .tool-name { color: #F4F4F5; }
+
+.tool-tagline {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  line-height: 1.4;
+}
+
+.tool-card-dark .tool-tagline { color: #94A3B8; }
+
+.tool-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.65;
+  margin-bottom: 24px;
+  flex: 1;
+}
+
+.tool-card-dark .tool-desc { color: #64748B; }
+
+.tool-ctas {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+
+/* ── Badges ─────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.badge-live {
+  background: #DCFCE7;
+  color: #166534;
+}
+
+.badge-live::before { content: '●'; color: #22C55E; font-size: 8px; }
+
+.badge-new {
+  background: #FFF7ED;
+  color: #9A3412;
+}
+
+.badge-new::before { content: '🔥'; font-size: 9px; }
+
+[data-theme="dark"] .badge-live { background: rgba(22, 101, 52, 0.25); color: #86EFAC; }
+[data-theme="dark"] .badge-new  { background: rgba(154, 52, 18, 0.25); color: #FCA5A5; }
+
+/* ── PRIVACY BANNER ─────────────────────────────────────── */
+.privacy-banner {
+  background: #0F172A;
+  padding: 80px 0;
+}
+
+[data-theme="dark"] .privacy-banner { background: #000000; }
+
+.privacy-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.privacy-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 400;
+  color: #F4F4F5;
+  margin-bottom: 28px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.privacy-body {
+  font-size: 16px;
+  color: #94A3B8;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.privacy-proof {
+  font-size: 15px;
+  color: #64748B;
+  font-style: italic;
+  margin-top: 8px;
+  margin-bottom: 48px;
+}
+
+.privacy-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 48px;
+}
+
+@media (max-width: 600px) {
+  .privacy-features { grid-template-columns: 1fr; gap: 2rem; }
+}
+
+.privacy-feature { text-align: center; }
+
+.privacy-feature-icon {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.privacy-feature-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #E2E8F0;
+  margin-bottom: 6px;
+}
+
+.privacy-feature-desc {
+  font-size: 13px;
+  color: #64748B;
+  line-height: 1.5;
+}
+
+/* ── TECH SECTION ───────────────────────────────────────── */
+.tech-section {
+  padding: 96px 0;
+}
+
+.tech-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
+@media (max-width: 800px) {
+  .tech-inner { grid-template-columns: 1fr; }
+}
+
+.tech-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
+}
+
+.tech-body {
+  font-size: 15px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.tech-links {
+  display: flex;
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.code-chrome {
+  background: #2D2D3F;
+  border-radius: 10px 10px 0 0;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.code-chrome-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.code-chrome-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #3D3D50;
+}
+
+.code-chrome-dots span:first-child { background: #FF5F57; }
+.code-chrome-dots span:nth-child(2) { background: #FEBC2E; }
+.code-chrome-dots span:last-child { background: #28C840; }
+
+.code-chrome-filename {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #6B6B8A;
+}
+
+.code-block {
+  background: #1E1E2E;
+  border-radius: 0 0 10px 10px;
+  padding: 24px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.8;
+  overflow-x: auto;
+  margin: 0;
+}
+
+.c-comment { color: #6272A4; }
+.c-kw      { color: #FF79C6; }
+.c-fn      { color: #50FA7B; }
+.c-str     { color: #F1FA8C; }
+
+/* ── AUTHOR SECTION ─────────────────────────────────────── */
+.author-section {
+  padding: 0 0 96px;
+}
+
+.author-inner {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  max-width: 700px;
+}
+
+@media (max-width: 600px) {
+  .author-inner { flex-direction: column; }
+}
+
+.author-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.author-avatar-fallback {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 24px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.author-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.author-roles {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+
+.author-pubs {
+  font-size: 14px;
+  color: var(--text-subtle);
+  line-height: 1.65;
+  margin-bottom: 16px;
+}
+
+.author-pubs em { font-style: italic; }
+
+.author-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.author-link {
+  font-size: 14px;
+  color: var(--accent);
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+
+.author-link:hover { opacity: 0.75; }
+
+.author-link-sep {
+  color: var(--text-subtle);
+  font-size: 14px;
+}
+
+/* ── FOOTER ─────────────────────────────────────────────── */
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 56px 0 32px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 48px;
+}
+
+@media (max-width: 768px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .footer-brand { grid-column: 1 / -1; }
+}
+
+@media (max-width: 480px) {
+  .footer-grid { grid-template-columns: 1fr; }
+}
+
+.footer-logo {
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.footer-tagline {
+  font-size: 13px;
+  color: var(--text-subtle);
+  line-height: 1.6;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-col-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  margin-bottom: 4px;
+}
+
+.footer-link {
+  font-size: 14px;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.footer-link:hover { color: var(--text); }
+
+.footer-bottom {
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+  font-size: 13px;
+  color: var(--text-subtle);
+}
+</style>

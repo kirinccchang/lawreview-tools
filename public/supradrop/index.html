@@ -1,0 +1,1532 @@
+<!--
+  SupraDrop — Bluebook Citation Auditor for Legal Scholars
+  Copyright (C) 2026 Kirin Chang <https://kirinchang.com>
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published
+  by the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU Affero General Public License for more details.
+
+  https://www.gnu.org/licenses/agpl-3.0.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+  <!-- Primary SEO -->
+  <title>SupraDrop — Bluebook Citation Auditor for Legal Scholars</title>
+  <meta name="description" content="Audit Bluebook citations in Word document footnotes: supra, Id., signal parentheticals, pincites, hereinafter, and more. Browser-based, no uploads. Free tool for law review editors.">
+  <meta name="author" content="Kirin Chang">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://supradrop.kirinchang.com/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="SupraDrop">
+  <meta property="og:title" content="SupraDrop — Bluebook Citation Auditor for Legal Scholars">
+  <meta property="og:description" content="Validate supra and Id. citations in Word document footnotes. Browser-based, no uploads. Free tool for law review editors and legal scholars.">
+  <meta property="og:url" content="https://supradrop.kirinchang.com/">
+  <meta property="og:image" content="https://supradrop.kirinchang.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SupraDrop — Bluebook Citation Auditor for Legal Scholars">
+  <meta name="twitter:description" content="Validate supra and Id. citations in Word document footnotes. Browser-based, no uploads.">
+  <meta name="twitter:image" content="https://supradrop.kirinchang.com/og-image.png">
+  <meta name="twitter:creator" content="@chengchi_chang">
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "SupraDrop",
+    "url": "https://supradrop.kirinchang.com/",
+    "description": "Validate supra and Id. citations in Word document footnotes. Browser-based, no uploads required.",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires a modern web browser with JavaScript enabled",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "author": { "@type": "Person", "name": "Kirin Chang", "url": "https://kirinchang.com" },
+    "keywords": "supra, id., legal citations, bluebook, footnotes, word document, law review, citation checker"
+  }
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Theme tokens (matches PermaDrop) ──────────────────────────────── */
+    :root {
+      --bg:             #f4f4f5;
+      --surface:        #ffffff;
+      --border:         #e4e4e7;
+      --border-input:   #d4d4d8;
+      --text:           #18181b;
+      --text-2:         #3f3f46;
+      --text-muted:     #71717a;
+      --text-faint:     #a1a1aa;
+      --hover-bg:       #fafafa;
+      --preview-bg:     #f9fafb;
+      --divider:        #f4f4f5;
+      --privacy-bg:     #f0fdf4;
+      --privacy-border: #bbf7d0;
+      --privacy-text:   #166534;
+      --note-bg:        #fffbeb;
+      --note-border:    #fde68a;
+      --note-text:      #78350f;
+      --error-bg:       #fef2f2;
+      --error-border:   #fecaca;
+      --error-text:     #991b1b;
+      --warn-bg:        #fffbeb;
+      --warn-border:    #fde68a;
+      --warn-text:      #92400e;
+      --ok-bg:          #f0fdf4;
+      --ok-border:      #bbf7d0;
+      --ok-text:        #166534;
+    }
+    body.dark {
+      --bg:             #09090b;
+      --surface:        #18181b;
+      --border:         #27272a;
+      --border-input:   #3f3f46;
+      --text:           #fafafa;
+      --text-2:         #d4d4d8;
+      --text-muted:     #a1a1aa;
+      --text-faint:     #71717a;
+      --hover-bg:       #1c1c1f;
+      --preview-bg:     #111113;
+      --divider:        #27272a;
+      --privacy-bg:     #052e16;
+      --privacy-border: #14532d;
+      --privacy-text:   #86efac;
+      --note-bg:        #1c1408;
+      --note-border:    #78350f;
+      --note-text:      #fde68a;
+      --error-bg:       #1f0a0a;
+      --error-border:   #7f1d1d;
+      --error-text:     #fca5a5;
+      --warn-bg:        #1c1408;
+      --warn-border:    #78350f;
+      --warn-text:      #fde68a;
+      --ok-bg:          #052e16;
+      --ok-border:      #14532d;
+      --ok-text:        #86efac;
+    }
+
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; transition: background 0.2s, color 0.2s; }
+    .container { max-width: 680px; margin: 0 auto; padding: 40px 20px 80px; }
+    h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+    .subtitle { font-size: 13px; color: var(--text-muted); margin-top: 6px; line-height: 1.5; }
+    .card { background: var(--surface); border-radius: 10px; padding: 22px 24px; margin-top: 16px; border: 1px solid var(--border); }
+    .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .card-title { font-size: 15px; font-weight: 600; }
+    .step-badge { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+    .step-badge.active  { background: var(--text); color: var(--surface); }
+    .step-badge.done    { background: #16a34a; color: white; }
+    .step-badge.inactive{ background: var(--border); color: var(--text-faint); }
+    button { padding: 8px 16px; border-radius: 7px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; transition: background 0.15s, opacity 0.15s; }
+    .btn-primary { background: var(--text); color: var(--surface); }
+    .btn-primary:hover:not(:disabled) { opacity: 0.85; }
+    .btn-primary:disabled { background: var(--text-faint); cursor: not-allowed; }
+    .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); font-size: 12px; padding: 5px 10px; }
+    .btn-ghost:hover:not(:disabled) { background: var(--hover-bg); }
+    .btn-ghost:disabled { opacity: 0.4; cursor: not-allowed; }
+    .drop-zone {
+      border: 2px dashed var(--border-input); border-radius: 8px; padding: 32px;
+      text-align: center; cursor: pointer; transition: border-color 0.15s, background 0.15s;
+    }
+    .drop-zone:hover, .drop-zone.dragover { border-color: var(--text); background: var(--hover-bg); }
+    .drop-zone p { font-size: 14px; color: var(--text-muted); }
+    .drop-zone strong { color: var(--text); }
+    .file-input { display: none; }
+    .privacy-note { display: flex; align-items: flex-start; gap: 8px; background: var(--privacy-bg); border: 1px solid var(--privacy-border); border-radius: 7px; padding: 10px 13px; margin-top: 10px; }
+    .privacy-note p { font-size: 12px; color: var(--privacy-text); line-height: 1.5; }
+    .file-chip { display: flex; align-items: center; gap: 8px; padding: 7px 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; font-size: 12px; margin-top: 10px; }
+    .file-chip-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); font-weight: 500; }
+    .file-chip-info { color: var(--text-muted); white-space: nowrap; }
+    .file-chip-remove { background: none; border: none; color: var(--text-faint); cursor: pointer; font-size: 16px; padding: 0 2px; line-height: 1; }
+    .file-chip-remove:hover { color: #dc2626; }
+    .error-msg { font-size: 13px; color: #dc2626; margin-top: 8px; }
+    .hint { font-size: 13px; color: var(--text-muted); margin-top: 5px; line-height: 1.5; }
+    .divider { height: 1px; background: var(--divider); margin: 14px 0; }
+    .dark-toggle { background: none; border: 1px solid var(--border); border-radius: 99px; padding: 4px 11px; font-size: 12px; color: var(--text-muted); cursor: pointer; }
+    .dark-toggle:hover { background: var(--hover-bg); }
+    .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 99px; }
+    .badge-error   { background: var(--error-bg); color: var(--error-text); border: 1px solid var(--error-border); }
+    .badge-warning { background: var(--warn-bg);  color: var(--warn-text);  border: 1px solid var(--warn-border); }
+    .badge-ok      { background: var(--ok-bg);    color: var(--ok-text);    border: 1px solid var(--ok-border); }
+    .badge-neutral { background: var(--preview-bg); color: var(--text-muted); border: 1px solid var(--border); }
+
+    /* Stats grid */
+    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+    @media (max-width: 500px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } }
+    .stat-box { background: var(--preview-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
+    .stat-box .stat-val { font-size: 22px; font-weight: 700; }
+    .stat-box .stat-lbl { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .stat-box.stat-error   { border-color: var(--error-border); }
+    .stat-box.stat-warning { border-color: var(--warn-border); }
+    .stat-val-error   { color: #dc2626; }
+    .stat-val-warning { color: #d97706; }
+
+    /* Issue list */
+    .issue-group { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
+    .issue-group-header {
+      display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+      cursor: pointer; background: var(--surface); transition: background 0.15s;
+      user-select: none;
+    }
+    .issue-group-header:hover { background: var(--hover-bg); }
+    .issue-fn-num { font-size: 12px; font-weight: 700; color: var(--text); background: var(--preview-bg); border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; flex-shrink: 0; font-family: monospace; }
+    .issue-summary { flex: 1; font-size: 13px; color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .issue-chevron { font-size: 11px; color: var(--text-faint); flex-shrink: 0; transition: transform 0.15s; }
+    .issue-chevron.open { transform: rotate(90deg); }
+    .issue-body { border-top: 1px solid var(--border); }
+    .issue-text-preview {
+      font-size: 12px; font-family: monospace; line-height: 1.6; word-break: break-word;
+      background: var(--preview-bg); padding: 10px 14px; color: var(--text-2);
+      border-bottom: 1px solid var(--border);
+      max-height: 120px; overflow-y: auto;
+    }
+    .issue-problem { display: flex; align-items: flex-start; gap: 10px; padding: 9px 14px; border-bottom: 1px solid var(--divider); }
+    .issue-problem:last-child { border-bottom: none; }
+    .issue-problem-icon { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+    .issue-problem-msg { font-size: 13px; color: var(--text-2); line-height: 1.5; }
+    .issue-problem-rule { font-size: 11px; color: var(--text-faint); margin-top: 2px; font-family: monospace; }
+
+    /* Highlights inside footnote text previews */
+    mark.hl-supra { background: #dbeafe; color: #1d4ed8; border-radius: 3px; padding: 0 2px; font-style: normal; }
+    mark.hl-id    { background: #ede9fe; color: #5b21b6; border-radius: 3px; padding: 0 2px; font-style: normal; }
+    body.dark mark.hl-supra { background: #1e3a5f; color: #93c5fd; }
+    body.dark mark.hl-id    { background: #2e1065; color: #c4b5fd; }
+
+    /* All-clear banner */
+    .all-clear { background: var(--ok-bg); border: 1px solid var(--ok-border); border-radius: 8px; padding: 18px 20px; text-align: center; }
+    .all-clear p { font-size: 14px; color: var(--ok-text); font-weight: 500; }
+    .all-clear .all-clear-sub { font-size: 12px; margin-top: 4px; opacity: 0.8; }
+
+    /* Dismissed items section */
+    .dismissed-toggle { background: none; border: none; color: var(--text-faint); font-size: 12px; cursor: pointer; padding: 4px 0; }
+    .dismissed-toggle:hover { color: var(--text-muted); }
+    .dismissed-row { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 4px; background: var(--preview-bg); }
+    .dismissed-text { flex: 1; font-size: 11px; color: var(--text-faint); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: monospace; }
+
+    /* Preceding-footnote context block inside an issue card */
+    .issue-prev-ctx { padding: 0 14px 10px; }
+    .issue-ctx-label { padding: 6px 14px 2px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-faint); }
+    /* Confirmed-error badge */
+    .badge-confirmed { background: #450a0a; color: #fca5a5; border: 1px solid #7f1d1d; }
+    body:not(.dark) .badge-confirmed { background: #fff1f2; color: #9f1239; border-color: #fecdd3; }
+    /* Issue card with confirmed state gets a red left accent */
+    .issue-group.confirmed { border-color: #ef4444; }
+    .issue-group.confirmed .issue-group-header { border-left: 3px solid #ef4444; }
+
+    /* Footnote browser */
+    .fn-browser-item { padding: 8px 12px; border-bottom: 1px solid var(--divider); font-size: 12px; display: flex; gap: 10px; align-items: flex-start; }
+    .fn-browser-item:last-child { border-bottom: none; }
+    .fn-num { font-family: monospace; font-weight: 700; color: var(--text-faint); flex-shrink: 0; min-width: 28px; }
+    .fn-text { color: var(--text-2); line-height: 1.5; word-break: break-word; }
+
+    /* Spinner */
+    .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--text); border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: -2px; margin-right: 6px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Tabs */
+    .tab-bar { display: flex; gap: 4px; margin-bottom: 14px; }
+    .tab-btn { padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--text-muted); transition: all 0.15s; }
+    .tab-btn.active { background: var(--text); color: var(--surface); border-color: var(--text); }
+    .tab-btn:hover:not(.active) { background: var(--hover-bg); }
+
+    /* Sister tool banner */
+    .sister-banner { display: flex; align-items: center; gap: 10px; background: var(--preview-bg); border: 1px solid var(--border); border-radius: 7px; padding: 9px 13px; margin-top: 10px; }
+    .sister-banner p { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+    .sister-banner a { color: var(--text); text-decoration: underline; text-underline-offset: 2px; }
+
+    /* Per-file result card header */
+    .file-result-header { display: flex; align-items: center; gap: 10px; }
+    .file-result-name { flex: 1; min-width: 0; }
+    .file-result-name-text { font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); }
+    .file-result-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .file-collapse-btn { background: none; border: none; color: var(--text-faint); cursor: pointer; font-size: 14px; padding: 2px 6px; }
+    .file-collapse-btn:hover { color: var(--text-muted); }
+  </style>
+</head>
+<body>
+<div class="container" x-data="app()">
+
+  <!-- Header -->
+  <div style="margin-bottom: 28px;">
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+      <h1>SupraDrop</h1>
+      <button class="dark-toggle" @click="darkMode = !darkMode" :title="darkMode ? 'Switch to light mode' : 'Switch to dark mode'">
+        <span x-text="darkMode ? '☀ Light' : '☾ Dark'"></span>
+      </button>
+    </div>
+    <p class="subtitle">
+      Drop a Word document and audit all 15 Bluebook citation rules in your footnotes —
+      <em>supra</em>, <em>Id.</em>, signal parentheticals, pincites, hereinafter, and more.<br>
+      Free &amp; open source · Runs entirely in your browser · Nothing leaves your device
+    </p>
+    <p style="margin-top:8px; font-size:13px; color:var(--text-muted);">
+      <a href="https://github.com/kirinccchang/supradrop" target="_blank" rel="noopener noreferrer"
+         style="color:var(--text-muted); text-decoration:underline; text-underline-offset:2px;">
+        View source on GitHub (AGPL-3.0)
+      </a>
+    </p>
+  </div>
+
+  <!-- Upload card -->
+  <div class="card">
+    <div class="card-header">
+      <div class="step-badge" :class="files.length > 0 ? 'done' : 'active'">
+        <span x-show="files.length === 0">1</span>
+        <span x-show="files.length > 0">✓</span>
+      </div>
+      <div class="card-title">Upload Word Document(s)</div>
+    </div>
+
+    <div class="drop-zone" :class="dragging ? 'dragover' : ''"
+         @click="$refs.fileInput.click()"
+         @dragover.prevent="dragging = true"
+         @dragleave="dragging = false"
+         @drop.prevent="onDrop($event)">
+      <p>
+        <strong>Click to choose</strong> or drag &amp; drop <strong>.docx</strong> files
+        <span style="color:var(--text-faint);"> — multiple files allowed</span>
+      </p>
+    </div>
+    <input type="file" accept=".docx" multiple class="file-input" x-ref="fileInput" @change="onFileInput($event)" />
+
+    <template x-for="fo in files" :key="fo.id">
+      <div class="file-chip">
+        <span class="file-chip-name" x-text="fo.name"></span>
+        <span class="file-chip-info" x-text="formatSize(fo.size)"></span>
+        <button class="file-chip-remove" @click="removeFile(fo.id)" title="Remove">×</button>
+      </div>
+    </template>
+
+    <p class="error-msg" x-show="fileError" x-text="fileError"></p>
+
+    <div class="privacy-note" style="margin-top:10px;">
+      <p>Your documents are read directly in your browser. No file is uploaded. No server receives your content.</p>
+    </div>
+
+    <div class="sister-banner" style="margin-top:10px;">
+      <p>
+        Need to archive URLs to perma.cc first?
+        Try <a href="https://permadrop.kirinchang.com/" target="_blank" rel="noopener noreferrer">PermaDrop</a>,
+        the sister tool — then bring the same .docx here.
+      </p>
+    </div>
+  </div>
+
+  <!-- Per-file results -->
+  <template x-for="fo in files" :key="fo.id">
+    <div class="card" style="margin-top:16px;">
+
+      <!-- File result header -->
+      <div class="file-result-header">
+        <div class="step-badge"
+             :class="fo.parsing ? 'active' : !fo.analyzed ? 'inactive' : (fileErrorCount(fo) + fileWarningCount(fo) === 0) ? 'done' : 'active'">
+          <span x-show="fo.parsing"><span class="spinner" style="width:10px; height:10px; margin:0;"></span></span>
+          <span x-show="!fo.parsing && fo.analyzed && (fileErrorCount(fo) + fileWarningCount(fo)) === 0">✓</span>
+          <span x-show="!fo.parsing && fo.analyzed && (fileErrorCount(fo) + fileWarningCount(fo)) > 0">!</span>
+          <span x-show="!fo.parsing && !fo.analyzed">2</span>
+        </div>
+        <div class="file-result-name">
+          <div class="file-result-name-text" x-text="fo.name"></div>
+          <div class="file-result-meta" x-show="fo.analyzed">
+            <span x-text="fo.stats.total + ' footnotes'"></span>
+            <span x-show="fileErrorCount(fo) > 0" style="color:#dc2626; margin-left:8px;"
+                  x-text="fileErrorCount(fo) + ' error' + (fileErrorCount(fo) !== 1 ? 's' : '')"></span>
+            <span x-show="fileWarningCount(fo) > 0" style="color:#d97706; margin-left:4px;"
+                  x-text="fileWarningCount(fo) + ' warning' + (fileWarningCount(fo) !== 1 ? 's' : '')"></span>
+            <span x-show="fileErrorCount(fo) === 0 && fileWarningCount(fo) === 0" style="color:#16a34a; margin-left:8px;">All clear</span>
+          </div>
+          <div class="file-result-meta" x-show="fo.parsing">
+            <span class="spinner"></span>Parsing…
+          </div>
+        </div>
+        <button class="file-collapse-btn" x-show="fo.analyzed" @click="fo.collapsed = !fo.collapsed"
+                :title="fo.collapsed ? 'Expand' : 'Collapse'"
+                x-text="fo.collapsed ? '▶' : '▼'"></button>
+        <button class="file-chip-remove" @click="removeFile(fo.id)" title="Remove file" style="font-size:18px; margin-left:4px;">×</button>
+      </div>
+
+      <!-- File result body -->
+      <div x-show="fo.analyzed && !fo.collapsed" x-transition style="margin-top:16px;">
+
+        <!-- Per-file check toggles -->
+        <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:14px;">
+          <span style="font-size:11px; font-weight:600; color:var(--text-faint); letter-spacing:0.4px; text-transform:uppercase; white-space:nowrap;">Checks:</span>
+          <template x-for="g in fo.ruleGroups" :key="g.id">
+            <label style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; padding:3px 10px; border-radius:99px; border:1px solid var(--border); background:var(--surface); transition:border-color 0.15s;"
+                   :style="g.enabled ? 'border-color:var(--text-muted);' : 'opacity:0.5;'">
+              <input type="checkbox" x-model="g.enabled" style="width:11px; height:11px; cursor:pointer; accent-color:var(--text);">
+              <span style="font-size:12px; font-weight:500;" :style="g.enabled ? 'color:var(--text)' : 'color:var(--text-faint)'" x-text="g.label"></span>
+            </label>
+          </template>
+        </div>
+
+        <!-- Stats grid -->
+        <div class="stat-grid">
+          <div class="stat-box">
+            <div class="stat-val" x-text="fo.stats.total"></div>
+            <div class="stat-lbl">Footnotes</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val" x-text="fo.stats.supraRefs"></div>
+            <div class="stat-lbl">Supra refs</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val" x-text="fo.stats.idRefs"></div>
+            <div class="stat-lbl">Id. refs</div>
+          </div>
+          <div class="stat-box" :class="fileErrorCount(fo) > 0 ? 'stat-error' : (fileWarningCount(fo) > 0 ? 'stat-warning' : '')">
+            <div class="stat-val" :class="fileErrorCount(fo) > 0 ? 'stat-val-error' : (fileWarningCount(fo) > 0 ? 'stat-val-warning' : '')"
+                 x-text="fileErrorCount(fo) + fileWarningCount(fo)"></div>
+            <div class="stat-lbl">Issues found</div>
+          </div>
+        </div>
+
+        <!-- All clear -->
+        <div class="all-clear" x-show="fo.issues.length === 0 && fo.stats.total > 0">
+          <p>All citations look correct.</p>
+          <p class="all-clear-sub">No errors detected across <span x-text="fo.stats.total"></span> footnotes.</p>
+        </div>
+
+        <!-- No footnotes -->
+        <div x-show="fo.stats.total === 0" style="font-size:13px; color:var(--text-muted);">
+          No footnotes found in this document.
+        </div>
+
+        <!-- Tab bar + issue list -->
+        <div x-show="fo.issues.length > 0 || fo.stats.total > 0">
+          <div class="tab-bar" x-show="fo.stats.total > 0">
+            <button class="tab-btn" :class="fo.activeTab === 'issues' ? 'active' : ''" @click="fo.activeTab = 'issues'">
+              Issues
+              <span x-show="fo.issues.length > 0" style="margin-left:4px; font-size:10px; opacity:0.8;"
+                    x-text="'(' + fo.issues.length + ')'"></span>
+            </button>
+            <button class="tab-btn" :class="fo.activeTab === 'browser' ? 'active' : ''" @click="fo.activeTab = 'browser'">
+              All Footnotes
+              <span style="margin-left:4px; font-size:10px; opacity:0.8;" x-text="'(' + fo.stats.total + ')'"></span>
+            </button>
+          </div>
+
+          <!-- Issues tab -->
+          <div x-show="fo.activeTab === 'issues' && fo.issues.length > 0">
+            <template x-for="fn in fo.issues.filter(f => !f.dismissed && f.problems.some(p => fileEnabledRules(fo).has(p.rule)))" :key="fn.footnoteNum">
+              <div class="issue-group" :class="fn.confirmed ? 'confirmed' : ''">
+                <div class="issue-group-header" @click="toggleFn(fo, fn.footnoteNum)">
+                  <span class="issue-fn-num" x-text="'fn. ' + fn.footnoteNum"></span>
+                  <span class="issue-summary">
+                    <template x-if="fn.confirmed">
+                      <span class="badge badge-confirmed" style="margin-right:6px;">✓ confirmed error</span>
+                    </template>
+                    <template x-if="!fn.confirmed">
+                      <span>
+                        <template x-if="fn.problems.filter(p => p.type === 'error' && fileEnabledRules(fo).has(p.rule)).length > 0">
+                          <span class="badge badge-error" style="margin-right:6px;"
+                                x-text="fn.problems.filter(p=>p.type==='error'&&fileEnabledRules(fo).has(p.rule)).length + ' error' + (fn.problems.filter(p=>p.type==='error'&&fileEnabledRules(fo).has(p.rule)).length > 1 ? 's' : '')"></span>
+                        </template>
+                        <template x-if="fn.problems.filter(p => p.type === 'warning' && fileEnabledRules(fo).has(p.rule)).length > 0">
+                          <span class="badge badge-warning"
+                                x-text="fn.problems.filter(p=>p.type==='warning'&&fileEnabledRules(fo).has(p.rule)).length + ' warning' + (fn.problems.filter(p=>p.type==='warning'&&fileEnabledRules(fo).has(p.rule)).length > 1 ? 's' : '')"></span>
+                        </template>
+                      </span>
+                    </template>
+                  </span>
+                  <span class="issue-chevron" :class="fo.expandedFn === fn.footnoteNum ? 'open' : ''">▶</span>
+                </div>
+                <div class="issue-body" x-show="fo.expandedFn === fn.footnoteNum" x-transition>
+                  <!-- Current footnote text -->
+                  <div class="issue-ctx-label">This footnote</div>
+                  <div class="issue-text-preview" x-html="highlightText(fn.text)"></div>
+
+                  <!-- Problems list -->
+                  <template x-for="(prob, pi) in fn.problems.filter(p => fileEnabledRules(fo).has(p.rule))" :key="fn.footnoteNum + '-' + pi">
+                    <div>
+                      <div class="issue-problem">
+                        <span class="issue-problem-icon" x-text="prob.type === 'error' ? '✕' : '⚠'"></span>
+                        <div>
+                          <div class="issue-problem-msg" x-html="prob.msg"></div>
+                          <div class="issue-problem-rule" x-text="prob.rule"></div>
+                        </div>
+                      </div>
+                      <!-- Preceding footnote context (for ID_AMBIGUOUS) -->
+                      <template x-if="prob.prevFnText">
+                        <div class="issue-prev-ctx">
+                          <div class="issue-ctx-label" x-text="'Preceding footnote (' + prob.prevFnNum + ')'"></div>
+                          <div class="issue-text-preview" style="margin-top:4px;" x-html="highlightText(prob.prevFnText)"></div>
+                        </div>
+                      </template>
+                    </div>
+                  </template>
+
+                  <!-- Review actions -->
+                  <div style="padding:8px 14px; display:flex; gap:8px; justify-content:flex-end; border-top:1px solid var(--divider);">
+                    <button class="btn-ghost" style="font-size:11px; color:var(--text-faint);"
+                            @click.stop="dismissIssue(fo, fn.footnoteNum)"
+                            title="Remove from list — this flag is a false positive">
+                      Looks correct
+                    </button>
+                    <template x-if="!fn.confirmed">
+                      <button class="btn-ghost" style="font-size:11px; color:#dc2626; border-color:#fca5a5;"
+                              @click.stop="confirmIssue(fo, fn.footnoteNum)"
+                              title="Keep and mark — this is a real error that needs fixing">
+                        Confirm error ✗
+                      </button>
+                    </template>
+                    <template x-if="fn.confirmed">
+                      <span style="font-size:11px; color:#dc2626; padding:5px 10px; font-weight:500;">✓ Confirmed</span>
+                    </template>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <!-- Dismissed section -->
+          <div x-show="fo.activeTab === 'issues' && fo.issues.filter(f => f.dismissed).length > 0" style="margin-top:8px;">
+            <button class="dismissed-toggle" @click="fo.showDismissed = !fo.showDismissed">
+              <span x-text="(fo.showDismissed ? '▾ ' : '▸ ') + 'Dismissed (' + fo.issues.filter(f => f.dismissed).length + ')'"></span>
+            </button>
+            <div x-show="fo.showDismissed" x-transition style="margin-top:6px;">
+              <template x-for="fn in fo.issues.filter(f => f.dismissed)" :key="fn.footnoteNum">
+                <div class="dismissed-row">
+                  <span class="issue-fn-num" style="font-size:11px;" x-text="'fn. ' + fn.footnoteNum"></span>
+                  <span class="dismissed-text" x-text="fn.text.slice(0, 80) + (fn.text.length > 80 ? '…' : '')"></span>
+                  <button class="btn-ghost" style="font-size:11px; flex-shrink:0;" @click="restoreIssue(fo, fn.footnoteNum)">Restore</button>
+                </div>
+              </template>
+            </div>
+          </div>
+
+          <!-- No visible issues (all dismissed or filtered out) -->
+          <div x-show="fo.activeTab === 'issues' && fo.issues.filter(f=>!f.dismissed && f.problems.some(p=>fileEnabledRules(fo).has(p.rule))).length === 0 && fo.stats.total > 0 && fo.issues.length > 0">
+            <div class="all-clear"><p>No issues to display.</p></div>
+          </div>
+
+          <!-- Footnote browser tab -->
+          <div x-show="fo.activeTab === 'browser'" style="border:1px solid var(--border); border-radius:8px; max-height:400px; overflow-y:auto;">
+            <template x-for="fn in fo.footnotes" :key="fn.num">
+              <div class="fn-browser-item">
+                <span class="fn-num" x-text="fn.num + '.'"></span>
+                <span class="fn-text" x-html="highlightText(fn.text)"></span>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <!-- Export buttons -->
+        <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:14px; padding-top:14px; border-top:1px solid var(--divider);">
+          <button class="btn-primary" @click="downloadCsv(fo)" :disabled="fo.issues.length === 0"
+                  style="font-size:12px; padding:6px 14px;">
+            ⬇ CSV Report
+          </button>
+          <button class="btn-ghost" @click="downloadTxt(fo)" :disabled="fo.issues.length === 0"
+                  style="font-size:12px; padding:6px 14px;">
+            ⬇ Text Report
+          </button>
+          <button class="btn-ghost" @click="downloadAnnotated(fo)" :disabled="!fo.zip || fo.issues.length === 0"
+                  style="font-size:12px; padding:6px 14px; border-color:#a5b4fc; color:#6366f1;"
+                  title="Download original .docx with Word comments added at each flagged footnote">
+            ⬇ Annotated .docx
+          </button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- Legend / Help card -->
+  <div class="card" style="margin-top: 16px;">
+    <div class="card-header" style="margin-bottom: 6px;">
+      <div class="card-title" style="font-size: 13px; font-weight: 600; color: var(--text-muted);">What gets checked</div>
+      <span style="font-size:11px; color:var(--text-faint);">click a group to expand</span>
+    </div>
+
+    <!-- Supra citations -->
+    <div style="border:1px solid var(--border); border-radius:7px; margin-bottom:6px; overflow:hidden;">
+      <button style="width:100%; display:flex; align-items:center; justify-content:space-between; padding:9px 13px; background:transparent; border:none; cursor:pointer; text-align:left;" @click="legendOpen.supra = !legendOpen.supra">
+        <span style="font-size:13px; font-weight:600; color:var(--text);">Supra citations</span>
+        <span style="font-size:11px; color:var(--text-faint);" x-text="legendOpen.supra ? '▲' : '▼'"></span>
+      </button>
+      <div x-show="legendOpen.supra" x-transition style="padding:4px 13px 12px; display:grid; gap:7px; font-size:12px; color:var(--text-2); line-height:1.6; border-top:1px solid var(--border);">
+        <div><span class="badge badge-error" style="margin-right:6px;">error</span> <strong>SUPRA_NONEXISTENT</strong> — references a footnote number that doesn't exist.</div>
+        <div><span class="badge badge-error" style="margin-right:6px;">error</span> <strong>SUPRA_FORWARD</strong> — references a later footnote (forward reference).</div>
+        <div><span class="badge badge-error" style="margin-right:6px;">error</span> <strong>SUPRA_TO_SHORT_CITE</strong> — target footnote is itself a short citation (Id. or supra), not a full citation.</div>
+        <div><span class="badge badge-warning" style="margin-right:6px;">warn</span> <strong>SUPRA_NO_PINCITE</strong> — missing ", at [page]" after supra note N (Bluebook R. 4.2).</div>
+        <div><span class="badge badge-warning" style="margin-right:6px;">warn</span> <strong>SUPRA_WRONG_SOURCE_TYPE</strong> — target is a case, statute, or constitution; supra is prohibited for primary sources (R. 4.2).</div>
+      </div>
+    </div>
+
+    <!-- Id. citations -->
+    <div style="border:1px solid var(--border); border-radius:7px; margin-bottom:6px; overflow:hidden;">
+      <button style="width:100%; display:flex; align-items:center; justify-content:space-between; padding:9px 13px; background:transparent; border:none; cursor:pointer; text-align:left;" @click="legendOpen.id = !legendOpen.id">
+        <span style="font-size:13px; font-weight:600; color:var(--text);">Id. citations</span>
+        <span style="font-size:11px; color:var(--text-faint);" x-text="legendOpen.id ? '▲' : '▼'"></span>
+      </button>
+      <div x-show="legendOpen.id" x-transition style="padding:4px 13px 12px; display:grid; gap:7px; font-size:12px; color:var(--text-2); line-height:1.6; border-top:1px solid var(--border);">
+        <div><span class="badge badge-error" style="margin-right:6px;">error</span> <strong>ID_NO_PRECEDING</strong> — Id. appears with no prior citation to refer back to.</div>
+        <div><span class="badge badge-warning" style="margin-right:6px;">warn</span> <strong>ID_AMBIGUOUS</strong> — preceding footnote cites multiple sources; Id. is ambiguous (R. 4.1).</div>
+        <div><span class="badge badge-warning" style="margin-right:6px;">warn</span> <strong>ID_STALE</strong> — Id. used more than 5 footnotes after the source; consider a short-form citation (R. 4.1).</div>
+      </div>
+    </div>
+
+    <!-- Signal parentheticals -->
+    <div style="border:1px solid var(--border); border-radius:7px; margin-bottom:6px; overflow:hidden;">
+      <button style="width:100%; display:flex; align-items:center; justify-content:space-between; padding:9px 13px; background:transparent; border:none; cursor:pointer; text-align:left;" @click="legendOpen.signals = !legendOpen.signals">
+        <span style="font-size:13px; font-weight:600; color:var(--text);">Citation signals</span>
+        <span style="font-size:11px; color:var(--text-faint);" x-text="legendOpen.signals ? '▲' : '▼'"></span>
+      </button>
+      <div x-show="legendOpen.signals" x-transition style="padding:4px 13px 12px; display:grid; gap:7px; font-size:12px; color:var(--text-2); line-height:1.6; border-top:1px solid var(--border);">
+        <div><span class="badge badge-warning" style="margin-right:6px;">warn</span> <strong>SEE_GEN_NO_PAREN</strong> — <em>See generally</em> without an explanatory parenthetical; Bluebook strongly prefers one.</div>
+        <div><span class="badge badge-warning" style="margin-right:6px;">warn</span> <strong>CF_NO_PAREN</strong> — <em>Cf.</em> always requires an explanatory parenthetical (R. 1.2).</div>
+        <div><span class="badge badge-warning" style="margin-right:6px;">warn</span> <strong>BUT_CF_NO_PAREN</strong> — <em>But cf.</em> always requires an explanatory parenthetical (R. 1.2).</div>
+        <div><span class="badge badge-warning" style="margin-right:6px;">warn</span> <strong>COMPARE_WITH_NO_PAREN</strong> — <em>Compare…with…</em> requires a parenthetical on each side (R. 1.2).</div>
+      </div>
+    </div>
+
+    <!-- Quotes & pincites -->
+    <div style="border:1px solid var(--border); border-radius:7px; margin-bottom:6px; overflow:hidden;">
+      <button style="width:100%; display:flex; align-items:center; justify-content:space-between; padding:9px 13px; background:transparent; border:none; cursor:pointer; text-align:left;" @click="legendOpen.pincites = !legendOpen.pincites">
+        <span style="font-size:13px; font-weight:600; color:var(--text);">Quotes &amp; pincites</span>
+        <span style="font-size:11px; color:var(--text-faint);" x-text="legendOpen.pincites ? '▲' : '▼'"></span>
+      </button>
+      <div x-show="legendOpen.pincites" x-transition style="padding:4px 13px 12px; display:grid; gap:7px; font-size:12px; color:var(--text-2); line-height:1.6; border-top:1px solid var(--border);">
+        <div><span class="badge badge-warning" style="margin-right:6px;">warn</span> <strong>QUOTE_NO_PINCITE</strong> — direct quote detected without a pincite; Bluebook R. 3.2 requires one.</div>
+        <div><span class="badge badge-warning" style="margin-right:6px;">warn</span> <strong>PINCITE_HYPHEN</strong> — page range uses a hyphen (<code>-</code>) instead of an en-dash (<code>–</code>) as required by Bluebook R. 3.2(a).</div>
+        <div><span class="badge badge-warning" style="margin-right:6px;">warn</span> <strong>PINCITE_UNSHORTENED</strong> — ending page not shortened per Bluebook R. 3.2(a). Example: <code>1124–1129</code> should be <code>1124–29</code>.</div>
+      </div>
+    </div>
+
+    <!-- Format -->
+    <div style="border:1px solid var(--border); border-radius:7px; overflow:hidden;">
+      <button style="width:100%; display:flex; align-items:center; justify-content:space-between; padding:9px 13px; background:transparent; border:none; cursor:pointer; text-align:left;" @click="legendOpen.format = !legendOpen.format">
+        <span style="font-size:13px; font-weight:600; color:var(--text);">Format</span>
+        <span style="font-size:11px; color:var(--text-faint);" x-text="legendOpen.format ? '▲' : '▼'"></span>
+      </button>
+      <div x-show="legendOpen.format" x-transition style="padding:4px 13px 12px; display:grid; gap:7px; font-size:12px; color:var(--text-2); line-height:1.6; border-top:1px solid var(--border);">
+        <div><span class="badge badge-warning" style="margin-right:6px;">warn</span> <strong>FOOTNOTE_NO_PERIOD</strong> — footnote does not end with a period.</div>
+      </div>
+    </div>
+
+    <!-- URLs -->
+    <div style="border:1px solid var(--border); border-radius:7px; overflow:hidden;">
+      <button style="width:100%; display:flex; align-items:center; justify-content:space-between; padding:9px 13px; background:transparent; border:none; cursor:pointer; text-align:left;" @click="legendOpen.urls = !legendOpen.urls">
+        <span style="font-size:13px; font-weight:600; color:var(--text);">URLs</span>
+        <span style="font-size:11px; color:var(--text-faint);" x-text="legendOpen.urls ? '▲' : '▼'"></span>
+      </button>
+      <div x-show="legendOpen.urls" x-transition style="padding:4px 13px 12px; display:grid; gap:7px; font-size:12px; color:var(--text-2); line-height:1.6; border-top:1px solid var(--border);">
+        <div><span class="badge badge-warning" style="margin-right:6px;">warn</span> <strong>URL_NOT_ARCHIVED</strong> — Bluebook R. 18.2 requires a permanent, archived URL (e.g., a Perma.cc link). <a href="https://permadrop.kirinchang.com/" target="_blank" rel="noopener noreferrer" style="color:var(--indigo-400,#818cf8);">PermaDrop</a> can help you create one.</div>
+      </div>
+    </div>
+
+    <!-- Hereinafter -->
+    <div style="border:1px solid var(--border); border-radius:7px; overflow:hidden;">
+      <button style="width:100%; display:flex; align-items:center; justify-content:space-between; padding:9px 13px; background:transparent; border:none; cursor:pointer; text-align:left;" @click="legendOpen.hereinafter = !legendOpen.hereinafter">
+        <span style="font-size:13px; font-weight:600; color:var(--text);">Hereinafter</span>
+        <span style="font-size:11px; color:var(--text-faint);" x-text="legendOpen.hereinafter ? '▲' : '▼'"></span>
+      </button>
+      <div x-show="legendOpen.hereinafter" x-transition style="padding:4px 13px 12px; display:grid; gap:7px; font-size:12px; color:var(--text-2); line-height:1.6; border-top:1px solid var(--border);">
+        <div><span class="badge badge-warning" style="margin-right:6px;">warn</span> <strong>HEREINAFTER_NEVER_USED</strong> — <em>[hereinafter X]</em> is defined but never referenced in any later footnote.</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Footer -->
+<footer style="max-width:680px; margin:0 auto; padding:28px 20px 48px; display:flex; align-items:center; justify-content:center;">
+  <p style="font-size:12px; color:var(--text-faint); text-align:center; line-height:1.8;">
+    Made by <a href="https://kirinchang.com" target="_blank" rel="noopener noreferrer"
+               style="color:var(--text-muted); text-decoration:underline; text-underline-offset:2px;">Kirin Chang</a>
+    &nbsp;·&nbsp;
+    <a href="https://github.com/kirinccchang/supradrop" target="_blank" rel="noopener noreferrer"
+       style="color:var(--text-muted); text-decoration:underline; text-underline-offset:2px;">GitHub</a>
+    &nbsp;·&nbsp; Free &amp; Open Source (AGPL-3.0)
+    &nbsp;·&nbsp;
+    <a href="https://permadrop.kirinchang.com/" target="_blank" rel="noopener noreferrer"
+       style="color:var(--text-muted); text-decoration:underline; text-underline-offset:2px;">PermaDrop</a>
+  </p>
+</footer>
+
+<script>
+function app() {
+  return {
+    // ── Global state ───────────────────────────────────────────────────────
+    dragging:  false,
+    fileError: '',
+    darkMode:  false,
+
+    // files[]: [{id, name, size, zip, parsing, analyzed, collapsed,
+    //            footnotes, issues, stats, expandedFn, activeTab, showDismissed}]
+    files: [],
+
+    // Default rule groups — cloned into each fo.ruleGroups on file load
+    defaultRuleGroups: [
+      { id: 'supra',       label: 'Supra',       enabled: true,
+        rules: ['SUPRA_NONEXISTENT','SUPRA_FORWARD','SUPRA_TO_SHORT_CITE','SUPRA_NO_PINCITE','SUPRA_WRONG_SOURCE_TYPE'] },
+      { id: 'id',          label: 'Id.',          enabled: true,
+        rules: ['ID_NO_PRECEDING','ID_AMBIGUOUS','ID_STALE'] },
+      { id: 'signals',     label: 'Signals',      enabled: true,
+        rules: ['SEE_GEN_NO_PAREN','CF_NO_PAREN','BUT_CF_NO_PAREN','COMPARE_WITH_NO_PAREN'] },
+      { id: 'pincites',    label: 'Quotes & Pincites', enabled: true,
+        rules: ['QUOTE_NO_PINCITE', 'PINCITE_HYPHEN', 'PINCITE_UNSHORTENED'] },
+      { id: 'format',      label: 'Format',       enabled: true,
+        rules: ['FOOTNOTE_NO_PERIOD'] },
+      { id: 'urls',        label: 'URLs',         enabled: true,
+        rules: ['URL_NOT_ARCHIVED'] },
+      { id: 'hereinafter', label: 'Hereinafter',  enabled: true,
+        rules: ['HEREINAFTER_NEVER_USED'] },
+    ],
+
+    // Legend accordion state
+    legendOpen: { supra: false, id: false, signals: false, pincites: false, format: false, urls: false, hereinafter: false },
+
+    fileEnabledRules(fo) {
+      return new Set((fo.ruleGroups || []).flatMap(g => g.enabled ? g.rules : []));
+    },
+
+    init() {
+      const mq = window.matchMedia('(prefers-color-scheme: dark)');
+      this.darkMode = mq.matches;
+      mq.addEventListener('change', e => { this.darkMode = e.matches; });
+      this.$watch('darkMode', v => document.body.classList.toggle('dark', v));
+      document.body.classList.toggle('dark', this.darkMode);
+    },
+
+    /* ── Per-file computed helpers ─────────────────────────────────────── */
+
+    fileErrorCount(fo) {
+      const e = this.fileEnabledRules(fo);
+      return fo.issues.reduce((n, f) => n + f.problems.filter(p => p.type === 'error' && e.has(p.rule)).length, 0);
+    },
+
+    fileWarningCount(fo) {
+      const e = this.fileEnabledRules(fo);
+      return fo.issues.reduce((n, f) => n + f.problems.filter(p => p.type === 'warning' && e.has(p.rule)).length, 0);
+    },
+
+    /* ── File handling ─────────────────────────────────────────────────── */
+
+    onDrop(e) {
+      this.dragging = false;
+      for (const f of Array.from(e.dataTransfer?.files || [])) this.addFile(f);
+    },
+
+    onFileInput(e) {
+      for (const f of Array.from(e.target.files || [])) this.addFile(f);
+      e.target.value = '';
+    },
+
+    async addFile(f) {
+      if (!f.name.toLowerCase().endsWith('.docx')) {
+        this.fileError = `"${f.name}" is not a .docx file — skipped.`;
+        return;
+      }
+      if (this.files.some(fo => fo.name === f.name)) {
+        this.fileError = `"${f.name}" is already loaded.`;
+        return;
+      }
+      this.fileError = '';
+
+      const id = 'f' + Date.now() + Math.random().toString(36).slice(2);
+      // Push first so Alpine wraps it in a reactive proxy immediately.
+      this.files.push({
+        id,
+        name:          f.name,
+        size:          f.size,
+        zip:           null,
+        parsing:       true,
+        analyzed:      false,
+        collapsed:     false,
+        footnotes:     [],
+        issues:        [],
+        stats:         { total: 0, supraRefs: 0, idRefs: 0 },
+        expandedFn:    null,
+        activeTab:     'issues',
+        showDismissed: false,
+        ruleGroups:    JSON.parse(JSON.stringify(this.defaultRuleGroups)),
+      });
+
+      try {
+        const buf = await f.arrayBuffer();
+        const zip = await JSZip.loadAsync(buf);
+        // Always access through this.files so mutations go through Alpine's
+        // reactive proxy (local variable after push() is the plain object).
+        const fo = this.files.find(x => x.id === id);
+        fo.zip = zip;
+        await this.analyzeFile(fo, zip);
+      } catch (err) {
+        this.fileError = `Could not read "${f.name}": ${err.message}`;
+        this.files = this.files.filter(x => x.id !== id);
+      } finally {
+        const fo = this.files.find(x => x.id === id);
+        if (fo) fo.parsing = false;
+      }
+    },
+
+    removeFile(fileId) {
+      this.files = this.files.filter(fo => fo.id !== fileId);
+    },
+
+    /* ── Docx parsing ──────────────────────────────────────────────────── */
+
+    async analyzeFile(fo, zip) {
+      const fnFile = zip.file('word/footnotes.xml');
+      if (!fnFile) {
+        fo.footnotes = [];
+        fo.issues    = [];
+        fo.stats     = { total: 0, supraRefs: 0, idRefs: 0 };
+        fo.analyzed  = true;
+        return;
+      }
+
+      const fnXml  = await fnFile.async('string');
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(fnXml, 'text/xml');
+      const W      = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
+
+      const fnNodes = Array.from(xmlDoc.getElementsByTagNameNS(W, 'footnote'));
+
+      // Whitelist: keep only footnotes with NO w:type attribute.
+      // Per OOXML spec, system footnotes (separator, continuationSeparator,
+      // continuationNotice) always carry an explicit w:type; user footnotes do not.
+      const realNodes = fnNodes.filter(node => {
+        const t = node.getAttributeNS(W, 'type') || node.getAttribute('w:type') || '';
+        return !t;
+      }).sort((a, b) => {
+        const ia = parseInt(a.getAttributeNS(W, 'id') || a.getAttribute('w:id'), 10);
+        const ib = parseInt(b.getAttributeNS(W, 'id') || b.getAttribute('w:id'), 10);
+        return ia - ib;
+      });
+
+      // Map, then filter to only auto-numbered footnotes:
+      //   - custom-mark footnotes (e.g., the "* Author note") contain <w:t> for the
+      //     mark symbol instead of <w:footnoteRef/>, so Word skips them in its
+      //     sequential numbering — we must exclude them too.
+      //   - truly empty/deleted footnotes (no visible text) are also filtered out.
+      // Re-assign sequential display numbers so they match Word's display.
+      const rawFns = realNodes.map(node => ({
+        xmlId:     parseInt(node.getAttributeNS(W, 'id') || node.getAttribute('w:id'), 10),
+        text:      this.extractText(node),
+        isAutoNum: this._hasFootnoteRef(node),
+      })).filter(fn => fn.isAutoNum && fn.text.length > 0);
+
+      fo.footnotes = rawFns.map((fn, i) => ({ ...fn, num: i + 1 }));
+
+      let supraRefs = 0, idRefs = 0;
+      for (const fn of fo.footnotes) {
+        supraRefs += (fn.text.match(/\bsupra\s+notes?\s+\d+/gi) || []).length;
+        idRefs    += (fn.text.match(/\bId\./g) || []).length;
+      }
+      fo.stats    = { total: fo.footnotes.length, supraRefs, idRefs };
+      fo.issues   = this.validateCitations(fo.footnotes);
+      fo.analyzed = true;
+    },
+
+    /**
+     * Recursively extract visible text from a Word XML node.
+     * Skips instrText, footnoteRef, endnoteRef, and footnote-reference runs.
+     * Adds a space between <w:p> paragraph elements.
+     */
+    extractText(node) {
+      return this._extractTextInner(node).trim().replace(/^\.\s*/, '');
+    },
+    _extractTextInner(node) {
+      const SKIP = new Set(['instrtext', 'footnoteref', 'endnoteref', 'rpr', 'ppr', 'sectpr', 'fldchar']);
+      let text = '';
+      for (const child of node.childNodes) {
+        const ln = (child.localName || '').toLowerCase();
+        if (child.nodeType === Node.TEXT_NODE) continue;
+        if (SKIP.has(ln)) continue;
+        if (ln === 't') {
+          text += child.textContent;
+        } else if (ln === 'tab') {
+          text += ' ';
+        } else if (ln === 'br') {
+          text += ' ';
+        } else if (ln === 'p') {
+          const paraText = this._extractTextInner(child).trim();
+          if (paraText) {
+            if (text) text += ' ';
+            text += paraText;
+          }
+        } else if (ln === 'r') {
+          if (!this._isFootnoteRefRun(child)) text += this._extractTextInner(child);
+        } else if (child.childNodes && child.childNodes.length > 0) {
+          text += this._extractTextInner(child);
+        }
+      }
+      return text;
+    },
+
+    /**
+     * Returns true if a <w:r> run is solely a footnote/endnote reference mark
+     * (the auto-numbered superscript that appears at the start of every footnote body).
+     * Detects both the rStyle="FootnoteReference" convention and the fallback of
+     * a superscript run whose text is only digits.
+     */
+    _isFootnoteRefRun(rNode) {
+      let hasSuperscript = false;
+      let textContent   = '';
+      for (const child of rNode.childNodes) {
+        const ln = (child.localName || '').toLowerCase();
+        if (ln === 'rpr') {
+          for (const rc of child.childNodes) {
+            const rln = (rc.localName || '').toLowerCase();
+            if (rln === 'rstyle') {
+              const val = rc.getAttribute('w:val') || '';
+              if (val === 'FootnoteReference' || val === 'EndnoteReference') return true;
+            }
+            if (rln === 'vertalign') {
+              const val = rc.getAttribute('w:val') || '';
+              if (val === 'superscript') hasSuperscript = true;
+            }
+          }
+        } else if (ln === 't') {
+          textContent += child.textContent;
+        }
+      }
+      // Fallback: a superscript run containing only digits → treat as ref mark
+      return hasSuperscript && /^\d+$/.test(textContent.trim());
+    },
+
+    /**
+     * Returns true if a footnote node contains a <w:footnoteRef/> element
+     * anywhere in its subtree.  Custom-mark footnotes (e.g., "* Author note")
+     * use a literal <w:t>*</w:t> instead of <w:footnoteRef/> and therefore
+     * return false.  Word does NOT include custom-mark footnotes in its
+     * sequential auto-number count; we must exclude them for the same reason.
+     */
+    _hasFootnoteRef(node) {
+      if ((node.localName || '').toLowerCase() === 'footnoteref') return true;
+      for (const child of node.childNodes) {
+        if (child.nodeType !== Node.TEXT_NODE && this._hasFootnoteRef(child)) return true;
+      }
+      return false;
+    },
+
+    /* ── Citation validation ───────────────────────────────────────────── */
+
+    validateCitations(footnotes) {
+      if (!footnotes.length) return [];
+
+      const fnNums = new Set(footnotes.map(f => f.num));
+      const fnMap  = new Map(footnotes.map(f => [f.num, f]));
+      const issues = [];
+
+      let prevAuth = null;
+
+      // ── Pre-pass: collect hereinafter definitions and usages ───────────
+      const hereDefMap = new Map();
+      const hereUseSet = new Set();
+      for (const { text: dText, num: dNum } of footnotes) {
+        const hRe = /\[hereinafter\s+([^\]]+)\]/gi;
+        let hm;
+        while ((hm = hRe.exec(dText)) !== null) {
+          const term = hm[1].trim();
+          if (!hereDefMap.has(term)) hereDefMap.set(term, dNum);
+        }
+      }
+      for (const [term, defFnNum] of hereDefMap) {
+        for (const { num: uNum, text: uText } of footnotes) {
+          if (uNum !== defFnNum && uText.includes(term)) {
+            hereUseSet.add(term);
+            break;
+          }
+        }
+      }
+
+      for (const fn of footnotes) {
+        const { num, text } = fn;
+        const problems = [];
+
+        // ── Find all supra note N refs ───────────────────────────────────
+        const supraMatches = [];
+        const supraRe = /\bsupra\s+notes?\s+(\d+)/gi;
+        let m;
+        while ((m = supraRe.exec(text)) !== null) {
+          supraMatches.push({ refNum: parseInt(m[1], 10), fullMatch: m[0], matchStart: m.index, matchEnd: m.index + m[0].length });
+        }
+
+        // ── Find all Id. refs ────────────────────────────────────────────
+        const idMatches = [];
+        const idRe = /\bId\./g;
+        while ((m = idRe.exec(text)) !== null) {
+          idMatches.push({ fullMatch: m[0] });
+        }
+
+        // ── Validate each supra ref ──────────────────────────────────────
+        for (const ref of supraMatches) {
+          if (!fnNums.has(ref.refNum)) {
+            problems.push({
+              type: 'error',
+              rule: 'SUPRA_NONEXISTENT',
+              msg:  `"${ref.fullMatch}" — footnote ${ref.refNum} does not exist in this document.`,
+            });
+          } else if (ref.refNum >= num) {
+            problems.push({
+              type: 'error',
+              rule: 'SUPRA_FORWARD',
+              msg:  `"${ref.fullMatch}" — cannot reference note ${ref.refNum}, which comes at or after this footnote (${num}).`,
+            });
+          } else {
+            const target     = fnMap.get(ref.refNum);
+            const targetTrim = target.text.replace(/^\s*(?:See(?: also)?|But see|Accord|E\.g\.,?)\s+/i, '');
+            const targetIsId    = /^Id\./i.test(targetTrim);
+            const targetIsSupra = /^supra\s+note/i.test(targetTrim);
+            if (targetIsId || targetIsSupra) {
+              problems.push({
+                type: 'error',
+                rule: 'SUPRA_TO_SHORT_CITE',
+                msg:  `"${ref.fullMatch}" — footnote ${ref.refNum} itself begins with ${targetIsId ? 'Id.' : 'supra note'}, not a full citation. A supra must refer to a full-citation footnote.`,
+              });
+            } else if ((() => {
+                // Narrow to the specific sub-citation this supra refers to.
+                // Extract the short-form label immediately before "supra note N":
+                // e.g. "Hendrix, supra note 3" → shortForm = "Hendrix"
+                const beforeSupra = text.slice(0, ref.matchStart);
+                const lastSemi = beforeSupra.lastIndexOf(';');
+                const rawShort = beforeSupra.slice(lastSemi + 1).trim().replace(/,\s*$/, '');
+                const searchKey = rawShort.split(/[\s,]+/)[0]; // first word
+                let targetSub = target.text;
+                if (searchKey && searchKey.length > 2) {
+                  const subCites = target.text.split(/\s*;\s*/);
+                  const match = subCites.find(s => s.includes(searchKey));
+                  if (match) targetSub = match;
+                }
+                return /\bv\.\s/.test(targetSub);
+              })()) {
+              problems.push({
+                type: 'warning',
+                rule: 'SUPRA_WRONG_SOURCE_TYPE',
+                msg:  `"${ref.fullMatch}" — Bluebook prohibits supra for cases; use a short-form case citation instead (R. 10.9, R. 4.2).`,
+              });
+            } else if (/\bU\.S\.C\.|§\s*\d|\bPub\.\s*L\./.test(target.text)) {
+              problems.push({
+                type: 'warning',
+                rule: 'SUPRA_WRONG_SOURCE_TYPE',
+                msg:  `"${ref.fullMatch}" — Bluebook prohibits supra for statutes; use the statutory short form instead (R. 12.10, R. 4.2).`,
+              });
+            } else if (/U\.S\.\s*Const\.|art\.\s+[IVX]+(?:\s|,|\.)/i.test(target.text)) {
+              problems.push({
+                type: 'warning',
+                rule: 'SUPRA_WRONG_SOURCE_TYPE',
+                msg:  `"${ref.fullMatch}" — Bluebook prohibits supra for constitutions; cite directly (R. 11, R. 4.2).`,
+              });
+            } else {
+              const afterMatch = text.slice(ref.matchEnd);
+              const hasPincite = /^[\s,]*at\s+[\d*§]/.test(afterMatch);
+              if (!hasPincite) {
+                problems.push({
+                  type: 'warning',
+                  rule: 'SUPRA_NO_PINCITE',
+                  msg:  `"${ref.fullMatch}" — missing pincite; Bluebook requires "supra note N, at [page]".`,
+                });
+              }
+            }
+          }
+        }
+
+        // ── Validate each Id. ref ────────────────────────────────────────
+        for (const ref of idMatches) {
+          if (prevAuth === null) {
+            problems.push({
+              type: 'error',
+              rule: 'ID_NO_PRECEDING',
+              msg:  `"Id." — there is no preceding citation for Id. to reference.`,
+            });
+          } else if (prevAuth.isAmbiguous) {
+            problems.push({
+              type:       'warning',
+              rule:       'ID_AMBIGUOUS',
+              msg:        `"Id." — the preceding footnote (${prevAuth.fnNum}) appears to cite multiple sources; Id. is ambiguous about which source it refers to.`,
+              prevFnNum:  prevAuth.fnNum,
+              prevFnText: fnMap.get(prevAuth.fnNum)?.text || '',
+            });
+          }
+        }
+
+        // ── Id. chain staleness ──────────────────────────────────────────
+        if (idMatches.length > 0 && prevAuth !== null && !prevAuth.isAmbiguous
+            && (num - prevAuth.fnNum) > 5) {
+          problems.push({
+            type: 'warning',
+            rule: 'ID_STALE',
+            msg:  `"Id." — the source was first cited ${num - prevAuth.fnNum} footnotes ago (fn ${prevAuth.fnNum}); consider a short-form citation instead (Bluebook R. 4.1).`,
+          });
+        }
+
+        // ── Terminal period ──────────────────────────────────────────────
+        // Skip check if the footnote ends with a bare URL — Bluebook R. 18.2.2
+        // advises against adding punctuation after URLs to avoid reader confusion.
+        const endsWithUrl = /https?:\/\/\S+$/.test(text.trim());
+        if (!endsWithUrl && !/[.!?]['"\u2019\u201d)]*$/.test(text.trim())) {
+          problems.push({
+            type: 'warning',
+            rule: 'FOOTNOTE_NO_PERIOD',
+            msg:  'Footnote does not end with a period.',
+          });
+        }
+
+        // ── Unarchived URL (Bluebook R. 18.2) ───────────────────────────
+        // Collect every URL in the footnote, then check whether the set
+        // contains any archived host. If there are non-archived URLs but
+        // no archived URLs at all, flag — regardless of position.
+        {
+          const ARCHIVED_HOST = /^https?:\/\/(?:perma\.cc|web\.archive\.org|archive\.org|archive\.ph|archive\.today|doi\.org)\//i;
+          const urlRe = /https?:\/\/[^\s"'<>]+/g;
+          let uM2, hasNonArchived = false, hasArchived = false;
+          while ((uM2 = urlRe.exec(text)) !== null) {
+            const url = uM2[0].replace(/[.,;)\]'"]+$/, '');
+            if (ARCHIVED_HOST.test(url)) { hasArchived = true; }
+            else { hasNonArchived = true; }
+          }
+          if (hasNonArchived && !hasArchived) {
+            problems.push({
+              type: 'warning',
+              rule: 'URL_NOT_ARCHIVED',
+              msg:  `Bluebook R. 18.2 requires a permanent, archived URL (e.g., a Perma.cc link). <a href="https://permadrop.kirinchang.com/" target="_blank" rel="noopener noreferrer">PermaDrop</a> can help you create one.`,
+            });
+          }
+        }
+
+        // ── Cf. without explanatory parenthetical ────────────────────────
+        if (/\bcf\./i.test(text) && !/\bbut\s+cf\./i.test(text)) {
+          if (!this._hasExplanatoryParen(text)) {
+            problems.push({
+              type: 'warning',
+              rule: 'CF_NO_PAREN',
+              msg:  '"Cf." always requires an explanatory parenthetical (Bluebook R. 1.2).',
+            });
+          }
+        }
+
+        // ── But cf. without explanatory parenthetical ────────────────────
+        if (/\bbut\s+cf\./i.test(text)) {
+          if (!this._hasExplanatoryParen(text)) {
+            problems.push({
+              type: 'warning',
+              rule: 'BUT_CF_NO_PAREN',
+              msg:  '"But cf." always requires an explanatory parenthetical (Bluebook R. 1.2).',
+            });
+          }
+        }
+
+        // ── Compare...with... needs parentheticals on both sides ─────────
+        if (/\bcompare\b.+?\bwith\b/i.test(text)) {
+          if (this._countExplanatoryParens(text) < 2) {
+            problems.push({
+              type: 'warning',
+              rule: 'COMPARE_WITH_NO_PAREN',
+              msg:  '"Compare...with..." — both sides require explanatory parentheticals (Bluebook R. 1.2).',
+            });
+          }
+        }
+
+        // ── Hereinafter defined but never used ───────────────────────────
+        {
+          const hRe = /\[hereinafter\s+([^\]]+)\]/gi;
+          let hm;
+          while ((hm = hRe.exec(text)) !== null) {
+            const term = hm[1].trim();
+            if (!hereUseSet.has(term)) {
+              problems.push({
+                type: 'warning',
+                rule: 'HEREINAFTER_NEVER_USED',
+                msg:  `[hereinafter ${term}] is defined here but never used in any subsequent footnote.`,
+              });
+            }
+          }
+        }
+
+        // ── "See generally" without explanatory parenthetical ────────────
+        if (/\bsee\s+generally\b/i.test(text)) {
+          if (!this._hasExplanatoryParen(text)) {
+            problems.push({
+              type: 'warning',
+              rule: 'SEE_GEN_NO_PAREN',
+              msg:  '"See generally" — Bluebook strongly prefers an explanatory parenthetical (e.g., (arguing that...)).',
+            });
+          }
+        }
+
+        // ── Direct quote without pincite ─────────────────────────────────
+        // Use exec() so we can inspect the quoted content before flagging.
+        const quoteMatch = /[\u201c\u0022]([^\u201c\u201d\u0022]{8,})[\u201d\u0022]/.exec(text);
+        if (quoteMatch) {
+          const quotedContent = quoteMatch[1];
+          // Article titles in citations often contain "Quoted Terms" or
+          // "Coined Phrases" — short, Title-Case phrases with no lowercase words.
+          // A real block quote has sentence-like content: multiple lowercase words.
+          const lcWordCount = (quotedContent.match(/\b[a-z]{4,}/g) || []).length;
+          const isLikelyDirectQuote = lcWordCount >= 2 || quotedContent.length >= 40;
+          if (isLikelyDirectQuote) {
+            const hasPincite =
+              /\bat\s+\*?\d+/.test(text) ||
+              /\d+\s+(?:U\.S\.|F\.[234]?d|F\.Supp\.[23]?d|Cal\.|N\.Y\.|Tex\.)\s+\d+\s*,\s*\d+/.test(text) ||
+              /,\s*\d{1,4}(?:\s+n\.\d+(?:\.\d+)?)?\s*(?:\(\d{4}\)|$)/.test(text);
+            if (!hasPincite) {
+              problems.push({
+                type: 'warning',
+                rule: 'QUOTE_NO_PINCITE',
+                msg:  'Direct quote detected without an apparent pincite (Bluebook R. 3.2 requires a pincite for quoted material).',
+              });
+            }
+          }
+        }
+
+        // ── Pincite page range format (Bluebook R. 3.2(a)) ──────────────────
+        {
+          const pinciteRe = /\b(\d{2,4})\s*([-\u2013])\s*(\d{2,4})\b/g;
+          let pm;
+          while ((pm = pinciteRe.exec(text)) !== null) {
+            const start = parseInt(pm[1], 10);
+            const dash  = pm[2];
+            const end   = parseInt(pm[3], 10);
+            // Exclusion 1: year ranges
+            if (start >= 1800 && start <= 2100 && end >= 1800 && end <= 2100) continue;
+            // Exclusion 2: not ascending
+            if (end <= start) continue;
+            // Exclusion 3: inside or immediately after a URL
+            if (/https?:\/\/\S*$/.test(text.slice(0, pm.index))) continue;
+            // Exclusion 4: end too small to be a meaningful pincite
+            if (end < 10) continue;
+
+            if (dash === '-') {
+              problems.push({
+                type: 'warning',
+                rule: 'PINCITE_HYPHEN',
+                msg:  `"${pm[0]}" — page spans must use an en-dash (–), not a hyphen (-). In Word: type start, two hyphens, end and Word auto-converts. Bluebook R. 3.2(a).`,
+              });
+            }
+
+            const expectedShort = this.bluebookShortEnd(start, end);
+            if (String(end).length > expectedShort.length) {
+              const dashChar = dash === '-' ? '-' : '\u2013';
+              problems.push({
+                type: 'warning',
+                rule: 'PINCITE_UNSHORTENED',
+                msg:  `"${pm[0]}" — Bluebook R. 3.2(a) requires the ending page to be shortened: write "${pm[1]}${dashChar}${expectedShort}" (retain last two digits, drop repetitious preceding digits).`,
+              });
+            }
+          }
+        }
+
+        // ── Update prevAuth for the next footnote ────────────────────────
+        const onlyId = idMatches.length > 0 && supraMatches.length === 0
+          && this.looksLikeOnlyId(text);
+
+        if (!onlyId) {
+          const srcCount = this.estimateSourceCount(text);
+          prevAuth = { fnNum: num, isAmbiguous: srcCount > 1 };
+        }
+
+        if (problems.length > 0) {
+          issues.push({ footnoteNum: num, text, problems });
+        }
+      }
+
+      return issues;
+    },
+
+    looksLikeOnlyId(text) {
+      const stripped = text.replace(/^\s*(?:See(?: also)?|But see|Accord|E\.g\.,?),?\s+/i, '').trim();
+      if (!/^Id\./.test(stripped)) return false;
+      return !this._hasSemiOutsideParens(stripped);
+    },
+
+    estimateSourceCount(text) {
+      const semis   = this._countCitationSemis(text);
+      const signals = (text.match(/\b(?:see also|but see|compare|accord|contra)\b/gi) || []).length;
+      return 1 + semis + signals;
+    },
+
+    _countCitationSemis(text) {
+      let depth = 0, count = 0, segStart = 0;
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if      (ch === '(') depth++;
+        else if (ch === ')') depth = Math.max(0, depth - 1);
+        else if (ch === ';' && depth === 0) {
+          if (this._completedCitation(text.slice(segStart, i))) count++;
+          segStart = i + 1;
+        }
+      }
+      return count;
+    },
+
+    _completedCitation(seg) {
+      return (
+        /\bv\.\s/.test(seg)                          ||
+        /\(\d{4}\)/.test(seg)                        ||
+        /https?:\/\//.test(seg)                      ||
+        /\b(U\.S\.C\.|§\s*\d|Pub\. L\.)/.test(seg)
+      );
+    },
+
+    _hasExplanatoryParen(text) {
+      return /\(\s*(?:not|hold|find|argu|explain|discuss|stat|conclud|recogniz|describ|reject|suggest|show|consider|analyz|emphasiz|acknowledg|observ|review|address|introduc|establish|provid|contend|assert|propos|distinguish|compar|contrast|determin|defin|identif|requir|limit|restrict|permit|prohibit|allow|interpret|evaluat|indicat|demonstrat|highlight|confirm|affirm|cit|detail|exam|explor|apply)ing\b/i.test(text);
+    },
+
+    _countExplanatoryParens(text) {
+      const re = /\(\s*(?:not|hold|find|argu|explain|discuss|stat|conclud|recogniz|describ|reject|suggest|show|consider|analyz|emphasiz|acknowledg|observ|review|address|introduc|establish|provid|contend|assert|propos|distinguish|compar|contrast|determin|defin|identif|requir|limit|restrict|permit|prohibit|allow|interpret|evaluat|indicat|demonstrat|highlight|confirm|affirm|cit|detail|exam|explor|apply)ing\b/gi;
+      return (text.match(re) || []).length;
+    },
+
+    /**
+     * Bluebook R. 3.2(a): compute the correctly shortened ending page number.
+     * Retains the last two digits; drops preceding digits that repeat the
+     * corresponding digits of the starting page from the left.
+     * Examples: 1124→1129 gives "29"; 104→107 gives "07"; 99→101 gives "101".
+     */
+    bluebookShortEnd(start, end) {
+      const s = String(start), e = String(end);
+      let prefixLen = 0;
+      for (let i = 0; i < Math.min(s.length, e.length); i++) {
+        if (s[i] === e[i]) prefixLen++;
+        else break;
+      }
+      const condensed = e.slice(prefixLen);
+      return condensed.length >= 2 ? condensed : e.slice(-2);
+    },
+
+    _hasSemiOutsideParens(text) {
+      let depth = 0;
+      for (const ch of text) {
+        if      (ch === '(') depth++;
+        else if (ch === ')') depth = Math.max(0, depth - 1);
+        else if (ch === ';' && depth === 0) return true;
+      }
+      return false;
+    },
+
+    /* ── UI helpers ────────────────────────────────────────────────────── */
+
+    toggleFn(fo, num) {
+      fo.expandedFn = fo.expandedFn === num ? null : num;
+    },
+
+    dismissIssue(fo, footnoteNum) {
+      const issue = fo.issues.find(f => f.footnoteNum === footnoteNum);
+      if (issue) issue.dismissed = true;
+      if (fo.expandedFn === footnoteNum) fo.expandedFn = null;
+    },
+
+    restoreIssue(fo, footnoteNum) {
+      const issue = fo.issues.find(f => f.footnoteNum === footnoteNum);
+      if (issue) issue.dismissed = false;
+    },
+
+    confirmIssue(fo, footnoteNum) {
+      const issue = fo.issues.find(f => f.footnoteNum === footnoteNum);
+      if (issue) issue.confirmed = true;
+    },
+
+    formatSize(bytes) {
+      if (bytes < 1024)         return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    },
+
+    highlightText(text) {
+      const escaped = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+      const withSupra = escaped.replace(
+        /\bsupra\s+notes?\s+\d+/gi,
+        m => `<mark class="hl-supra">${m}</mark>`
+      );
+      return withSupra.replace(
+        /\bId\./g,
+        m => `<mark class="hl-id">${m}</mark>`
+      );
+    },
+
+    /* ── Export ────────────────────────────────────────────────────────── */
+
+    downloadCsv(fo) {
+      const e = this.fileEnabledRules(fo);
+      const enabledLabel = fo.ruleGroups.filter(g => g.enabled).map(g => g.label).join(', ');
+      const rows = [
+        [`SupraDrop Citation Report — Checks: ${enabledLabel}`],
+        ['Footnote', 'Severity', 'Review Status', 'Rule', 'Message', 'Footnote Text Preview'],
+      ];
+      for (const fn of fo.issues) {
+        const visible = fn.problems.filter(p => e.has(p.rule));
+        if (!visible.length) continue;
+        const status = fn.confirmed ? 'confirmed error' : 'unreviewed';
+        for (const p of visible) {
+          const preview = fn.text.slice(0, 120).replace(/\r?\n/g, ' ');
+          rows.push([fn.footnoteNum, p.type, status, p.rule, p.msg, preview]);
+        }
+      }
+      const csv = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\r\n');
+      this._download(csv, 'text/csv', fo.name.replace(/\.docx$/i, '') + '-citation-issues.csv');
+    },
+
+    downloadTxt(fo) {
+      const e = this.fileEnabledRules(fo);
+      const ec = this.fileErrorCount(fo), wc = this.fileWarningCount(fo);
+      const enabledLabel = fo.ruleGroups.filter(g => g.enabled).map(g => g.label).join(', ');
+      const lines = [
+        `SupraDrop Citation Validation Report`,
+        `File: ${fo.name}`,
+        `Generated: ${new Date().toLocaleString()}`,
+        `Checks enabled: ${enabledLabel}`,
+        ``,
+        `Summary: ${fo.stats.total} footnotes, ${fo.stats.supraRefs} supra refs, ${fo.stats.idRefs} Id. refs`,
+        `Issues: ${ec} error(s), ${wc} warning(s)`,
+        ``,
+        `${'─'.repeat(60)}`,
+        ``,
+      ];
+      let hasAny = false;
+      for (const fn of fo.issues) {
+        const visible = fn.problems.filter(p => e.has(p.rule));
+        if (!visible.length) continue;
+        hasAny = true;
+        lines.push(`Footnote ${fn.footnoteNum}:`);
+        lines.push(`  Text: ${fn.text.slice(0, 200)}${fn.text.length > 200 ? '…' : ''}`);
+        for (const p of visible) {
+          lines.push(`  [${p.type.toUpperCase()}] ${p.rule}: ${p.msg}`);
+        }
+        lines.push('');
+      }
+      if (!hasAny) {
+        lines.push('No issues found for the enabled checks.');
+      }
+      this._download(lines.join('\n'), 'text/plain', fo.name.replace(/\.docx$/i, '') + '-citation-issues.txt');
+    },
+
+    async downloadAnnotated(fo) {
+      if (!fo.zip || !fo.issues.length) return;
+      const enabled = this.fileEnabledRules(fo);
+
+      const blocks = [];
+      let nextCommentId = 1;
+      for (const issue of fo.issues) {
+        if (issue.dismissed) continue;
+        const fn = fo.footnotes.find(f => f.num === issue.footnoteNum);
+        if (!fn) continue;
+        const visible = issue.problems.filter(p => enabled.has(p.rule));
+        if (!visible.length) continue;
+        blocks.push({
+          xmlId: fn.xmlId,
+          problems: visible.map(p => ({ id: nextCommentId++, rule: p.rule, msg: p.msg, type: p.type })),
+        });
+      }
+      if (!blocks.length) { alert('No visible issues to annotate.'); return; }
+
+      // 1. Inject comment anchors into word/document.xml at each <w:footnoteReference> run.
+      //    Comments must be anchored in document.xml (body), not in footnotes.xml —
+      //    Word does not render sidebar comments anchored inside footnote part XML.
+      let docXml = await fo.zip.file('word/document.xml').async('string');
+      for (const block of blocks) {
+        const idStr = block.xmlId.toString();
+        // Locate <w:footnoteReference w:id="N" .../>
+        const fnRefRe = new RegExp(`<w:footnoteReference\\b[^>]*\\bw:id="${idStr}"[^>]*/>`);
+        const fnRefMatch = fnRefRe.exec(docXml);
+        if (!fnRefMatch) continue;
+        const fnRefIdx = fnRefMatch.index;
+
+        // Find the enclosing <w:r> ... </w:r>
+        const rStart = docXml.lastIndexOf('<w:r', fnRefIdx);
+        if (rStart === -1) continue;
+        const rEnd = docXml.indexOf('</w:r>', fnRefIdx);
+        if (rEnd === -1) continue;
+        const rClose = rEnd + '</w:r>'.length;
+
+        const startMark = block.problems.map(p =>
+          `<w:commentRangeStart w:id="${p.id}"/>`).join('');
+        const endMark = block.problems.map(p =>
+          `<w:commentRangeEnd w:id="${p.id}"/><w:r><w:rPr><w:rStyle w:val="CommentReference"/></w:rPr><w:commentReference w:id="${p.id}"/></w:r>`
+        ).join('');
+
+        // Insert end first (higher offset), then start (lower offset)
+        docXml = docXml.slice(0, rClose) + endMark + docXml.slice(rClose);
+        docXml = docXml.slice(0, rStart) + startMark + docXml.slice(rStart);
+      }
+
+      // 2. Build word/comments.xml
+      const xmlEsc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      const now = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
+      let commentsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:comments xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">`;
+      for (const block of blocks) {
+        for (const p of block.problems) {
+          const label = p.type === 'error' ? '[ERROR]' : '[WARN]';
+          commentsXml += `\n<w:comment w:id="${p.id}" w:author="SupraDrop by Kirin" w:date="${now}" w:initials="SK"><w:p><w:r><w:t xml:space="preserve">${xmlEsc(`${label} ${p.rule}: ${p.msg}`)}</w:t></w:r></w:p></w:comment>`;
+        }
+      }
+      commentsXml += '\n</w:comments>';
+
+      // 3. Patch word/_rels/document.xml.rels to declare the comments part.
+      //    (Word resolves <w:commentReference> through the document-level rels,
+      //    even when the reference element lives inside footnotes.xml.)
+      const docRelsPath = 'word/_rels/document.xml.rels';
+      const cmtRel = '<Relationship Id="rIdSCmts" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments" Target="comments.xml"/>';
+      let docRels = (await fo.zip.file(docRelsPath)?.async('string')) || '';
+      if (!docRels.includes('comments.xml')) {
+        docRels = docRels
+          ? docRels.replace('</Relationships>', cmtRel + '</Relationships>')
+          : `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${cmtRel}</Relationships>`;
+      }
+
+      // 4. Patch [Content_Types].xml
+      let ctXml = await fo.zip.file('[Content_Types].xml').async('string');
+      if (!ctXml.includes('comments+xml')) {
+        ctXml = ctXml.replace('</Types>', '<Override PartName="/word/comments.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.comments+xml"/></Types>');
+      }
+
+      // 5. Pack new zip
+      const newZip = new JSZip();
+      for (const [path, zf] of Object.entries(fo.zip.files)) {
+        if (zf.dir) continue;
+        if (path === 'word/document.xml')        newZip.file(path, docXml);
+        else if (path === '[Content_Types].xml') newZip.file(path, ctXml);
+        else if (path === docRelsPath)           newZip.file(path, docRels);
+        else                                     newZip.file(path, await zf.async('arraybuffer'));
+      }
+      newZip.file('word/comments.xml', commentsXml);
+      if (!fo.zip.file(docRelsPath)) newZip.file(docRelsPath, docRels);
+
+      const blob = await newZip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
+      this._download(blob, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        fo.name.replace(/\.docx$/i, '') + '-annotated.docx');
+    },
+
+    _download(content, mimeType, filename) {
+      const blob = content instanceof Blob ? content : new Blob([content], { type: mimeType });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href     = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    },
+  };
+}
+</script>
+</body>
+</html>
