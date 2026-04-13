@@ -8,6 +8,7 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "astro": "^4.15.0"
+    "astro": "^5.0.0",
+    "lightningcss": "^1.29.0"
   }
 }
