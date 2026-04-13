@@ -1,4 +1,4 @@
-/* ── NAVBAR ─────────────────────────────────────────────── */
+/* -- NAVBAR ----------------------------------------------- */
 .navbar {
   position: sticky;
   top: 0;
@@ -95,7 +95,7 @@
   .nav-tools-link { display: none; }
 }
 
-/* ── HERO ───────────────────────────────────────────────── */
+/* -- HERO ------------------------------------------------- */
 .hero {
   position: relative;
   min-height: 100vh;
@@ -219,7 +219,7 @@
   flex-wrap: wrap;
 }
 
-/* ── Buttons ────────────────────────────────────────────── */
+/* -- Buttons ---------------------------------------------- */
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -284,7 +284,7 @@
 
 .btn-text-link:hover { opacity: 0.75; }
 
-/* ── Mock card ──────────────────────────────────────────── */
+/* -- Mock card -------------------------------------------- */
 .hero-visual {
   display: flex;
   justify-content: center;
@@ -377,7 +377,7 @@
   letter-spacing: 0.02em;
 }
 
-/* ── TOOL LAUNCHER ──────────────────────────────────────── */
+/* -- TOOL LAUNCHER ---------------------------------------- */
 .tools-section {
   padding: 80px 0 96px;
 }
@@ -491,7 +491,7 @@
   margin-top: auto;
 }
 
-/* ── Badges ─────────────────────────────────────────────── */
+/* -- Badges ----------------------------------------------- */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -520,7 +520,7 @@
 [data-theme="dark"] .badge-live { background: rgba(22, 101, 52, 0.25); color: #86EFAC; }
 [data-theme="dark"] .badge-new  { background: rgba(154, 52, 18, 0.25); color: #FCA5A5; }
 
-/* ── PRIVACY BANNER ─────────────────────────────────────── */
+/* -- PRIVACY BANNER --------------------------------------- */
 .privacy-banner {
   background: #0F172A;
   padding: 80px 0;
@@ -590,7 +590,7 @@
   line-height: 1.5;
 }
 
-/* ── TECH SECTION ───────────────────────────────────────── */
+/* -- TECH SECTION ----------------------------------------- */
 .tech-section {
   padding: 96px 0;
 }
@@ -675,7 +675,7 @@
 .c-fn      { color: #50FA7B; }
 .c-str     { color: #F1FA8C; }
 
-/* ── AUTHOR SECTION ─────────────────────────────────────── */
+/* -- AUTHOR SECTION --------------------------------------- */
 .author-section {
   padding: 0 0 96px;
 }
@@ -759,7 +759,7 @@
   font-size: 14px;
 }
 
-/* ── FOOTER ─────────────────────────────────────────────── */
+/* -- FOOTER ----------------------------------------------- */
 .footer {
   border-top: 1px solid var(--border);
   padding: 56px 0 32px;
