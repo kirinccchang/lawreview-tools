@@ -1825,8 +1825,10 @@ function app() {
               /\br\.\s*\d/.test(text);                 // Model Rules r. 1.6, Restatement r. 12
             const hasPincite =
               isStatutoryCitation ||
-              // Web/URL sources are unpaginated — Bluebook R. 3.2(a) exempts them from pincite.
-              /https?:\/\//.test(text) ||
+              // Pure web sources are unpaginated — Bluebook R. 3.2(a) exempts them from pincite.
+              // "Pure" means: has a URL but no volume+reporter+page pattern (journal articles
+              // also have URLs but still require pincites).
+              (/https?:\/\//.test(text) && !/\d+\s+[A-Z][A-Za-z.]*\s+\d+/.test(text)) ||
               // "at N" or "at ¶¶ N" — covers paragraph pincites in orders/slip opinions
               /\bat\s+(?:¶+\s*)?\*?\d+/.test(text) ||
               // Reporter citation with comma-separated pincite: [vol] [Reporter] [start], [pincite]
