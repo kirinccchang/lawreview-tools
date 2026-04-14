@@ -1641,44 +1641,60 @@ function app() {
                 if (match) targetSub = match;
               }
 
-              // Statute / rule: U.S.C., Fed. R. Civ. P., § N, Pub. L., Rev. Stat., etc.
-              const RULE_RE = /\bFed\.\s*R\.|U\.S\.C\.A?\.|§\s*\d|\bPub\.\s*L\.|\bRev\.\s*Stat\./;
-              // Constitution
-              const CONST_RE = /U\.S\.\s*Const\.|art\.\s+[IVX]+(?:\s|,|\.)/i;
+              // Strip citation signals to get the bare author/title label
+              const cleanLabel = rawShort
+                .replace(/^\s*(?:See(?: also| generally)?|But see|Accord|E\.g\.,?|Cf\.|But cf\.)\s*/i, '')
+                .trim();
+              // First word of 4+ chars is the key we look for in the target footnote
+              const labelKey = cleanLabel.split(/[\s,]+/).find(w => w.length >= 4) || '';
 
-              const isStatuteOrRule  = RULE_RE.test(rawShort)  || RULE_RE.test(targetSub);
-              const isConstitution   = CONST_RE.test(rawShort) || CONST_RE.test(targetSub);
-              // Only classify as case when the targetSub (not rawShort) has "v."
-              // and the source isn't already identified as a statute/constitution.
-              const isCase = !isStatuteOrRule && !isConstitution && /\bv\.\s/.test(targetSub);
-
-              if (isCase) {
+              if (labelKey && !target.text.toLowerCase().includes(labelKey.toLowerCase())) {
+                // Label absent from target footnote → footnote number is likely wrong
                 problems.push({
-                  type: 'warning',
-                  rule: 'SUPRA_WRONG_SOURCE_TYPE',
-                  msg:  `"${ref.fullMatch}" — Bluebook prohibits supra for cases; use a short-form case citation instead (R. 10.9, R. 4.2).`,
-                });
-              } else if (isStatuteOrRule) {
-                problems.push({
-                  type: 'warning',
-                  rule: 'SUPRA_WRONG_SOURCE_TYPE',
-                  msg:  `"${ref.fullMatch}" — Bluebook prohibits supra for statutes and rules; use the short form instead (e.g., repeat the section/rule number) (R. 12.10, R. 4.2).`,
-                });
-              } else if (isConstitution) {
-                problems.push({
-                  type: 'warning',
-                  rule: 'SUPRA_WRONG_SOURCE_TYPE',
-                  msg:  `"${ref.fullMatch}" — Bluebook prohibits supra for constitutions; cite directly (R. 11, R. 4.2).`,
+                  type: 'error',
+                  rule: 'SUPRA_MISMATCH',
+                  msg:  `"${ref.fullMatch}" — "${cleanLabel.slice(0, 60)}" not found in footnote ${ref.refNum}. The footnote number is likely wrong.`,
                 });
               } else {
-                const afterMatch = text.slice(ref.matchEnd);
-                const hasPincite = /^[\s,]*at\s+[\d*§]/.test(afterMatch);
-                if (!hasPincite) {
+                // Statute / rule: U.S.C., Fed. R. Civ. P., § N, Pub. L., Rev. Stat., etc.
+                const RULE_RE = /\bFed\.\s*R\.|U\.S\.C\.A?\.|§\s*\d|\bPub\.\s*L\.|\bRev\.\s*Stat\./;
+                // Constitution
+                const CONST_RE = /U\.S\.\s*Const\.|art\.\s+[IVX]+(?:\s|,|\.)/i;
+
+                const isStatuteOrRule  = RULE_RE.test(rawShort)  || RULE_RE.test(targetSub);
+                const isConstitution   = CONST_RE.test(rawShort) || CONST_RE.test(targetSub);
+                // Only classify as case when the targetSub (not rawShort) has "v."
+                // and the source isn't already identified as a statute/constitution.
+                const isCase = !isStatuteOrRule && !isConstitution && /\bv\.\s/.test(targetSub);
+
+                if (isCase) {
                   problems.push({
                     type: 'warning',
-                    rule: 'SUPRA_NO_PINCITE',
-                    msg:  `"${ref.fullMatch}" — missing pincite; Bluebook requires "supra note N, at [page]".`,
+                    rule: 'SUPRA_WRONG_SOURCE_TYPE',
+                    msg:  `"${ref.fullMatch}" — Bluebook prohibits supra for cases; use a short-form case citation instead (R. 10.9, R. 4.2).`,
                   });
+                } else if (isStatuteOrRule) {
+                  problems.push({
+                    type: 'warning',
+                    rule: 'SUPRA_WRONG_SOURCE_TYPE',
+                    msg:  `"${ref.fullMatch}" — Bluebook prohibits supra for statutes and rules; use the short form instead (e.g., repeat the section/rule number) (R. 12.10, R. 4.2).`,
+                  });
+                } else if (isConstitution) {
+                  problems.push({
+                    type: 'warning',
+                    rule: 'SUPRA_WRONG_SOURCE_TYPE',
+                    msg:  `"${ref.fullMatch}" — Bluebook prohibits supra for constitutions; cite directly (R. 11, R. 4.2).`,
+                  });
+                } else {
+                  const afterMatch = text.slice(ref.matchEnd);
+                  const hasPincite = /^[\s,]*at\s+[\d*§]/.test(afterMatch);
+                  if (!hasPincite) {
+                    problems.push({
+                      type: 'warning',
+                      rule: 'SUPRA_NO_PINCITE',
+                      msg:  `"${ref.fullMatch}" — missing pincite; Bluebook requires "supra note N, at [page]".`,
+                    });
+                  }
                 }
               }
             }
