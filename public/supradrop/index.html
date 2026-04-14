@@ -1798,12 +1798,17 @@ function app() {
         }
 
         // ── "See generally" without explanatory parenthetical ────────────
+        // ── "See generally" without explanatory parenthetical ────────────
+        // Bluebook "strongly prefers" (not "requires") a parenthetical here.
+        // Accept any substantive parenthetical (30+ chars), not just -ing ones:
+        // "(The article ties...)" is valid intent even if the format is imperfect.
+        // CF and BUT_CF remain strict because they "always require" (R. 1.2(b)).
         if (/\bsee\s+generally\b/i.test(text)) {
-          if (!this._hasExplanatoryParen(text)) {
+          if (!this._hasExplanatoryParen(text) && !this._hasAnySubstantiveParen(text)) {
             problems.push({
               type: 'warning',
               rule: 'SEE_GEN_NO_PAREN',
-              msg:  '"See generally" — Bluebook strongly prefers an explanatory parenthetical (e.g., (arguing that...)).',
+              msg:  '"See generally" — Bluebook strongly prefers an explanatory parenthetical beginning with a present participle, e.g., (arguing that...).',
             });
           }
         }
@@ -1961,6 +1966,14 @@ function app() {
       // Count all parentheticals beginning with a present participle.
       const re = /\(\s*[A-Za-z]{2,}ing\b/g;
       return (text.match(re) || []).length;
+    },
+
+    _hasAnySubstantiveParen(text) {
+      // Accepts any parenthetical with 30+ characters of content — long enough
+      // to be substantive explanation, short enough to exclude citation parentheticals
+      // like (9th Cir. 2024) or (2020). Used for "See generally" which only
+      // "strongly prefers" (not "requires") a Bluebook-formatted parenthetical.
+      return /\([^)]{30,}\)/.test(text);
     },
 
     /**
