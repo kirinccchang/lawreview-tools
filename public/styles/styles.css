@@ -382,9 +382,10 @@
 /* -- Mock card -------------------------------------------- */
 .hero-visual {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 24px 0;
 }
 
 .mock-card {
@@ -393,7 +394,8 @@
   border-radius: 6px;
   box-shadow: var(--shadow-lg);
   transform: rotate(1.5deg);
-  min-width: 340px;
+  width: 100%;
+  min-width: 0;
   overflow: hidden;
   font-family: var(--font-mono);
   font-size: 13px;
@@ -1155,22 +1157,7 @@
 .page-ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
 .compat-note { font-size: 13px; color: var(--text-subtle); }
 
-.btn-primary {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 11px 22px; background: var(--accent); color: #fff;
-  border-radius: 8px; font-size: 15px; font-weight: 500; text-decoration: none;
-  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
-}
-.btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: var(--shadow-md); }
-.btn-ghost {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 11px 22px; border: 1.5px solid var(--accent); color: var(--accent);
-  border-radius: 8px; font-size: 15px; font-weight: 500; text-decoration: none;
-  transition: background 0.15s, color 0.15s;
-}
-.btn-ghost:hover { background: var(--accent); color: var(--bg); }
-.btn-text-link { font-size: 14px; color: var(--accent); text-decoration: none; font-weight: 500; transition: opacity 0.15s; }
-.btn-text-link:hover { opacity: 0.75; }
+/* (duplicate btn-primary/ghost block removed — canonical rules are earlier in this file) */
 
 .docs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem 4rem; }
 @media (max-width: 700px) { .docs-grid { grid-template-columns: 1fr; } }
