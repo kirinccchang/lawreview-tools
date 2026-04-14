@@ -42,6 +42,7 @@ const canonicalURL = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
     href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
     rel="stylesheet"
   />
+  <link rel="stylesheet" href="/styles/styles.css" />
 
   <!-- Dark mode: runs synchronously before paint to prevent flash -->
   <script is:inline>
@@ -58,95 +59,3 @@ const canonicalURL = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
 </body>
 </html>
 
-<style is:global>
-  /* ── Design Tokens ─────────────────────────────────────── */
-  :root {
-    --bg:           #F8F5F0;
-    --bg-alt:       #F0EDE8;
-    --bg-card:      #FFFFFF;
-    --bg-dark:      #0F172A;
-    --text:         #0F172A;
-    --text-muted:   #3F3F46;
-    --text-subtle:  #A1A1AA;
-    --accent:       #B91C1C;
-    --accent-hover: #991B1B;
-    --border:       #E4E4E7;
-    --font-display: 'DM Serif Display', Georgia, serif;
-    --font-body:    'IBM Plex Sans', system-ui, sans-serif;
-    --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
-    --radius:       8px;
-    --shadow-sm:    0 1px 3px rgba(0,0,0,0.08);
-    --shadow-md:    0 8px 24px rgba(0,0,0,0.12);
-    --shadow-lg:    0 20px 48px rgba(0,0,0,0.16);
-  }
-
-  [data-theme="dark"] {
-    --bg:           #09090B;
-    --bg-alt:       #111113;
-    --bg-card:      #18181B;
-    --bg-dark:      #09090B;
-    --text:         #F4F4F5;
-    --text-muted:   #A1A1AA;
-    --text-subtle:  #52525B;
-    --accent:       #FCA5A5;
-    --accent-hover: #FBBDBD;
-    --border:       #27272A;
-    --shadow-sm:    0 1px 3px rgba(0,0,0,0.3);
-    --shadow-md:    0 8px 24px rgba(0,0,0,0.4);
-    --shadow-lg:    0 20px 48px rgba(0,0,0,0.5);
-  }
-
-  /* ── Reset ─────────────────────────────────────────────── */
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html {
-    scroll-behavior: smooth;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  body {
-    background-color: var(--bg);
-    color: var(--text);
-    font-family: var(--font-body);
-    font-size: 16px;
-    line-height: 1.6;
-    transition: background-color 0.2s ease, color 0.2s ease;
-  }
-
-  img { max-width: 100%; height: auto; display: block; }
-  a { color: inherit; text-decoration: none; }
-  button { cursor: pointer; border: none; background: none; font-family: inherit; }
-
-  /* ── Animations ─────────────────────────────────────────── */
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .anim-1 { opacity: 0; animation: fadeInUp 0.6s ease forwards 0.1s; }
-  .anim-2 { opacity: 0; animation: fadeInUp 0.6s ease forwards 0.25s; }
-  .anim-3 { opacity: 0; animation: fadeInUp 0.6s ease forwards 0.4s; }
-  .anim-4 { opacity: 0; animation: fadeInUp 0.6s ease forwards 0.55s; }
-  .anim-5 { opacity: 0; animation: fadeInUp 0.6s ease forwards 0.7s; }
-
-  /* ── Utilities ──────────────────────────────────────────── */
-  .container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
-  .section-divider {
-    width: 100%;
-    height: 2px;
-    background: var(--border);
-    margin-bottom: 48px;
-  }
-
-  .sr-only {
-    position: absolute; width: 1px; height: 1px;
-    padding: 0; margin: -1px; overflow: hidden;
-    clip: rect(0,0,0,0); border: 0;
-  }
-</style>
