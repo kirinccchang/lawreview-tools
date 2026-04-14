@@ -1652,7 +1652,7 @@ function app() {
                 // Search prior footnotes for the correct target
                 const candidates = [];
                 for (const [fnNum, fn] of fnMap) {
-                  if (fnNum < num && fn.text.toLowerCase().includes(labelKey.toLowerCase())) {
+                  if (fnNum !== ref.refNum && fn.text.toLowerCase().includes(labelKey.toLowerCase())) {
                     candidates.push(fnNum);
                   }
                 }
