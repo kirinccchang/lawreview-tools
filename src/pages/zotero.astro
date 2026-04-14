@@ -1,5 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
+import release from '../data/zotero-release.json';
+const ver    = release.version ?? '1.3.2';
+const xpiUrl = release.xpiUrl;
+const cslUrl = release.cslUrl;
 ---
 <Base
   title="Zotero Perma Archiver — lawreview.tools"
@@ -30,48 +34,160 @@ import Base from '../layouts/Base.astro';
 <main class="page-main">
   <div class="container">
 
-    <!-- ── HEADER ──────────────────────────────────────────── -->
-    <div class="page-header">
-      <div class="phase-label">WRITING PHASE · ZOTERO PLUGIN</div>
-      <div class="zot-title-row">
-        <h1 class="page-title">Zotero Perma Archiver</h1>
-        <a href="https://github.com/kirinccchang/zotero-perma-archiver/blob/main/README_zh.md" target="_blank" rel="noopener" class="zot-lang-link">繁體中文版 →</a>
-      </div>
-      <div class="zot-badge-row">
-        <span class="zot-badge">Zotero 7 &amp; 8</span>
-        <a href="https://github.com/kirinccchang/zotero-perma-archiver/releases/latest" target="_blank" rel="noopener" class="zot-badge zot-badge-link">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-          GitHub Release
-        </a>
-        <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener" class="zot-badge zot-badge-link">AGPL v3</a>
-      </div>
-      <p class="page-subtitle">
-        Automatically archives any Zotero item with a URL to perma.cc when you save it.
-        Already have a library full of unarchived items? Select them, right-click, and archive
-        them all at once. The [perma.cc/...] link appears in your Word citations automatically.
-        Bluebook 22nd ed. Rule 18.2.1(d) compliance — no technical knowledge required.
-      </p>
-      <p class="zot-dev">
-        Developed by <a href="https://kirinchang.com" target="_blank" rel="noopener" class="inline-link">Cheng-chi "Kirin" Chang</a>,
-        Research Fellow, U.S.-Asia Law Institute, NYU School of Law;
-        Affiliated Researcher, AI and Future of Work Program, Emory University School of Law
-        (former Associate Director and Academic Researcher).
-      </p>
-      <div class="page-ctas">
-        <a
-          href="https://github.com/kirinccchang/zotero-perma-archiver/releases/download/v1.3.2/perma-archiver_v1.3.2.xpi"
-          class="btn-primary"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download v1.3.2 (.xpi)
-        </a>
-        <a href="https://github.com/kirinccchang/zotero-perma-archiver/releases" target="_blank" rel="noopener" class="btn-ghost">All Releases →</a>
-        <a href="https://github.com/kirinccchang/zotero-perma-archiver" target="_blank" rel="noopener" class="btn-ghost">GitHub →</a>
-      </div>
-      <p class="compat-note">Compatible with Zotero 7 and 8 · macOS · Windows · AGPL v3</p>
-    </div>
+    <!-- ══ HERO (two-column) ════════════════════════════════ -->
+    <div class="zot-hero">
 
-    <!-- ── TWO WORKFLOWS ───────────────────────────────────── -->
+      <!-- LEFT: header content -->
+      <div class="zot-hero-left">
+        <div class="phase-label">WRITING PHASE · ZOTERO PLUGIN</div>
+        <h1 class="page-title">Zotero Perma Archiver</h1>
+
+        <div class="zot-badge-row">
+          <span class="zot-badge">Zotero 7 &amp; 8</span>
+          <a href="https://github.com/kirinccchang/zotero-perma-archiver/releases/latest"
+             target="_blank" rel="noopener" class="zot-badge zot-badge-link">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            v{ver}
+          </a>
+          <a href="https://www.gnu.org/licenses/agpl-3.0.html"
+             target="_blank" rel="noopener" class="zot-badge zot-badge-link">AGPL v3</a>
+        </div>
+
+        <p class="page-subtitle">
+          Automatically archives any Zotero item with a URL to perma.cc when you save it.
+          Already have a library full of unarchived items? Select them, right-click, and archive
+          them all at once. The [perma.cc/...] link appears in your Word citations automatically.
+          Bluebook 22nd ed. Rule 18.2.1(d) compliance — no technical knowledge required.
+        </p>
+        <p class="zot-dev">
+          Developed by <a href="https://kirinchang.com" target="_blank" rel="noopener" class="inline-link">Cheng-chi "Kirin" Chang</a>,
+          Research Fellow, U.S.-Asia Law Institute, NYU School of Law;
+          Affiliated Researcher, AI and Future of Work Program, Emory University School of Law
+          (former Associate Director and Academic Researcher).
+        </p>
+
+        <div class="page-ctas">
+          <a href={xpiUrl} class="btn-primary">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download v{ver} (.xpi)
+          </a>
+          <a href={cslUrl} download="bluebook-law-review-perma.csl" class="btn-ghost">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Bluebook CSL Style
+          </a>
+          <a href="https://github.com/kirinccchang/zotero-perma-archiver" target="_blank" rel="noopener" class="btn-ghost">GitHub →</a>
+        </div>
+
+        <p class="compat-note">Compatible with Zotero 7 and 8 · macOS · Windows · AGPL v3</p>
+        <p class="zot-zh-note">
+          <a href="https://github.com/kirinccchang/zotero-perma-archiver/blob/main/README_zh.md"
+             target="_blank" rel="noopener">Installation guide also available in Traditional Chinese →</a>
+          <span class="zot-zh-sub">(plugin interface is English only)</span>
+        </p>
+      </div>
+
+      <!-- RIGHT: animated demo -->
+      <div class="zot-hero-right" aria-hidden="true">
+        <div class="zot-demo">
+
+          <!-- Window chrome -->
+          <div class="zot-demo-chrome">
+            <span class="zot-dot zot-dot-r"></span>
+            <span class="zot-dot zot-dot-y"></span>
+            <span class="zot-dot zot-dot-g"></span>
+            <span class="zot-demo-chrome-title">Zotero</span>
+          </div>
+
+          <!-- App body -->
+          <div class="zot-demo-app">
+
+            <!-- Sidebar -->
+            <div class="zot-demo-sidebar">
+              <div class="zot-demo-lib">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                My Library
+              </div>
+              <div class="zot-demo-item zot-item-active">
+                <div class="zot-item-icon">📰</div>
+                <div class="zot-item-text">Rose, J. (2024)<br><span>The Law as Justice...</span></div>
+              </div>
+              <div class="zot-demo-item">
+                <div class="zot-item-icon">📰</div>
+                <div class="zot-item-text">Smith, M. (2023)<br><span>Federal Courts and...</span></div>
+              </div>
+              <div class="zot-demo-item">
+                <div class="zot-item-icon">📄</div>
+                <div class="zot-item-text">Chen, L. (2024)<br><span>Administrative Law...</span></div>
+              </div>
+            </div>
+
+            <!-- Info panel -->
+            <div class="zot-demo-info">
+              <div class="zot-demo-tabs">
+                <span class="zot-tab zot-tab-active">Info</span>
+                <span class="zot-tab">Notes</span>
+                <span class="zot-tab">Tags</span>
+              </div>
+              <div class="zot-demo-fields">
+                <div class="zot-field">
+                  <span class="zot-field-key">Title</span>
+                  <span class="zot-field-val">The Law as Justice Gorsuch Sees It</span>
+                </div>
+                <div class="zot-field">
+                  <span class="zot-field-key">Author</span>
+                  <span class="zot-field-val">Rose, Rebecca J.</span>
+                </div>
+                <div class="zot-field">
+                  <span class="zot-field-key">Publication</span>
+                  <span class="zot-field-val">The Atlantic</span>
+                </div>
+                <div class="zot-field">
+                  <span class="zot-field-key">Date</span>
+                  <span class="zot-field-val">August 5, 2024</span>
+                </div>
+                <div class="zot-field">
+                  <span class="zot-field-key">URL</span>
+                  <span class="zot-field-val zot-url-val">theatlantic.com/ideas/archive/2024/08/...</span>
+                </div>
+                <!-- Animated Place field -->
+                <div class="zot-field zot-field-place">
+                  <span class="zot-field-key">Place</span>
+                  <span class="zot-field-val zot-place-val">
+                    <!-- State 1: empty -->
+                    <span class="zot-place-empty">—</span>
+                    <!-- State 2: archiving -->
+                    <span class="zot-place-archiving">
+                      <span class="zot-spinner"></span> Archiving…
+                    </span>
+                    <!-- State 3: done -->
+                    <span class="zot-place-done">
+                      <span class="zot-perma-link">[https://perma.cc/PT32-56LR]</span>
+                      <span class="zot-check">✓</span>
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Arrow + citation output -->
+          <div class="zot-demo-footer">
+            <div class="zot-demo-arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+              Bluebook footnote — auto-generated
+            </div>
+            <div class="zot-demo-citation">
+              Rose, <em>The Law as Justice Gorsuch Sees It</em>, Atlantic (Aug. 5, 2024),
+              theatlantic.com/... (last visited Apr. 9, 2026)
+              <span class="zot-cite-bracket">[https://perma.cc/PT32-56LR]</span>.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div><!-- end .zot-hero -->
+
+    <!-- ── TWO WORKFLOWS ─────────────────────────────────── -->
     <div class="zot-two-col">
       <div class="zot-workflow-card">
         <div class="zot-workflow-label">New items</div>
@@ -83,7 +199,7 @@ import Base from '../layouts/Base.astro';
       </div>
     </div>
 
-    <!-- ── BACKGROUND (collapsible) ───────────────────────── -->
+    <!-- ── BACKGROUND (collapsible) ─────────────────────── -->
     <details class="zot-details">
       <summary>What is Zotero? What is perma.cc? Why does this exist?</summary>
       <div class="zot-details-body">
@@ -94,7 +210,7 @@ import Base from '../layouts/Base.astro';
 
     <div class="section-divider"></div>
 
-    <!-- ── BEFORE YOU START ────────────────────────────────── -->
+    <!-- ── BEFORE YOU START ──────────────────────────────── -->
     <div class="docs-section">
       <h2 class="docs-h2">Before You Start</h2>
       <p class="docs-body">You will need:</p>
@@ -111,11 +227,10 @@ import Base from '../layouts/Base.astro';
 
     <div class="section-divider"></div>
 
-    <!-- ── INSTALLATION ────────────────────────────────────── -->
+    <!-- ── INSTALLATION ──────────────────────────────────── -->
     <div class="docs-section">
       <h2 class="docs-h2">Installation</h2>
 
-      <!-- Step 1 -->
       <div class="zot-step">
         <div class="zot-step-header">
           <span class="zot-step-num">1</span>
@@ -123,7 +238,7 @@ import Base from '../layouts/Base.astro';
         </div>
         <div class="zot-step-body">
           <p class="docs-body">
-            <a href="https://github.com/kirinccchang/zotero-perma-archiver/releases/download/v1.3.2/perma-archiver_v1.3.2.xpi" class="inline-link"><strong>Click here to download: perma-archiver_v1.3.2.xpi</strong></a>
+            <a href={xpiUrl} class="inline-link"><strong>Click here to download: perma-archiver_v{ver}.xpi</strong></a>
           </p>
           <div class="zot-callout zot-callout-note">
             <div class="zot-callout-label">Note</div>
@@ -135,7 +250,7 @@ import Base from '../layouts/Base.astro';
             <li>In the dropdown menu, click <strong>Plugins</strong>.</li>
             <li>In the Plugins window, look for a small <strong>gear icon ⚙</strong> in the upper-right corner. Click it.</li>
             <li>Click <strong>Install Add-on From File…</strong></li>
-            <li>A file browser will open. Navigate to where you saved the <code>.xpi</code> file, select it, and click <strong>Open</strong>.</li>
+            <li>Navigate to where you saved the <code>.xpi</code> file, select it, and click <strong>Open</strong>.</li>
             <li>When asked to restart Zotero, click <strong>Restart Now</strong>.</li>
           </ol>
           <div class="zot-callout zot-callout-note">
@@ -145,7 +260,6 @@ import Base from '../layouts/Base.astro';
         </div>
       </div>
 
-      <!-- Step 2 -->
       <div class="zot-step">
         <div class="zot-step-header">
           <span class="zot-step-num">2</span>
@@ -156,16 +270,14 @@ import Base from '../layouts/Base.astro';
             <li>In Zotero, click <strong>Tools</strong> in the menu bar.</li>
             <li>Hover over <strong>Perma Archiver</strong>.</li>
             <li>Click <strong>Set API Key…</strong></li>
-            <li>A small dialog box will appear. Paste your API key and click <strong>OK</strong>.</li>
-            <li>The plugin will immediately try to connect to perma.cc and show your folders — this confirms your key is working.</li>
+            <li>Paste your API key and click <strong>OK</strong>.</li>
+            <li>The plugin will immediately try to connect and show your folders — this confirms your key is working.</li>
           </ol>
           <div class="zot-callout zot-callout-important">
             <div class="zot-callout-label">Important</div>
-            The plugin will not archive anything until you complete this step. Your API key is what connects the plugin to your perma.cc account.
-            <br><br>
-            If a folder list does not appear after entering the key, the key was not accepted. Double-check that you copied it correctly from <a href="https://perma.cc/settings/tools" target="_blank" rel="noopener" class="inline-link">perma.cc/settings/tools</a>. If you have not generated a key yet, click the "Generate an API key" button on that page first.
+            The plugin will not archive anything until you complete this step. If a folder list does not appear after entering the key, the key was not accepted — double-check at <a href="https://perma.cc/settings/tools" target="_blank" rel="noopener" class="inline-link">perma.cc/settings/tools</a>.
           </div>
-          <p class="docs-body"><strong>Optional — Choose a save folder:</strong> By default, all archives are saved to your perma.cc Personal Links folder. After entering your API key, a folder selection dialog will open automatically. You can also access it later via <strong>Tools → Perma Archiver → Choose Save Folder…</strong></p>
+          <p class="docs-body"><strong>Optional — Choose a save folder:</strong> By default, archives go to your Personal Links folder. Access folder selection via <strong>Tools → Perma Archiver → Choose Save Folder…</strong></p>
           <div class="zot-callout zot-callout-tip">
             <div class="zot-callout-label">Tip</div>
             Law school accounts often have shared organizational folders set up by the library. Ask your law librarian if your institution has a dedicated perma.cc folder for student journal work.
@@ -173,7 +285,6 @@ import Base from '../layouts/Base.astro';
         </div>
       </div>
 
-      <!-- Step 3 -->
       <div class="zot-step">
         <div class="zot-step-header">
           <span class="zot-step-num">3</span>
@@ -182,19 +293,17 @@ import Base from '../layouts/Base.astro';
         <div class="zot-step-body">
           <div class="zot-callout zot-callout-note">
             <div class="zot-callout-label">Note</div>
-            Steps 1 and 2 are all you need. Once the plugin is installed and your API key is entered, the perma.cc link is saved directly into your Zotero item — you can see it there, copy it manually, or use it however you like.
-            <br><br>
-            Step 3 is only needed if you use Zotero's Word plugin to insert citations into Microsoft Word or Google Docs. If you do, this small style file makes the [https://perma.cc/...] bracket appear in your footnotes automatically.
+            Steps 1 and 2 are all you need. The perma.cc link is saved directly into your Zotero item. Step 3 is only needed if you use Zotero's Word plugin and want the [perma.cc/...] bracket in your footnotes automatically.
           </div>
           <p class="docs-body">
-            <a href="https://raw.githubusercontent.com/kirinccchang/zotero-perma-archiver/main/bluebook-law-review-perma.csl" class="inline-link"><strong>Click here to download: bluebook-law-review-perma.csl</strong></a>
+            <a href={cslUrl} download="bluebook-law-review-perma.csl" class="inline-link"><strong>Click here to download: bluebook-law-review-perma.csl</strong></a>
           </p>
           <p class="docs-body zot-small">If your browser opens it as text instead of downloading, right-click the link and choose <em>Save Link As…</em></p>
           <ol class="docs-steps">
             <li>In Zotero, open <strong>Settings</strong> (Mac: <strong>Zotero → Settings</strong>; Windows: <strong>Edit → Preferences</strong>).</li>
             <li>Click the <strong>Cite</strong> tab.</li>
-            <li>Under "Citation Styles," click the <strong>+</strong> button or <strong>Add from File…</strong></li>
-            <li>Select the <code>.csl</code> file you just downloaded and click <strong>Open</strong>.</li>
+            <li>Under "Citation Styles," click <strong>+</strong> or <strong>Add from File…</strong></li>
+            <li>Select the <code>.csl</code> file and click <strong>Open</strong>.</li>
             <li>When inserting citations in Word or Google Docs, choose <strong>Bluebook Law Review (perma.cc)</strong> as your citation style.</li>
           </ol>
           <div class="zot-callout zot-callout-tip">
@@ -207,7 +316,7 @@ import Base from '../layouts/Base.astro';
 
     <div class="section-divider"></div>
 
-    <!-- ── WHAT HAPPENS AFTER SETUP ────────────────────────── -->
+    <!-- ── WHAT HAPPENS AFTER SETUP ─────────────────────── -->
     <div class="docs-section">
       <h2 class="docs-h2">What Happens After Setup</h2>
 
@@ -216,49 +325,49 @@ import Base from '../layouts/Base.astro';
       <ol class="docs-steps">
         <li>You click the Zotero browser extension icon to save any item with a URL.</li>
         <li>The plugin calls perma.cc in the background (takes a few seconds).</li>
-        <li>The perma.cc link is saved directly into your Zotero item. To see it: click the item in Zotero, then look at the <strong>Info</strong> tab on the right side panel.
+        <li>The perma.cc link is saved into your Zotero item (Info tab, right panel).
           <ul class="docs-list zot-sublist">
-            <li>For most item types (news articles, web pages, government documents, etc.), it appears in the <strong>Place</strong> field.</li>
-            <li>For blog posts and forum posts, which do not have a Place field, it is appended to the end of the <strong>URL</strong> field in brackets: <code>https://original-url [https://perma.cc/XXXX-XXXX]</code>.</li>
+            <li>For most item types, it appears in the <strong>Place</strong> field.</li>
+            <li>For blog posts and forum posts: appended to the <strong>URL</strong> field in brackets: <code>https://original-url [https://perma.cc/XXXX-XXXX]</code>.</li>
           </ul>
         </li>
       </ol>
-      <p class="docs-body">If you use the Bluebook Law Review (perma.cc) citation style, Word citations will include the perma.cc bracket automatically:</p>
+      <p class="docs-body">If you use the Bluebook Law Review (perma.cc) citation style, Word citations will include the bracket automatically:</p>
       <div class="zot-citation-block">
-        Rebecca J. Rose, <em>The Law as Justice Gorsuch Sees It</em>, Atlantic (Aug. 5, 2024),<br>
+        Rose, <em>The Law as Justice Gorsuch Sees It</em>, Atlantic (Aug. 5, 2024),<br>
         https://www.theatlantic.com/ideas/archive/2024/08/interview-justice-neil-gorsuch-over-ruled/679342/<br>
         (last visited Apr. 9, 2026) [https://perma.cc/PT32-56LR].
       </div>
 
       <h3 class="docs-h3">Batch archiving — your existing library</h3>
-      <p class="docs-body">Already have items in Zotero that were saved before you installed this plugin? You can archive them all retroactively:</p>
+      <p class="docs-body">Already have items saved before you installed this plugin? Archive them retroactively:</p>
       <ol class="docs-steps">
-        <li>Select any items in your Zotero library (<kbd>⌘A</kbd> or <kbd>Ctrl+A</kbd> to select all, or hold <kbd>⌘</kbd>/<kbd>Ctrl</kbd> to pick specific ones).</li>
+        <li>Select items (<kbd>⌘A</kbd> / <kbd>Ctrl+A</kbd> for all, or hold <kbd>⌘</kbd>/<kbd>Ctrl</kbd> for specific items).</li>
         <li>Right-click the selection.</li>
         <li>Choose <strong>Archive to Perma.cc</strong>.</li>
         <li>Confirm — the plugin works through each item and shows a summary when done.</li>
       </ol>
-      <p class="docs-body">Items that fail (e.g., paywalled pages) are automatically tagged <code>perma-failed</code> — a colored label that appears in your Zotero library so you can find and handle them manually. If you retry and it succeeds, the tag is removed automatically. Works with any Zotero item that has a URL — webpages, blog posts, newspaper articles, reports, government documents, and more.</p>
+      <p class="docs-body">Items that fail are automatically tagged <code>perma-failed</code> — a colored label in your Zotero library. The tag is removed automatically if a retry succeeds. Works with any Zotero item that has a URL.</p>
       <div class="zot-callout zot-callout-important">
         <div class="zot-callout-label">Important</div>
-        Check your link quota before running a batch archive on a large library. Individual trial accounts have only 10 links total — if you run out mid-batch, remaining items will be tagged <code>perma-failed</code>. Institutional accounts (through law school libraries) typically have unlimited links. Check your remaining quota at <a href="https://perma.cc/settings/tools" target="_blank" rel="noopener" class="inline-link">perma.cc/settings/tools</a> before starting.
+        Check your link quota before batch-archiving a large library. Individual trial accounts have only 10 links total. Institutional accounts typically have unlimited links. Check your quota at <a href="https://perma.cc/settings/tools" target="_blank" rel="noopener" class="inline-link">perma.cc/settings/tools</a> before starting.
       </div>
     </div>
 
     <div class="section-divider"></div>
 
-    <!-- ── KNOWN LIMITATIONS ───────────────────────────────── -->
+    <!-- ── KNOWN LIMITATIONS ────────────────────────────── -->
     <div class="docs-section" id="known-limitations">
       <h2 class="docs-h2">Known Limitations</h2>
       <div class="zot-callout zot-callout-warning">
         <div class="zot-callout-label">Warning</div>
-        A perma.cc link is not a guarantee the content was captured. If the original page was already unavailable, returning an error, or behind a paywall at the moment of capture, perma.cc may still issue a link — but the archived snapshot will be empty or show a "Capture Failed" error. <strong>Always verify your perma.cc links before submitting</strong> by clicking each one and confirming the content appears correctly.
+        A perma.cc link is not a guarantee the content was captured. If the original page was unavailable or behind a paywall at capture time, perma.cc may still issue a link — but the snapshot will be empty or show "Capture Failed." <strong>Always verify your perma.cc links before submitting</strong> by clicking each one and confirming the content appears.
         <br><br>
-        If a capture failed, you can fix it manually without losing the link: open the perma.cc link → click "Show record details" → use "Upload file" to replace the failed capture with a screenshot (JPG, PNG, GIF) or a PDF of the page — up to 200 MB. This lets you preserve the same perma.cc URL while supplying a working snapshot.
+        If a capture failed: open the perma.cc link → "Show record details" → "Upload file" to replace the snapshot with a screenshot or PDF (up to 200 MB).
       </div>
       <div class="zot-callout zot-callout-warning">
         <div class="zot-callout-label">Warning</div>
-        Paywalled sites (NYT, WSJ, SSRN login-required pages, etc.) may fail to archive — perma.cc cannot bypass paywalls. For these, archive manually at <a href="https://perma.cc" target="_blank" rel="noopener" class="inline-link">perma.cc</a> and add <em>(on file with the author)</em> to your citation per Rule 18.2.1(d).
+        Paywalled sites (NYT, WSJ, SSRN login-required pages, etc.) may fail to archive — perma.cc cannot bypass paywalls. For these, archive manually at <a href="https://perma.cc" target="_blank" rel="noopener" class="inline-link">perma.cc</a> and add <em>(on file with the author)</em> per Rule 18.2.1(d).
       </div>
       <div class="zot-callout zot-callout-note">
         <div class="zot-callout-label">Note</div>
@@ -268,32 +377,32 @@ import Base from '../layouts/Base.astro';
 
     <div class="section-divider"></div>
 
-    <!-- ── TROUBLESHOOTING ─────────────────────────────────── -->
+    <!-- ── TROUBLESHOOTING ───────────────────────────────── -->
     <div class="docs-section" id="troubleshooting">
       <h2 class="docs-h2">Troubleshooting</h2>
       <details class="zot-details">
         <summary>Plugin menu doesn't appear after installation</summary>
         <div class="zot-details-body">
-          <p>Make sure Zotero was fully restarted after installation. If Perma Archiver doesn't appear under Tools after restarting, try reinstalling: go to <strong>Tools → Plugins</strong>, find Perma Archiver, click <strong>Remove</strong>, restart Zotero, then install the <code>.xpi</code> file again from scratch.</p>
+          <p>Make sure Zotero was fully restarted after installation. If Perma Archiver doesn't appear under Tools after restarting, try reinstalling: <strong>Tools → Plugins</strong>, find Perma Archiver, click <strong>Remove</strong>, restart Zotero, then install the <code>.xpi</code> again.</p>
         </div>
       </details>
       <details class="zot-details">
         <summary>Archives not appearing in citations</summary>
         <div class="zot-details-body">
-          <p>Confirm you have installed the Bluebook Law Review (perma.cc) CSL style (Step 3) and selected it as your citation style in the Zotero Word plugin. Also verify that the perma.cc link appears in the item's <strong>Place</strong> or <strong>URL</strong> field in Zotero — if it's missing, the item was probably saved before the plugin was installed and needs to be batch-archived retroactively.</p>
+          <p>Confirm you have installed the Bluebook Law Review (perma.cc) CSL style (Step 3) and selected it as your citation style in the Zotero Word plugin. Also verify that the perma.cc link appears in the item's <strong>Place</strong> or <strong>URL</strong> field — if missing, the item was saved before the plugin was installed and needs to be batch-archived.</p>
         </div>
       </details>
       <details class="zot-details">
         <summary>The plugin is running but nothing is being archived</summary>
         <div class="zot-details-body">
-          <p>The most common cause is a missing or invalid API key. Go to <strong>Tools → Perma Archiver → Set API Key…</strong> and re-enter your key. If a folder list does not appear after entering the key, the key was not accepted — verify it at <a href="https://perma.cc/settings/tools" target="_blank" rel="noopener" class="inline-link">perma.cc/settings/tools</a>. Also check that you have remaining links in your quota.</p>
+          <p>The most common cause is a missing or invalid API key. Go to <strong>Tools → Perma Archiver → Set API Key…</strong> and re-enter your key. If a folder list does not appear after entering the key, verify it at <a href="https://perma.cc/settings/tools" target="_blank" rel="noopener" class="inline-link">perma.cc/settings/tools</a>. Also check that you have remaining links in your quota.</p>
         </div>
       </details>
     </div>
 
     <div class="section-divider"></div>
 
-    <!-- ── TESTED ON ───────────────────────────────────────── -->
+    <!-- ── TESTED ON ─────────────────────────────────────── -->
     <div class="docs-section">
       <h2 class="docs-h2">Tested On</h2>
       <ul class="docs-list">
@@ -306,7 +415,7 @@ import Base from '../layouts/Base.astro';
 
     <div class="section-divider"></div>
 
-    <!-- ── LICENSE ─────────────────────────────────────────── -->
+    <!-- ── LICENSE + ACKNOWLEDGMENTS ────────────────────── -->
     <div class="docs-section">
       <h2 class="docs-h2">License</h2>
       <p class="docs-body">
@@ -318,7 +427,6 @@ import Base from '../layouts/Base.astro';
       </p>
     </div>
 
-    <!-- ── ACKNOWLEDGMENTS ─────────────────────────────────── -->
     <div class="docs-section">
       <h2 class="docs-h2">Acknowledgments</h2>
       <p class="docs-body">
@@ -341,14 +449,8 @@ import Base from '../layouts/Base.astro';
   <div class="container">
     <div class="section-divider"></div>
     <div class="author-inner">
-      <img
-        src="/avatar.jpeg"
-        alt="Kirin Chang"
-        class="author-avatar"
-        width="80"
-        height="80"
-        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-      />
+      <img src="/avatar.jpeg" alt="Kirin Chang" class="author-avatar" width="80" height="80"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
       <div class="author-avatar-fallback" style="display:none" aria-hidden="true">KC</div>
       <div class="author-body">
         <h2 class="author-name">Built by Kirin Chang</h2>
@@ -386,12 +488,8 @@ import Base from '../layouts/Base.astro';
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="/" class="footer-logo">
-          <span aria-hidden="true">⚖</span> lawreview.tools
-        </a>
-        <p class="footer-tagline">
-          Free, private Bluebook tools<br>for law review editors<br>and legal scholars.
-        </p>
+        <a href="/" class="footer-logo"><span aria-hidden="true">⚖</span> lawreview.tools</a>
+        <p class="footer-tagline">Free, private Bluebook tools<br>for law review editors<br>and legal scholars.</p>
       </div>
       <div class="footer-col">
         <div class="footer-col-title">Tools</div>
@@ -420,282 +518,389 @@ import Base from '../layouts/Base.astro';
 </Base>
 
 <style>
-/* ── Zotero page–specific styles ──────────────────────────── */
-
-.zot-title-row {
-  display: flex;
-  align-items: baseline;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-bottom: 16px;
+/* ═══════════════════════════════════════════════════════════
+   HERO LAYOUT
+═══════════════════════════════════════════════════════════ */
+.zot-hero {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 56px;
+  align-items: start;
+  padding-bottom: 8px;
 }
-.zot-title-row .page-title { margin-bottom: 0; }
-
-.zot-lang-link {
-  font-size: 14px;
-  color: #888888;
-  text-decoration: none;
-  transition: color .15s;
-  white-space: nowrap;
+@media (max-width: 960px) {
+  .zot-hero { grid-template-columns: 1fr; }
+  .zot-hero-right { order: -1; }
 }
-.zot-lang-link:hover { color: #111111; }
-[data-theme="dark"] .zot-lang-link { color: #666666; }
-[data-theme="dark"] .zot-lang-link:hover { color: #EEEEEE; }
 
+/* ── Badges ─────────────────────────────────────────────── */
 .zot-badge-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
 }
 .zot-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 12px;
-  font-weight: 500;
-  padding: 3px 10px;
-  border-radius: 100px;
-  background: #F5F4F0;
-  color: #3D3D3D;
-  border: 1px solid #E0DED8;
-  white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 500; padding: 3px 10px; border-radius: 100px;
+  background: #F5F4F0; color: #3D3D3D; border: 1px solid #E0DED8; white-space: nowrap;
 }
-[data-theme="dark"] .zot-badge {
-  background: #1A1A1A;
-  color: #AAAAAA;
-  border-color: #333333;
-}
-.zot-badge-link {
-  text-decoration: none;
-  transition: background .15s, color .15s;
-}
-.zot-badge-link:hover {
-  background: #ECEAE3;
-  color: #111111;
-}
-[data-theme="dark"] .zot-badge-link:hover {
-  background: #252525;
-  color: #EEEEEE;
-}
+[data-theme="dark"] .zot-badge { background: #1A1A1A; color: #AAAAAA; border-color: #333333; }
+.zot-badge-link { text-decoration: none; transition: background .15s, color .15s; }
+.zot-badge-link:hover { background: #ECEAE3; color: #111111; }
+[data-theme="dark"] .zot-badge-link:hover { background: #252525; color: #EEEEEE; }
 
+/* ── Developer credit ───────────────────────────────────── */
 .zot-dev {
-  font-size: 14px;
-  color: #888888;
-  line-height: 1.65;
-  margin-bottom: 24px;
-  max-width: 660px;
+  font-size: 14px; color: #888888; line-height: 1.65; margin-bottom: 24px; max-width: 600px;
 }
 [data-theme="dark"] .zot-dev { color: #666666; }
 
-/* Two-column workflow summary */
-.zot-two-col {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin: 32px 0;
+/* ── Chinese docs note ──────────────────────────────────── */
+.zot-zh-note {
+  margin-top: 10px; font-size: 12px; color: #AAAAAA;
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
 }
-@media (max-width: 600px) { .zot-two-col { grid-template-columns: 1fr; } }
+.zot-zh-note a { color: #999999; text-decoration: none; transition: color .15s; }
+.zot-zh-note a:hover { color: #555555; }
+[data-theme="dark"] .zot-zh-note a { color: #666666; }
+[data-theme="dark"] .zot-zh-note a:hover { color: #AAAAAA; }
+.zot-zh-sub { color: #CCCCCC; }
+[data-theme="dark"] .zot-zh-sub { color: #444444; }
 
-.zot-workflow-card {
-  background: #F5F4F0;
-  border-radius: 8px;
-  padding: 20px 24px;
-}
-[data-theme="dark"] .zot-workflow-card { background: #1A1A1A; }
-.zot-workflow-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #888888;
-  margin-bottom: 10px;
-}
-[data-theme="dark"] .zot-workflow-label { color: #666666; }
-.zot-workflow-card p {
-  font-size: 14px;
-  line-height: 1.65;
-  color: #3D3D3D;
-  margin: 0;
-}
-[data-theme="dark"] .zot-workflow-card p { color: #AAAAAA; }
-
-/* Collapsible details */
-.zot-details {
+/* ═══════════════════════════════════════════════════════════
+   DEMO VISUALIZATION
+═══════════════════════════════════════════════════════════ */
+.zot-demo {
   border: 1px solid #E0DED8;
-  border-radius: 8px;
-  margin: 24px 0;
+  border-radius: 10px;
   overflow: hidden;
+  background: #FFFFFF;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.04);
+  font-size: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  position: sticky;
+  top: 88px;
 }
-[data-theme="dark"] .zot-details { border-color: #333333; }
-.zot-details > summary {
-  padding: 14px 20px;
-  font-size: 15px;
-  font-weight: 500;
-  color: #3D3D3D;
-  cursor: pointer;
-  user-select: none;
-  list-style: none;
+[data-theme="dark"] .zot-demo {
+  border-color: #2A2A2A;
+  background: #111111;
+  box-shadow: 0 2px 12px rgba(0,0,0,.4);
+}
+
+/* Window chrome */
+.zot-demo-chrome {
+  background: #E8E6E1;
+  padding: 10px 14px;
   display: flex;
   align-items: center;
   gap: 8px;
+  border-bottom: 1px solid #D8D5CE;
+}
+[data-theme="dark"] .zot-demo-chrome { background: #1E1E1E; border-color: #2A2A2A; }
+.zot-dot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
+.zot-dot-r { background: #FF5F57; }
+.zot-dot-y { background: #FFBD2E; }
+.zot-dot-g { background: #28C840; }
+.zot-demo-chrome-title {
+  font-size: 12px; font-weight: 600; color: #555555; margin-left: 4px;
+}
+[data-theme="dark"] .zot-demo-chrome-title { color: #888888; }
+
+/* App body: sidebar + info panel */
+.zot-demo-app {
+  display: flex;
+  border-bottom: 1px solid #E0DED8;
+}
+[data-theme="dark"] .zot-demo-app { border-color: #2A2A2A; }
+
+/* Sidebar */
+.zot-demo-sidebar {
+  width: 148px;
+  flex-shrink: 0;
+  border-right: 1px solid #E0DED8;
   background: #F5F4F0;
-  transition: background .15s;
+  padding: 8px 0;
+}
+[data-theme="dark"] .zot-demo-sidebar { background: #161616; border-color: #2A2A2A; }
+
+.zot-demo-lib {
+  display: flex; align-items: center; gap: 5px;
+  padding: 6px 10px;
+  font-size: 11px; font-weight: 600; color: #666666; letter-spacing: 0.02em;
+}
+[data-theme="dark"] .zot-demo-lib { color: #666666; }
+
+.zot-demo-item {
+  display: flex; align-items: flex-start; gap: 6px;
+  padding: 6px 10px;
+  cursor: default; border-radius: 4px; margin: 1px 4px;
+}
+.zot-item-icon { font-size: 11px; margin-top: 1px; flex-shrink: 0; }
+.zot-item-text { font-size: 11px; color: #555555; line-height: 1.4; }
+.zot-item-text span { font-size: 10px; color: #888888; }
+[data-theme="dark"] .zot-item-text { color: #888888; }
+[data-theme="dark"] .zot-item-text span { color: #666666; }
+
+.zot-item-active {
+  background: #3B6FBF;
+  border-radius: 5px;
+}
+.zot-item-active .zot-item-text { color: #FFFFFF !important; }
+.zot-item-active .zot-item-text span { color: rgba(255,255,255,.75) !important; }
+
+/* Info panel */
+.zot-demo-info {
+  flex: 1;
+  min-width: 0;
+  background: #FFFFFF;
+}
+[data-theme="dark"] .zot-demo-info { background: #111111; }
+
+.zot-demo-tabs {
+  display: flex;
+  border-bottom: 1px solid #E8E6E1;
+  background: #F5F4F0;
+}
+[data-theme="dark"] .zot-demo-tabs { background: #161616; border-color: #2A2A2A; }
+.zot-tab {
+  padding: 6px 12px; font-size: 11px; font-weight: 500; color: #888888; cursor: default;
+}
+.zot-tab-active {
+  color: #111111; border-bottom: 2px solid #3B6FBF; background: #FFFFFF;
+}
+[data-theme="dark"] .zot-tab-active { color: #EEEEEE; background: #111111; }
+
+.zot-demo-fields { padding: 8px 0; }
+
+.zot-field {
+  display: flex; gap: 0; padding: 3px 10px;
+}
+.zot-field-key {
+  width: 76px; flex-shrink: 0;
+  font-size: 11px; color: #888888; line-height: 1.5;
+}
+[data-theme="dark"] .zot-field-key { color: #555555; }
+.zot-field-val {
+  font-size: 11px; color: #222222; line-height: 1.5;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  max-width: 200px;
+}
+[data-theme="dark"] .zot-field-val { color: #CCCCCC; }
+.zot-url-val { color: #3B6FBF; }
+[data-theme="dark"] .zot-url-val { color: #6B9FDF; }
+
+/* Place field — animated */
+.zot-field-place {
+  background: rgba(34, 197, 94, 0.07);
+  border-radius: 3px;
+  margin: 2px 4px;
+  padding: 3px 6px;
+}
+[data-theme="dark"] .zot-field-place { background: rgba(34, 197, 94, 0.08); }
+
+.zot-place-val { position: relative; display: inline-flex; align-items: center; gap: 5px; }
+
+/* Three states: empty → archiving → done, cycling every 4.5s */
+.zot-place-empty,
+.zot-place-archiving,
+.zot-place-done {
+  position: absolute;
+  left: 0; top: 0;
+  white-space: nowrap;
+  animation-duration: 4.5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+/* Reserve space */
+.zot-place-val::after { content: '[https://perma.cc/PT32-56LR] ✓'; visibility: hidden; font-size: 11px; }
+
+.zot-place-empty    { animation-name: zot-state-empty; color: #AAAAAA; }
+.zot-place-archiving{ animation-name: zot-state-archiving; color: #888888; }
+.zot-place-done     { animation-name: zot-state-done; }
+
+@keyframes zot-state-empty {
+  0%,  15% { opacity: 1; }
+  20%, 100% { opacity: 0; }
+}
+@keyframes zot-state-archiving {
+  0%,  15% { opacity: 0; }
+  20%, 35% { opacity: 1; }
+  40%, 100% { opacity: 0; }
+}
+@keyframes zot-state-done {
+  0%,  35% { opacity: 0; }
+  45%, 90% { opacity: 1; }
+  100%     { opacity: 0; }
+}
+
+.zot-perma-link {
+  color: #22863A; font-size: 11px; font-weight: 500;
+}
+[data-theme="dark"] .zot-perma-link { color: #4ADE80; }
+.zot-check { color: #22863A; font-size: 10px; }
+[data-theme="dark"] .zot-check { color: #4ADE80; }
+
+/* Spinner dots */
+.zot-spinner {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border: 1.5px solid #CCCCCC;
+  border-top-color: #888888;
+  border-radius: 50%;
+  animation: zot-spin .8s linear infinite;
+  vertical-align: middle;
+  margin-right: 2px;
+}
+@keyframes zot-spin { to { transform: rotate(360deg); } }
+
+/* Footer arrow + citation */
+.zot-demo-footer { padding: 12px 14px; }
+
+.zot-demo-arrow {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; color: #888888; margin-bottom: 8px;
+}
+[data-theme="dark"] .zot-demo-arrow { color: #555555; }
+
+.zot-demo-citation {
+  background: #F8F7F4;
+  border-radius: 5px;
+  padding: 10px 12px;
+  font-size: 11px;
+  color: #333333;
+  line-height: 1.65;
+  border-left: 3px solid #D0CEC9;
+}
+[data-theme="dark"] .zot-demo-citation { background: #1A1A1A; border-color: #333333; color: #AAAAAA; }
+.zot-demo-citation em { font-style: italic; }
+.zot-cite-bracket {
+  color: #22863A; font-weight: 500;
+}
+[data-theme="dark"] .zot-cite-bracket { color: #4ADE80; }
+
+/* ═══════════════════════════════════════════════════════════
+   TWO-WORKFLOW CARDS
+═══════════════════════════════════════════════════════════ */
+.zot-two-col {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 32px 0;
+}
+@media (max-width: 600px) { .zot-two-col { grid-template-columns: 1fr; } }
+.zot-workflow-card { background: #F5F4F0; border-radius: 8px; padding: 20px 24px; }
+[data-theme="dark"] .zot-workflow-card { background: #1A1A1A; }
+.zot-workflow-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: #888888; margin-bottom: 10px;
+}
+[data-theme="dark"] .zot-workflow-label { color: #666666; }
+.zot-workflow-card p { font-size: 14px; line-height: 1.65; color: #3D3D3D; margin: 0; }
+[data-theme="dark"] .zot-workflow-card p { color: #AAAAAA; }
+
+/* ═══════════════════════════════════════════════════════════
+   COLLAPSIBLES
+═══════════════════════════════════════════════════════════ */
+.zot-details {
+  border: 1px solid #E0DED8; border-radius: 8px; margin: 24px 0; overflow: hidden;
+}
+[data-theme="dark"] .zot-details { border-color: #333333; }
+.zot-details > summary {
+  padding: 14px 20px; font-size: 15px; font-weight: 500; color: #3D3D3D;
+  cursor: pointer; user-select: none; list-style: none;
+  display: flex; align-items: center; gap: 8px;
+  background: #F5F4F0; transition: background .15s;
 }
 .zot-details > summary::-webkit-details-marker { display: none; }
 .zot-details > summary::before {
-  content: '▶';
-  font-size: 10px;
-  color: #888888;
-  transition: transform .2s;
-  flex-shrink: 0;
+  content: '▶'; font-size: 10px; color: #888888;
+  transition: transform .2s; flex-shrink: 0;
 }
 .zot-details[open] > summary::before { transform: rotate(90deg); }
 .zot-details > summary:hover { background: #ECEAE3; }
 [data-theme="dark"] .zot-details > summary { background: #1A1A1A; color: #AAAAAA; }
 [data-theme="dark"] .zot-details > summary:hover { background: #222222; }
-.zot-details-body {
-  padding: 20px 24px;
-  border-top: 1px solid #E0DED8;
-}
+.zot-details-body { padding: 20px 24px; border-top: 1px solid #E0DED8; }
 [data-theme="dark"] .zot-details-body { border-top-color: #333333; }
-.zot-details-body p {
-  font-size: 15px;
-  line-height: 1.7;
-  color: #3D3D3D;
-  margin-bottom: 12px;
-}
+.zot-details-body p { font-size: 15px; line-height: 1.7; color: #3D3D3D; margin-bottom: 12px; }
 .zot-details-body p:last-child { margin-bottom: 0; }
 [data-theme="dark"] .zot-details-body p { color: #AAAAAA; }
 
-/* Callout boxes */
+/* ═══════════════════════════════════════════════════════════
+   CALLOUTS
+═══════════════════════════════════════════════════════════ */
 .zot-callout {
-  border-radius: 6px;
-  padding: 14px 18px;
-  margin: 16px 0;
-  font-size: 14px;
-  line-height: 1.65;
-  border-left: 3px solid;
+  border-radius: 6px; padding: 14px 18px; margin: 16px 0;
+  font-size: 14px; line-height: 1.65; border-left: 3px solid;
 }
 .zot-callout-label {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 6px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; margin-bottom: 6px;
 }
-.zot-callout-tip    { background: #F0FAF0; border-color: #22C55E; color: #1A5C2A; }
-.zot-callout-tip    .zot-callout-label { color: #16A34A; }
-.zot-callout-note   { background: #EFF6FF; border-color: #60A5FA; color: #1E3A5F; }
-.zot-callout-note   .zot-callout-label { color: #2563EB; }
-.zot-callout-important { background: #FFF7ED; border-color: #FB923C; color: #7C2D12; }
+.zot-callout-tip      { background: #F0FAF0; border-color: #22C55E; color: #1A5C2A; }
+.zot-callout-tip      .zot-callout-label { color: #16A34A; }
+.zot-callout-note     { background: #EFF6FF; border-color: #60A5FA; color: #1E3A5F; }
+.zot-callout-note     .zot-callout-label { color: #2563EB; }
+.zot-callout-important{ background: #FFF7ED; border-color: #FB923C; color: #7C2D12; }
 .zot-callout-important .zot-callout-label { color: #EA580C; }
-.zot-callout-warning { background: #FEF2F2; border-color: #F87171; color: #7F1D1D; }
-.zot-callout-warning .zot-callout-label { color: #DC2626; }
-
-[data-theme="dark"] .zot-callout-tip    { background: #052E16; color: #86EFAC; }
-[data-theme="dark"] .zot-callout-tip    .zot-callout-label { color: #4ADE80; }
-[data-theme="dark"] .zot-callout-note   { background: #0C1A2E; color: #93C5FD; }
-[data-theme="dark"] .zot-callout-note   .zot-callout-label { color: #60A5FA; }
-[data-theme="dark"] .zot-callout-important { background: #2D1506; color: #FDBA74; }
+.zot-callout-warning  { background: #FEF2F2; border-color: #F87171; color: #7F1D1D; }
+.zot-callout-warning  .zot-callout-label { color: #DC2626; }
+[data-theme="dark"] .zot-callout-tip      { background: #052E16; color: #86EFAC; }
+[data-theme="dark"] .zot-callout-tip      .zot-callout-label { color: #4ADE80; }
+[data-theme="dark"] .zot-callout-note     { background: #0C1A2E; color: #93C5FD; }
+[data-theme="dark"] .zot-callout-note     .zot-callout-label { color: #60A5FA; }
+[data-theme="dark"] .zot-callout-important{ background: #2D1506; color: #FDBA74; }
 [data-theme="dark"] .zot-callout-important .zot-callout-label { color: #FB923C; }
-[data-theme="dark"] .zot-callout-warning { background: #2D0606; color: #FCA5A5; }
-[data-theme="dark"] .zot-callout-warning .zot-callout-label { color: #F87171; }
+[data-theme="dark"] .zot-callout-warning  { background: #2D0606; color: #FCA5A5; }
+[data-theme="dark"] .zot-callout-warning  .zot-callout-label { color: #F87171; }
 
-/* Installation steps */
-.zot-step {
-  border: 1px solid #E0DED8;
-  border-radius: 8px;
-  margin-bottom: 16px;
-  overflow: hidden;
-}
+/* ═══════════════════════════════════════════════════════════
+   INSTALLATION STEPS
+═══════════════════════════════════════════════════════════ */
+.zot-step { border: 1px solid #E0DED8; border-radius: 8px; margin-bottom: 16px; overflow: hidden; }
 [data-theme="dark"] .zot-step { border-color: #333333; }
 .zot-step-header {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 16px 20px;
-  background: #F5F4F0;
-  font-size: 16px;
-  font-weight: 600;
-  color: #111111;
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 20px; background: #F5F4F0;
+  font-size: 16px; font-weight: 600; color: #111111;
 }
 [data-theme="dark"] .zot-step-header { background: #1A1A1A; color: #EEEEEE; }
 .zot-step-num {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: #111111;
-  color: #FFFFFF;
-  font-size: 13px;
-  font-weight: 700;
-  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #111111; color: #FFFFFF;
+  font-size: 13px; font-weight: 700; flex-shrink: 0;
 }
 [data-theme="dark"] .zot-step-num { background: #EEEEEE; color: #111111; }
-.zot-step-body { padding: 20px 20px 20px 20px; }
-.zot-optional {
-  font-size: 13px;
-  font-weight: 400;
-  color: #888888;
-  margin-left: 4px;
-}
+.zot-step-body { padding: 20px; }
+.zot-optional { font-size: 13px; font-weight: 400; color: #888888; margin-left: 4px; }
 
-/* h3 within docs sections */
+/* ═══════════════════════════════════════════════════════════
+   MISC
+═══════════════════════════════════════════════════════════ */
 .docs-h3 {
   font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: #111111;
-  margin-top: 32px;
-  margin-bottom: 12px;
+  font-size: 18px; font-weight: 600; letter-spacing: -0.01em;
+  color: #111111; margin-top: 32px; margin-bottom: 12px;
 }
 [data-theme="dark"] .docs-h3 { color: #EEEEEE; }
 
-/* Citation example block */
 .zot-citation-block {
-  background: #F5F4F0;
-  border-left: 3px solid #D0CEC9;
-  border-radius: 0 6px 6px 0;
-  padding: 16px 20px;
+  background: #F5F4F0; border-left: 3px solid #D0CEC9;
+  border-radius: 0 6px 6px 0; padding: 16px 20px;
   font-family: 'IBM Plex Mono', 'Courier New', monospace;
-  font-size: 13px;
-  line-height: 1.7;
-  color: #3D3D3D;
-  margin: 16px 0;
+  font-size: 13px; line-height: 1.7; color: #3D3D3D; margin: 16px 0;
 }
-[data-theme="dark"] .zot-citation-block {
-  background: #1A1A1A;
-  border-color: #444444;
-  color: #AAAAAA;
-}
+[data-theme="dark"] .zot-citation-block { background: #1A1A1A; border-color: #444444; color: #AAAAAA; }
 .zot-citation-block em { font-style: italic; }
 
-/* Sub-list inside numbered steps */
-.zot-sublist {
-  margin-top: 8px;
-  padding-left: 20px;
-}
+.zot-sublist { margin-top: 8px; padding-left: 20px; }
 
-/* kbd keys */
 kbd {
-  display: inline-block;
-  padding: 1px 6px;
-  font-family: 'IBM Plex Mono', 'Courier New', monospace;
-  font-size: 12px;
-  color: #3D3D3D;
-  background: #F5F4F0;
-  border: 1px solid #D0CEC9;
-  border-radius: 4px;
-  box-shadow: 0 1px 0 #D0CEC9;
+  display: inline-block; padding: 1px 6px;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace; font-size: 12px;
+  color: #3D3D3D; background: #F5F4F0; border: 1px solid #D0CEC9;
+  border-radius: 4px; box-shadow: 0 1px 0 #D0CEC9;
 }
 [data-theme="dark"] kbd { color: #AAAAAA; background: #1A1A1A; border-color: #444444; box-shadow: 0 1px 0 #444444; }
 
-/* Small text variant */
 .zot-small { font-size: 13px; color: #888888; }
 [data-theme="dark"] .zot-small { color: #666666; }
 </style>

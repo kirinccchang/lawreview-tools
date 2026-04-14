@@ -436,6 +436,8 @@ function transform(html, tool) {
 
 /* ── Main ──────────────────────────────────────────────────── */
 console.log('\n📦 Fetching and integrating tool builds...\n');
+
+// 1. Fetch tool HTML
 for (const tool of TOOLS) {
   const url = `https://raw.githubusercontent.com/${tool.repo}/main/index.html`;
   try {
@@ -447,4 +449,31 @@ for (const tool of TOOLS) {
     console.warn(`  ⚠  ${tool.repo}: ${err.message}`);
   }
 }
+
+// 2. Fetch latest zotero-perma-archiver release metadata
+try {
+  const res = await fetch(
+    'https://api.github.com/repos/kirinccchang/zotero-perma-archiver/releases/latest',
+    { headers: { 'Accept': 'application/vnd.github+json', 'User-Agent': 'lawreview-tools-build' } }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  const tag  = data.tag_name ?? 'v1.3.2';
+  const ver  = tag.replace(/^v/, '');
+  const xpi  = data.assets?.find(a => a.name.endsWith('.xpi'));
+  const csl  = data.assets?.find(a => a.name.endsWith('.csl'));
+  writeFileSync('src/data/zotero-release.json', JSON.stringify({
+    version:     ver,
+    tag,
+    xpiUrl:      xpi?.browser_download_url
+                   ?? `https://github.com/kirinccchang/zotero-perma-archiver/releases/download/${tag}/perma-archiver_${tag}.xpi`,
+    cslUrl:      csl?.browser_download_url
+                   ?? 'https://raw.githubusercontent.com/kirinccchang/zotero-perma-archiver/main/bluebook-law-review-perma.csl',
+    publishedAt: data.published_at ?? null,
+  }, null, 2), 'utf-8');
+  console.log(`  ✓  zotero-perma-archiver latest → ${tag}`);
+} catch (err) {
+  console.warn(`  ⚠  zotero release metadata: ${err.message} (using cached fallback)`);
+}
+
 console.log('\n✅ Done.\n');
