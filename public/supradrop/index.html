@@ -1817,7 +1817,6 @@ function app() {
           const isLikelyDirectQuote = lcWordCount >= 2 || quotedContent.length >= 40;
           if (isLikelyDirectQuote) {
             // Statutory/rule citations use section numbers or subdivisions as pincite — no page needed.
-            // Statutory/rule citations use section numbers or subdivisions as pincite — no page needed.
             const isStatutoryCitation =
               /§\s*\d+/.test(text) ||                 // § 1927, § 1983(a)
               /Fed\.\s*R\./.test(text) ||              // Fed. R. Civ. P., Fed. R. Evid.
@@ -1826,6 +1825,8 @@ function app() {
               /\br\.\s*\d/.test(text);                 // Model Rules r. 1.6, Restatement r. 12
             const hasPincite =
               isStatutoryCitation ||
+              // Web/URL sources are unpaginated — Bluebook R. 3.2(a) exempts them from pincite.
+              /https?:\/\//.test(text) ||
               // "at N" or "at ¶¶ N" — covers paragraph pincites in orders/slip opinions
               /\bat\s+(?:¶+\s*)?\*?\d+/.test(text) ||
               // Reporter citation with comma-separated pincite: [vol] [Reporter] [start], [pincite]
