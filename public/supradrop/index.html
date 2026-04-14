@@ -1804,8 +1804,11 @@ function app() {
           if (isLikelyDirectQuote) {
             const hasPincite =
               /\bat\s+\*?\d+/.test(text) ||
-              /\d+\s+(?:U\.S\.|F\.[234]?d|F\.Supp\.[23]?d|Cal\.|N\.Y\.|Tex\.)\s+\d+\s*,\s*\d+/.test(text) ||
-              /,\s*\d{1,4}(?:\s+n\.\d+(?:\.\d+)?)?\s*(?:\(\d{4}\)|$)/.test(text);
+              // General reporter pattern: [vol] [Reporter] [start], [pincite]
+              // Covers F.R.D., F.2d, F.Supp.2d, U.S., S.Ct., N.Y., etc.
+              /\d+\s+[A-Z][A-Za-z0-9.]*\s+\d+\s*,\s*\d+/.test(text) ||
+              // Pincite followed by parenthetical containing a year, e.g. (S.D.N.Y. 2012)
+              /,\s*\d{1,4}(?:\s+n\.\d+(?:\.\d+)?)?\s*(?:\([^)]*\d{4}[^)]*\)|$)/.test(text);
             if (!hasPincite) {
               problems.push({
                 type: 'warning',
