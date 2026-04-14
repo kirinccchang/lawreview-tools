@@ -47,10 +47,10 @@ body { overflow-x: hidden; max-width: 100%; }
 /* ── Body + typography ─────────────────────────────────────── */
 body {
   font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
-  background: #F5F4F0 !important;
+  background: #FFFFFF !important;
 }
 body.dark { background: #111111 !important; }
-:root      { --bg: #F5F4F0 !important; }
+:root      { --bg: #FFFFFF !important; }
 body.dark  { --bg: #111111 !important; }
 .container h1 {
   font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif !important;
@@ -404,10 +404,10 @@ body.dark {
 /* ── Typography ────────────────────────────────────────────── */
 h1 {
   font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif !important;
-  font-size: 30px !important;
-  font-weight: 600 !important;
+  font-size: clamp(2rem, 4vw, 3rem) !important;
+  font-weight: 400 !important;
   letter-spacing: -0.02em !important;
-  line-height: 1.15 !important;
+  line-height: 1.1 !important;
   color: #111111 !important;
 }
 body.dark h1 { color: #EEEEEE !important; }
@@ -424,8 +424,10 @@ body.dark .card-title { color: #777777 !important; }
 
 .subtitle {
   font-family: 'IBM Plex Sans', sans-serif !important;
-  font-size: 14px !important;
-  line-height: 1.6 !important;
+  font-size: 18px !important;
+  line-height: 1.65 !important;
+  color: #3D3D3D !important;
+  margin-bottom: 28px !important;
 }
 
 /* ── Cards ─────────────────────────────────────────────────── */
