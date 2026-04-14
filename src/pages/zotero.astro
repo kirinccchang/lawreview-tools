@@ -206,14 +206,33 @@ const cslUrl = release.cslUrl;
                   <div class="zot-item-text">Chen, L. (2024)<br><span>Administrative Law...</span></div>
                 </div>
               </div>
-              <!-- Info panel: 3 selected -->
+              <!-- Info panel: archiving progress animation -->
               <div class="zot-demo-info">
                 <div class="zot-demo-tabs">
                   <span class="zot-tab zot-tab-active">Info</span>
                   <span class="zot-tab">Notes</span>
                   <span class="zot-tab">Tags</span>
                 </div>
-                <div class="zot-bulk-msg">3 items selected</div>
+                <div class="zot-bulk-progress">
+                  <!-- Phase 1: Rose archiving, Smith+Chen waiting -->
+                  <div class="zot-bps zot-bps-1">
+                    <div class="zot-bpr"><span class="zot-spinner"></span><span class="zot-bpr-name">Rose, J.</span><span class="zot-bpr-arch">Archiving…</span></div>
+                    <div class="zot-bpr"><span class="zot-bpr-dash">—</span><span class="zot-bpr-name">Smith, M.</span><span class="zot-bpr-wait">waiting</span></div>
+                    <div class="zot-bpr"><span class="zot-bpr-dash">—</span><span class="zot-bpr-name">Chen, L.</span><span class="zot-bpr-wait">waiting</span></div>
+                  </div>
+                  <!-- Phase 2: Rose done, Smith archiving, Chen waiting -->
+                  <div class="zot-bps zot-bps-2">
+                    <div class="zot-bpr"><span class="zot-check">✓</span><span class="zot-bpr-name">Rose, J.</span><span class="zot-perma-link">perma.cc/PT32-56LR</span></div>
+                    <div class="zot-bpr"><span class="zot-spinner"></span><span class="zot-bpr-name">Smith, M.</span><span class="zot-bpr-arch">Archiving…</span></div>
+                    <div class="zot-bpr"><span class="zot-bpr-dash">—</span><span class="zot-bpr-name">Chen, L.</span><span class="zot-bpr-wait">waiting</span></div>
+                  </div>
+                  <!-- Phase 3: Rose+Smith done, Chen archiving -->
+                  <div class="zot-bps zot-bps-3">
+                    <div class="zot-bpr"><span class="zot-check">✓</span><span class="zot-bpr-name">Rose, J.</span><span class="zot-perma-link">perma.cc/PT32-56LR</span></div>
+                    <div class="zot-bpr"><span class="zot-check">✓</span><span class="zot-bpr-name">Smith, M.</span><span class="zot-perma-link">perma.cc/XK45-89QR</span></div>
+                    <div class="zot-bpr"><span class="zot-spinner"></span><span class="zot-bpr-name">Chen, L.</span><span class="zot-bpr-arch">Archiving…</span></div>
+                  </div>
+                </div>
               </div>
               <!-- Right-click context menu -->
               <div class="zot-ctx-menu">
@@ -575,7 +594,7 @@ const cslUrl = release.cslUrl;
 <style>
 /* ── Container width — match PermaDrop/SupraDrop ──────────── */
 .container {
-  max-width: min(1000px, calc(100vw - 48px));
+  max-width: min(1080px, calc(100vw - 48px));
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -583,7 +602,7 @@ const cslUrl = release.cslUrl;
 ═══════════════════════════════════════════════════════════ */
 .zot-hero {
   display: grid;
-  grid-template-columns: 1fr minmax(440px, 480px);
+  grid-template-columns: 1fr minmax(460px, 560px);
   gap: 48px;
   align-items: center;
   padding-bottom: 8px;
@@ -929,11 +948,54 @@ const cslUrl = release.cslUrl;
 .zot-ctx-sep { height: 1px; background: #E0DED8; margin: 3px 0; }
 [data-theme="dark"] .zot-ctx-sep { background: #404040; }
 
-/* ── Bulk view: info panel message ─────────────────────── */
-.zot-bulk-msg {
-  padding: 14px 12px; font-size: 11px; color: #999999; font-style: italic;
+/* ── Bulk archiving progress animation ───────────────────── */
+.zot-bulk-progress {
+  position: relative;
+  padding: 10px 12px 6px;
+  min-height: 66px;
 }
-[data-theme="dark"] .zot-bulk-msg { color: #555555; }
+.zot-bps {
+  position: absolute;
+  top: 10px; left: 12px; right: 12px;
+  animation-duration: 9s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+.zot-bps-1 { animation-name: zot-bps1; }
+.zot-bps-2 { animation-name: zot-bps2; }
+.zot-bps-3 { animation-name: zot-bps3; }
+@keyframes zot-bps1 {
+  0%, 5%  { opacity: 1; }
+  28%     { opacity: 1; }
+  35%     { opacity: 0; }
+  95%     { opacity: 0; }
+  100%    { opacity: 1; }
+}
+@keyframes zot-bps2 {
+  0%, 30% { opacity: 0; }
+  37%     { opacity: 1; }
+  62%     { opacity: 1; }
+  68%     { opacity: 0; }
+  100%    { opacity: 0; }
+}
+@keyframes zot-bps3 {
+  0%, 65% { opacity: 0; }
+  72%     { opacity: 1; }
+  95%     { opacity: 1; }
+  100%    { opacity: 0; }
+}
+.zot-bpr {
+  display: flex; align-items: center; gap: 6px;
+  padding: 2px 0; font-size: 11px; line-height: 1.5;
+}
+.zot-bpr-name { flex: 1; color: #333333; font-weight: 500; }
+[data-theme="dark"] .zot-bpr-name { color: #BBBBBB; }
+.zot-bpr-arch { color: #888888; }
+[data-theme="dark"] .zot-bpr-arch { color: #666666; }
+.zot-bpr-wait { color: #BBBBBB; }
+[data-theme="dark"] .zot-bpr-wait { color: #444444; }
+.zot-bpr-dash { width: 14px; flex-shrink: 0; color: #CCCCCC; text-align: center; }
+[data-theme="dark"] .zot-bpr-dash { color: #444444; }
 
 /* ── Bulk footer ────────────────────────────────────────── */
 .zot-bulk-footer .zot-demo-citation {
