@@ -312,9 +312,14 @@ body.dark .lrt-current         { background: #1A1A1A; color: #EEEEEE; }
 }
 .lrt-gh-link svg { width: 18px; height: 18px; display: block; }
 
-/* Theme toggle — fully reset to defeat tool button CSS */
+/* Theme toggle — fully reset to defeat tool button CSS + UA stylesheet */
 #lrt-theme-btn {
   all: unset !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
   box-sizing: border-box !important;
   display: flex !important; align-items: center !important; justify-content: center !important;
   width: 34px !important; height: 34px !important;
