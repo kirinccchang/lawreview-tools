@@ -71,7 +71,7 @@
 
   /* ── Utilities ──────────────────────────────────────────── */
   .container {
-    max-width: 1280px;
+    max-width: min(1440px, calc(100vw - 64px));
     margin: 0 auto;
     padding: 0 32px;
   }
@@ -190,7 +190,7 @@
 /* Override .container max-width specifically for the hero — use most of
    the viewport up to 1600px, instead of the standard 1100px reading width */
 .hero .container {
-  max-width: min(1600px, calc(100vw - 64px));
+  max-width: min(1720px, calc(100vw - 64px));
 }
 
 .hero {
