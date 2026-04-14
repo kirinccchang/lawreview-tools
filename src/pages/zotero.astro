@@ -537,13 +537,16 @@ const cslUrl = release.cslUrl;
 ═══════════════════════════════════════════════════════════ */
 .zot-hero {
   display: grid;
-  grid-template-columns: 1fr 420px;
+  grid-template-columns: 1fr minmax(400px, 460px);
   gap: 56px;
-  align-items: start;
+  align-items: center;
   padding-bottom: 8px;
+  max-width: 1060px;
+  margin-left: auto;
+  margin-right: auto;
 }
 @media (max-width: 960px) {
-  .zot-hero { grid-template-columns: 1fr; }
+  .zot-hero { grid-template-columns: 1fr; max-width: 100%; }
   .zot-hero-right { order: -1; }
 }
 
