@@ -40,6 +40,10 @@ const SHELL_CSS = `
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style id="lrt-shell">
 
+/* ── Prevent horizontal overflow on mobile ─────────────────── */
+html { overflow-x: hidden; }
+body { overflow-x: hidden; max-width: 100%; }
+
 /* ── Body + typography ─────────────────────────────────────── */
 body {
   font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
@@ -358,7 +362,7 @@ const FOOTER_HTML = `
       </div>
     </div>
     <div id="lrt-footer-bottom">
-      © 2026 Kirin Chang · <a href="https://lawreview.tools/">lawreview.tools</a> · Open source under AGPL v3
+      © 2026 <a href="https://kirinchang.com/" target="_blank" rel="noopener">Kirin Chang</a> · <a href="https://lawreview.tools/">lawreview.tools</a> · Open source under AGPL v3
     </div>
   </div>
 </footer>
