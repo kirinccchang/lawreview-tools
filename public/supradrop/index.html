@@ -353,11 +353,14 @@ body.dark #lrt-theme-btn       { color: #AAAAAA !important; }
 body.dark #lrt-theme-btn:hover { background: #1A1A1A !important; color: #EEEEEE !important; }
 #lrt-theme-btn svg { width: 18px !important; height: 18px !important; display: block !important; pointer-events: none; }
 
-/* Show moon in light mode, sun in dark mode */
-.lrt-moon { display: block !important; }
-.lrt-sun  { display: none  !important; }
-body.dark .lrt-moon { display: none  !important; }
-body.dark .lrt-sun  { display: block !important; }
+/* Show moon in light mode, sun in dark mode.
+   Must be scoped to #lrt-theme-btn to beat the
+   "#lrt-theme-btn svg { display: block !important }" rule above
+   (ID+class=110 specificity > ID+element=101). */
+#lrt-theme-btn .lrt-moon { display: block !important; }
+#lrt-theme-btn .lrt-sun  { display: none  !important; }
+body.dark #lrt-theme-btn .lrt-moon { display: none  !important; }
+body.dark #lrt-theme-btn .lrt-sun  { display: block !important; }
 
 /* ── Author section ─────────────────────────────────────────── */
 #lrt-author {
