@@ -1444,13 +1444,15 @@ function app() {
       //   - custom-mark footnotes (e.g., the "* Author note") contain <w:t> for the
       //     mark symbol instead of <w:footnoteRef/>, so Word skips them in its
       //     sequential numbering — we must exclude them too.
-      //   - truly empty/deleted footnotes (no visible text) are also filtered out.
+      //   - empty footnotes are KEPT in the sequence — Word still assigns them a
+      //     display number, so dropping them would shift all subsequent numbers.
+      //     They are skipped during validation (validateCitations checks text.length).
       // Re-assign sequential display numbers so they match Word's display.
       const rawFns = realNodes.map(node => ({
         xmlId:     parseInt(node.getAttributeNS(W, 'id') || node.getAttribute('w:id'), 10),
         text:      this.extractText(node),
         isAutoNum: this._hasFootnoteRef(node),
-      })).filter(fn => fn.isAutoNum && fn.text.length > 0);
+      })).filter(fn => fn.isAutoNum);
 
       fo.footnotes = rawFns.map((fn, i) => ({ ...fn, num: i + 1 }));
 
@@ -1579,6 +1581,7 @@ function app() {
 
       for (const fn of footnotes) {
         const { num, text } = fn;
+        if (!text.trim()) continue;  // empty footnote — keep in numbering, skip analysis
         const problems = [];
 
         // ── Find all supra note N refs ───────────────────────────────────
