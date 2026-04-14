@@ -1836,7 +1836,11 @@ function app() {
                !/\.pdf(?:[?#]|$)/i.test(text)) ||
               // "at N" or "at ¶¶ N" — covers paragraph pincites in orders/slip opinions
               /\bat\s+(?:¶+\s*)?\*?\d+/.test(text) ||
-              // Reporter citation with comma-separated pincite: [vol] [Reporter] [start], [pincite]
+              // Complete journal citation: vol Reporter startpage (year) — the startpage
+              // itself is the location; short articles (Nature, Science, etc.) are 1-2 pages
+              // so no additional comma-pincite is required or possible.
+              /\d+\s+[A-Z][A-Za-z0-9.]*\s+\d+\s*\([^)]*\d{4}[^)]*\)/.test(text) ||
+              // Reporter citation with explicit comma-separated pincite: [vol] [Reporter] [start], [pincite]
               /\d+\s+[A-Z][A-Za-z0-9.]*\s+\d+\s*,\s*\d+/.test(text) ||
               // Pincite before court/year parenthetical: , 187 (S.D.N.Y. 2012)
               /,\s*\d{1,4}(?:\s+n\.\d+(?:\.\d+)?)?\s*(?:\([^)]*\d{4}[^)]*\)|$)/.test(text) ||
