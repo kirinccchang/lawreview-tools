@@ -784,6 +784,13 @@ function transform(html, tool) {
   html = html.replaceAll(tool.oldBase + '/', tool.newCanonical);
   html = html.replaceAll(tool.oldBase,       tool.newCanonical);
 
+  // Replace cross-tool old domain links with lawreview.tools canonical URLs
+  for (const other of TOOLS) {
+    if (other.id === tool.id) continue;
+    html = html.replaceAll(other.oldBase + '/', other.newCanonical);
+    html = html.replaceAll(other.oldBase,       other.newCanonical);
+  }
+
   html = html
     .replace(/<link[^>]*rel="icon"[^>]*>\s*/g, '')
     .replace(/<link[^>]*rel="apple-touch-icon"[^>]*>\s*/g, '')
