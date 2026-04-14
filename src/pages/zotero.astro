@@ -672,13 +672,6 @@ const cslUrl = release.cslUrl;
 .lrt-menu-divider { height: 1px; background: #E0DED8; margin: 3px 4px; }
 [data-theme="dark"] .lrt-menu-divider { background: #333333; }
 
-@media (max-width: 680px) {
-  #lrt-nav-links { display: none; }
-  .lrt-gh-link   { display: none; }
-  #lrt-theme-btn { display: none; }
-  #lrt-hamburger { display: block; }
-}
-
 #lrt-theme-btn {
   all: unset;
   -webkit-appearance: none;
@@ -704,6 +697,14 @@ const cslUrl = release.cslUrl;
 #lrt-theme-btn .lrt-sun  { display: none; }
 [data-theme="dark"] #lrt-theme-btn .lrt-moon { display: none; }
 [data-theme="dark"] #lrt-theme-btn .lrt-sun  { display: block; }
+
+/* Media query last — must come after all base rules to override them */
+@media (max-width: 680px) {
+  #lrt-nav-links { display: none; }
+  .lrt-gh-link   { display: none; }
+  #lrt-theme-btn { display: none; }
+  #lrt-hamburger { display: block; }
+}
 </style>
 
 <style>
