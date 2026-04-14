@@ -1836,10 +1836,13 @@ function app() {
                !/\.pdf(?:[?#]|$)/i.test(text)) ||
               // "at N" or "at ¶¶ N" — covers paragraph pincites in orders/slip opinions
               /\bat\s+(?:¶+\s*)?\*?\d+/.test(text) ||
-              // Complete journal citation: vol Reporter startpage (year) — the startpage
-              // itself is the location; short articles (Nature, Science, etc.) are 1-2 pages
-              // so no additional comma-pincite is required or possible.
-              /\d+\s+[A-Z][A-Za-z0-9.]*\s+\d+\s*\([^)]*\d{4}[^)]*\)/.test(text) ||
+              // Complete non-law-journal citation: vol Reporter startpage (year).
+              // Short journals (Nature, Science, JAMA — typically 1-2 pages) need no
+              // separate pincite; the startpage IS the location.
+              // Law journals (L. Rev., L.J., J.L., etc.) are long articles and DO require
+              // an explicit pincite, so we exclude them from this exemption.
+              (!(/\bL\.\s*Rev\.|\bL\.J\.|\bJ\.\s*L\b|\bLaw\s+(?:Rev|J)\b/.test(text)) &&
+               /\d+\s+[A-Z][A-Za-z0-9.]*\s+\d+\s*\([^)]*\d{4}[^)]*\)/.test(text)) ||
               // Reporter citation with explicit comma-separated pincite: [vol] [Reporter] [start], [pincite]
               /\d+\s+[A-Z][A-Za-z0-9.]*\s+\d+\s*,\s*\d+/.test(text) ||
               // Pincite before court/year parenthetical: , 187 (S.D.N.Y. 2012)
