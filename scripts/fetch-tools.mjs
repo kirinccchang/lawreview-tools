@@ -584,9 +584,9 @@ function buildFooter(tool) {
       </div>
       <div class="lrt-fcol">
         <div class="lrt-fheading">Tools</div>
+        <a href="https://lawreview.tools/zotero" class="lrt-flink">Zotero Plugin</a>
         <a href="https://lawreview.tools/permadrop/" class="lrt-flink">PermaDrop</a>
         <a href="https://lawreview.tools/supradrop/" class="lrt-flink">SupraDrop</a>
-        <a href="https://lawreview.tools/zotero" class="lrt-flink">Zotero Plugin</a>
       </div>
       <div class="lrt-fcol">
         <div class="lrt-fheading">This Tool</div>
