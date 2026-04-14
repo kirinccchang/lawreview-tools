@@ -18,26 +18,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-
   <!-- Primary SEO -->
   <title>PermaDrop — Perma.cc URL Archiver for Legal Scholars</title>
   <meta name="description" content="Archive URLs in Word documents to perma.cc for permanent legal citations. Browser-based, no uploads. Free tool for law review editors and legal scholars.">
   <meta name="author" content="Kirin Chang">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://permadrop.kirinchang.com/">
+  <link rel="canonical" href="https://lawreview.tools/permadrop/">
 
   <!-- Open Graph (social sharing) -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PermaDrop">
   <meta property="og:title" content="PermaDrop — Perma.cc URL Archiver for Legal Scholars">
   <meta property="og:description" content="Archive URLs in Word documents to perma.cc for permanent legal citations. Browser-based, no uploads. Free tool for law review editors and legal scholars.">
-  <meta property="og:url" content="https://permadrop.kirinchang.com/">
-  <meta property="og:image" content="https://permadrop.kirinchang.com/og-image.png">
+  <meta property="og:url" content="https://lawreview.tools/permadrop/">
+  <meta property="og:image" content="https://lawreview.tools/permadrop/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="PermaDrop — Archive Word document URLs to perma.cc">
@@ -47,7 +43,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="PermaDrop — Perma.cc URL Archiver for Legal Scholars">
   <meta name="twitter:description" content="Archive URLs in Word documents to perma.cc for permanent legal citations. Browser-based, no uploads.">
-  <meta name="twitter:image" content="https://permadrop.kirinchang.com/og-image.png">
+  <meta name="twitter:image" content="https://lawreview.tools/permadrop/og-image.png">
   <meta name="twitter:creator" content="@chengchi_chang">
 
   <!-- JSON-LD Structured Data -->
@@ -56,7 +52,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "PermaDrop",
-    "url": "https://permadrop.kirinchang.com/",
+    "url": "https://lawreview.tools/permadrop/",
     "description": "Archive URLs in Word documents to perma.cc for permanent legal citations. Browser-based, no uploads required.",
     "applicationCategory": "UtilityApplication",
     "operatingSystem": "Any",
@@ -241,8 +237,70 @@
     .file-dl-row:last-child { border-bottom:none; }
     .file-dl-name { flex:1; min-width:120px; font-size:13px; font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--text); }
   </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style id="lrt-nav-css">
+  #lrt-nav {
+    position: sticky; top: 0; z-index: 9999;
+    height: 54px;
+    background: var(--bg, #f4f4f5);
+    border-bottom: 1px solid var(--border, #e4e4e7);
+    transition: background .2s, border-color .2s;
+  }
+  #lrt-inner {
+    max-width: min(1440px, calc(100vw - 48px));
+    margin: 0 auto; padding: 0 24px;
+    height: 100%; display: flex; align-items: center;
+    justify-content: space-between; gap: 16px;
+  }
+  #lrt-logo {
+    display: flex; align-items: center; gap: 7px;
+    font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    font-size: 17px; font-weight: 400;
+    color: var(--text, #18181b);
+    text-decoration: none; flex-shrink: 0; white-space: nowrap;
+    letter-spacing: -0.01em;
+  }
+  #lrt-logo:hover { opacity: .7; transition: opacity .15s; }
+  #lrt-links { display: flex; align-items: center; gap: 2px; }
+  .lrt-link {
+    font-size: 13px; font-weight: 500;
+    color: var(--text-muted, #71717a);
+    text-decoration: none;
+    padding: 5px 10px; border-radius: 6px;
+    transition: background .15s, color .15s; white-space: nowrap;
+  }
+  .lrt-link:hover {
+    background: var(--hover-bg, #f0f0f0);
+    color: var(--text, #18181b);
+  }
+  .lrt-current {
+    background: var(--hover-bg, #f0f0f0);
+    color: var(--text, #18181b);
+    font-weight: 600;
+  }
+  @media (max-width: 500px) {
+    #lrt-logo span.lrt-wordmark { display: none; }
+    .lrt-link { font-size: 12px; padding: 4px 7px; }
+  }
+</style>
 </head>
 <body>
+<nav id="lrt-nav" aria-label="lawreview.tools">
+  <div id="lrt-inner">
+    <a href="https://lawreview.tools/" id="lrt-logo">
+      <span aria-hidden="true">⚖</span>
+      <span class="lrt-wordmark">lawreview.tools</span>
+    </a>
+    <div id="lrt-links">
+      <a href="https://lawreview.tools/permadrop/" class="lrt-link lrt-current">PermaDrop</a>
+      <a href="https://lawreview.tools/supradrop/" class="lrt-link">SupraDrop</a>
+      <a href="https://lawreview.tools/zotero" class="lrt-link">Zotero Plugin</a>
+    </div>
+  </div>
+</nav>
+
 <div class="container" x-data="app()">
 
   <div style="margin-bottom: 28px;">
