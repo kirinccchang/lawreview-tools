@@ -1924,14 +1924,13 @@ function app() {
 
     _hasExplanatoryParen(text) {
       // Bluebook explanatory parentheticals begin with a present participle (R. 1.2).
-      // Match any ( followed by a lowercase word ending in -ing rather than
-      // maintaining a fragile whitelist of specific verb stems.
-      return /\(\s*[a-z]{2,}ing\b/.test(text);
+      // Match any ( followed by a word ending in -ing (case-insensitive first letter).
+      return /\(\s*[A-Za-z]{2,}ing\b/.test(text);
     },
 
     _countExplanatoryParens(text) {
       // Count all parentheticals beginning with a present participle.
-      const re = /\(\s*[a-z]{2,}ing\b/g;
+      const re = /\(\s*[A-Za-z]{2,}ing\b/g;
       return (text.match(re) || []).length;
     },
 
