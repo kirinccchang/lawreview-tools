@@ -175,13 +175,6 @@ body.dark #lrt-hamburger-menu a.lrt-current { background: #242424 !important; co
 .lrt-menu-divider { height: 1px !important; background: #E0DED8 !important; margin: 3px 4px !important; }
 body.dark .lrt-menu-divider { background: #333333 !important; }
 
-@media (max-width: 680px) {
-  #lrt-nav-links { display: none !important; }
-  .lrt-gh-link   { display: none !important; }
-  #lrt-theme-btn { display: none !important; }
-  #lrt-hamburger { display: block; }
-}
-
 /* Theme toggle — fully reset to defeat tool button CSS + UA stylesheet */
 #lrt-theme-btn {
   all: unset !important;
@@ -204,14 +197,19 @@ body.dark #lrt-theme-btn       { color: #AAAAAA !important; }
 body.dark #lrt-theme-btn:hover { background: #1A1A1A !important; color: #EEEEEE !important; }
 #lrt-theme-btn svg { width: 18px !important; height: 18px !important; display: block !important; pointer-events: none; }
 
-/* Show moon in light mode, sun in dark mode.
-   Must be scoped to #lrt-theme-btn to beat the
-   "#lrt-theme-btn svg { display: block !important }" rule above
-   (ID+class=110 specificity > ID+element=101). */
+/* Show moon in light mode, sun in dark mode. */
 #lrt-theme-btn .lrt-moon { display: block !important; }
 #lrt-theme-btn .lrt-sun  { display: none  !important; }
 body.dark #lrt-theme-btn .lrt-moon { display: none  !important; }
 body.dark #lrt-theme-btn .lrt-sun  { display: block !important; }
+
+/* Media query last — must follow all base rules to correctly override display values */
+@media (max-width: 680px) {
+  #lrt-nav-links { display: none !important; }
+  .lrt-gh-link   { display: none !important; }
+  #lrt-theme-btn { display: none !important; }
+  #lrt-hamburger { display: block; }
+}
 
 /* ── Author section ─────────────────────────────────────────── */
 #lrt-author {
