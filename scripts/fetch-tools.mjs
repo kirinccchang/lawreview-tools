@@ -567,9 +567,11 @@ const AUTHOR_HTML = `
 <!-- ══ end author section ═══════════════════════════════════ -->`.trim();
 
 /* ══════════════════════════════════════════════════════════════
-   FOOTER
+   FOOTER  (tool-specific Resources links)
 ══════════════════════════════════════════════════════════════ */
-const FOOTER_HTML = `
+function buildFooter(tool) {
+  const repoUrl = `https://github.com/${tool.repo}`;
+  return `
 <!-- ══ lawreview.tools footer ══════════════════════════════ -->
 <footer id="lrt-footer">
   <div id="lrt-footer-inner">
@@ -587,10 +589,10 @@ const FOOTER_HTML = `
         <a href="https://lawreview.tools/zotero" class="lrt-flink">Zotero Plugin</a>
       </div>
       <div class="lrt-fcol">
-        <div class="lrt-fheading">Resources</div>
-        <a href="https://github.com/kirinccchang" target="_blank" rel="noopener" class="lrt-flink">GitHub</a>
-        <a href="https://lawreview.tools/zotero" class="lrt-flink">Docs</a>
-        <a href="https://github.com/kirinccchang/zotero-perma-archiver/releases" target="_blank" rel="noopener" class="lrt-flink">Changelog</a>
+        <div class="lrt-fheading">This Tool</div>
+        <a href="${repoUrl}" target="_blank" rel="noopener" class="lrt-flink">Source Code</a>
+        <a href="${repoUrl}/releases" target="_blank" rel="noopener" class="lrt-flink">Releases</a>
+        <a href="${repoUrl}/issues" target="_blank" rel="noopener" class="lrt-flink">Report a Bug</a>
       </div>
       <div class="lrt-fcol">
         <div class="lrt-fheading">Legal</div>
@@ -604,6 +606,7 @@ const FOOTER_HTML = `
   </div>
 </footer>
 <!-- ══ end footer ═══════════════════════════════════════════ -->`.trim();
+}
 
 /* ══════════════════════════════════════════════════════════════
    DARK MODE + SCROLL SYNC SCRIPT
@@ -663,7 +666,7 @@ function transform(html, tool) {
 
   html = html.replace('</head>', SHELL_CSS + '\n</head>');
   html = html.replace('<body>',  '<body>\n' + buildNavbar(tool.id) + '\n' + SYNC_SCRIPT + '\n');
-  html = html.replace('</body>', AUTHOR_HTML + '\n' + FOOTER_HTML + '\n</body>');
+  html = html.replace('</body>', AUTHOR_HTML + '\n' + buildFooter(tool) + '\n</body>');
 
   return html;
 }
