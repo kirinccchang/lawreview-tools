@@ -557,11 +557,13 @@ const cslUrl = release.cslUrl;
 [data-theme="dark"] .nav-theme-toggle:hover { background: #1A1A1A; color: #EEEEEE; }
 .nav-theme-toggle svg { width: 18px; height: 18px; display: block; pointer-events: none; }
 
-/* Moon in light mode, sun in dark mode */
-.icon-moon { display: block; }
-.icon-sun  { display: none; }
-[data-theme="dark"] .icon-moon { display: none; }
-[data-theme="dark"] .icon-sun  { display: block; }
+/* Moon in light mode, sun in dark mode.
+   Scoped under .nav-theme-toggle (class+class=20) to beat
+   .nav-theme-toggle svg (class+element=11) above. */
+.nav-theme-toggle .icon-moon { display: block; }
+.nav-theme-toggle .icon-sun  { display: none; }
+[data-theme="dark"] .nav-theme-toggle .icon-moon { display: none; }
+[data-theme="dark"] .nav-theme-toggle .icon-sun  { display: block; }
 
 /* ── Active nav link (matches injected .lrt-current style) ─ */
 .nav-link-current {
