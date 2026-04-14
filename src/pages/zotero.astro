@@ -564,26 +564,10 @@ const cslUrl = release.cslUrl;
 
 </Base>
 
-<style>
+<style is:global>
 /* ═══════════════════════════════════════════════════════════
-   HERO LAYOUT
+   NAVBAR (global — ID selectors must not be scoped)
 ═══════════════════════════════════════════════════════════ */
-.zot-hero {
-  display: grid;
-  grid-template-columns: 1fr minmax(400px, 460px);
-  gap: 56px;
-  align-items: center;
-  padding-bottom: 8px;
-  max-width: 1060px;
-  margin-left: auto;
-  margin-right: auto;
-}
-@media (max-width: 960px) {
-  .zot-hero { grid-template-columns: 1fr; max-width: 100%; }
-  .zot-hero-right { order: -1; }
-}
-
-/* ── Navbar (identical to injected lrt-* CSS, data-theme variant) ── */
 #lrt-nav {
   position: sticky; top: 0; z-index: 9999;
   height: 68px; background: #FFFFFF;
@@ -611,6 +595,7 @@ const cslUrl = release.cslUrl;
 [data-theme="dark"] #lrt-logo { color: #EEEEEE; }
 
 #lrt-nav-right { display: flex; align-items: center; gap: 6px; }
+#lrt-nav-links { display: flex; align-items: center; gap: 6px; }
 
 .lrt-nav-link {
   font-size: 15px; font-weight: 500; color: #3D3D3D;
@@ -626,7 +611,7 @@ const cslUrl = release.cslUrl;
 .lrt-gh-link { display: flex; align-items: center; padding: 5px 6px; flex-shrink: 0; }
 .lrt-gh-link svg { width: 18px; height: 18px; display: block; }
 
-/* ── Responsive nav dropdown ─────────────────────────────── */
+/* Responsive nav dropdown */
 #lrt-tools-dropdown { display: none; position: relative; }
 
 #lrt-tools-btn {
@@ -699,11 +684,30 @@ const cslUrl = release.cslUrl;
 [data-theme="dark"] #lrt-theme-btn:hover { background: #1A1A1A; color: #EEEEEE; }
 #lrt-theme-btn svg { width: 18px; height: 18px; display: block; pointer-events: none; }
 
-/* Moon/sun: scoped (ID+class=110) beats svg rule (ID+element=101) */
 #lrt-theme-btn .lrt-moon { display: block; }
 #lrt-theme-btn .lrt-sun  { display: none; }
 [data-theme="dark"] #lrt-theme-btn .lrt-moon { display: none; }
 [data-theme="dark"] #lrt-theme-btn .lrt-sun  { display: block; }
+</style>
+
+<style>
+/* ═══════════════════════════════════════════════════════════
+   HERO LAYOUT
+═══════════════════════════════════════════════════════════ */
+.zot-hero {
+  display: grid;
+  grid-template-columns: 1fr minmax(400px, 460px);
+  gap: 56px;
+  align-items: center;
+  padding-bottom: 8px;
+  max-width: 1060px;
+  margin-left: auto;
+  margin-right: auto;
+}
+@media (max-width: 960px) {
+  .zot-hero { grid-template-columns: 1fr; max-width: 100%; }
+  .zot-hero-right { order: -1; }
+}
 
 /* ── Badges ─────────────────────────────────────────────── */
 .zot-badge-row {
