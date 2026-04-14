@@ -1923,11 +1923,15 @@ function app() {
     },
 
     _hasExplanatoryParen(text) {
-      return /\(\s*(?:not|hold|find|argu|explain|discuss|stat|conclud|recogniz|describ|reject|suggest|show|consider|analyz|emphasiz|acknowledg|observ|review|address|introduc|establish|provid|contend|assert|propos|distinguish|compar|contrast|determin|defin|identif|requir|limit|restrict|permit|prohibit|allow|interpret|evaluat|indicat|demonstrat|highlight|confirm|affirm|cit|detail|exam|explor|apply)ing\b/i.test(text);
+      // Bluebook explanatory parentheticals begin with a present participle (R. 1.2).
+      // Match any ( followed by a lowercase word ending in -ing rather than
+      // maintaining a fragile whitelist of specific verb stems.
+      return /\(\s*[a-z]{2,}ing\b/.test(text);
     },
 
     _countExplanatoryParens(text) {
-      const re = /\(\s*(?:not|hold|find|argu|explain|discuss|stat|conclud|recogniz|describ|reject|suggest|show|consider|analyz|emphasiz|acknowledg|observ|review|address|introduc|establish|provid|contend|assert|propos|distinguish|compar|contrast|determin|defin|identif|requir|limit|restrict|permit|prohibit|allow|interpret|evaluat|indicat|demonstrat|highlight|confirm|affirm|cit|detail|exam|explor|apply)ing\b/gi;
+      // Count all parentheticals beginning with a present participle.
+      const re = /\(\s*[a-z]{2,}ing\b/g;
       return (text.match(re) || []).length;
     },
 
