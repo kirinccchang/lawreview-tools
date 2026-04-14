@@ -698,12 +698,15 @@ const cslUrl = release.cslUrl;
 [data-theme="dark"] #lrt-theme-btn .lrt-moon { display: none; }
 [data-theme="dark"] #lrt-theme-btn .lrt-sun  { display: block; }
 
-/* Media query last — must come after all base rules to override them */
+/* Media queries last — must come after all base rules to override them */
 @media (max-width: 680px) {
   #lrt-nav-links { display: none; }
   .lrt-gh-link   { display: none; }
   #lrt-theme-btn { display: none; }
   #lrt-hamburger { display: block; }
+}
+@media (max-width: 480px) {
+  #lrt-nav-inner { padding: 0 20px; }
 }
 </style>
 
@@ -1182,6 +1185,7 @@ const cslUrl = release.cslUrl;
   border-radius: 0 6px 6px 0; padding: 16px 20px;
   font-family: 'IBM Plex Mono', 'Courier New', monospace;
   font-size: 13px; line-height: 1.7; color: #3D3D3D; margin: 16px 0;
+  overflow-wrap: anywhere;
 }
 [data-theme="dark"] .zot-citation-block { background: #1A1A1A; border-color: #444444; color: #AAAAAA; }
 .zot-citation-block em { font-style: italic; }
