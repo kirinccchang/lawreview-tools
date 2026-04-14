@@ -213,6 +213,7 @@
   align-items: center;
   padding-top: 80px;
   padding-bottom: 80px;
+  max-width: 1320px;
 }
 
 @media (max-width: 900px) {
@@ -240,6 +241,7 @@
   color: var(--text-muted);
   line-height: 1.65;
   margin-bottom: 24px;
+  overflow-wrap: break-word;
 }
 
 .built-at-nyu {
@@ -259,7 +261,9 @@
   font-family: var(--font-body);
   padding: 6px 10px;
   border-radius: 4px;
-  white-space: nowrap;
+  white-space: normal;
+  max-width: min(300px, calc(100vw - 48px));
+  line-height: 1.4;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.15s ease;
@@ -521,6 +525,21 @@
 [data-theme="dark"] .tool-card-dark {
   background: #0A0A0A;
   border-color: #222222;
+}
+
+/* Buttons on dark cards: outlined style so they read as buttons, not white blocks */
+.tool-card-dark .btn-primary,
+.tool-card-dark .btn-primary.btn-light {
+  background: transparent;
+  color: #EEEEEE;
+  border: 1.5px solid rgba(255,255,255,0.3);
+}
+.tool-card-dark .btn-primary:hover,
+.tool-card-dark .btn-primary.btn-light:hover {
+  background: #EEEEEE;
+  color: #111111;
+  border-color: #EEEEEE;
+  box-shadow: 0 4px 16px rgba(255,255,255,0.1);
 }
 
 .tool-phase-label {
