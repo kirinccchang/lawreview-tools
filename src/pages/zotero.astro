@@ -705,8 +705,22 @@ const cslUrl = release.cslUrl;
   margin-right: auto;
 }
 @media (max-width: 960px) {
-  .zot-hero { grid-template-columns: 1fr; max-width: 100%; }
-  .zot-hero-right { order: -1; }
+  .zot-hero { grid-template-columns: 1fr; max-width: 100%; gap: 32px; }
+  /* min-width:0 prevents grid item from overflowing its 1fr cell */
+  .zot-hero-left  { min-width: 0; }
+  .zot-hero-right { order: -1; min-width: 0; }
+  .zot-demo { position: static; max-width: 100%; }
+}
+@media (max-width: 540px) {
+  /* Scale down demo internals so card fits on narrow phones */
+  .zot-demo-sidebar { width: 120px; }
+  .zot-demo-lib { padding: 5px 8px; }
+  .zot-demo-item { padding: 5px 8px; }
+  .zot-field { padding: 3px 8px; }
+  .zot-field-key { width: 64px; }
+  .zot-field-val { max-width: 140px; }
+  .zot-demo-footer { padding: 10px 10px; }
+  .zot-demo-citation { font-size: 10.5px; padding: 8px 10px; overflow-wrap: anywhere; }
 }
 
 /* ── Badges ─────────────────────────────────────────────── */
@@ -954,6 +968,7 @@ const cslUrl = release.cslUrl;
   color: #333333;
   line-height: 1.65;
   border-left: 3px solid #D0CEC9;
+  overflow-wrap: anywhere;
 }
 [data-theme="dark"] .zot-demo-citation { background: #1A1A1A; border-color: #333333; color: #AAAAAA; }
 .zot-demo-citation em { font-style: italic; }
