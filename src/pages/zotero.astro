@@ -112,88 +112,121 @@ const cslUrl = release.cslUrl;
             <span class="zot-demo-chrome-title">Zotero</span>
           </div>
 
-          <!-- App body -->
-          <div class="zot-demo-app">
+          <!-- View tabs -->
+          <div class="zot-view-tabs" role="tablist">
+            <button class="zot-view-tab zot-view-tab-active" data-target="zot-view-auto" role="tab" aria-selected="true">Auto-save</button>
+            <button class="zot-view-tab" data-target="zot-view-bulk" role="tab" aria-selected="false">Select &amp; archive</button>
+          </div>
 
-            <!-- Sidebar -->
-            <div class="zot-demo-sidebar">
-              <div class="zot-demo-lib">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                My Library
+          <!-- ── View 1: Auto-save ─────────────────────────── -->
+          <div id="zot-view-auto" class="zot-view-panel">
+            <div class="zot-demo-app">
+              <div class="zot-demo-sidebar">
+                <div class="zot-demo-lib">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                  My Library
+                </div>
+                <div class="zot-demo-item zot-item-active">
+                  <div class="zot-item-icon">📰</div>
+                  <div class="zot-item-text">Rose, J. (2024)<br><span>The Law as Justice...</span></div>
+                </div>
+                <div class="zot-demo-item">
+                  <div class="zot-item-icon">📰</div>
+                  <div class="zot-item-text">Smith, M. (2023)<br><span>Federal Courts and...</span></div>
+                </div>
+                <div class="zot-demo-item">
+                  <div class="zot-item-icon">📄</div>
+                  <div class="zot-item-text">Chen, L. (2024)<br><span>Administrative Law...</span></div>
+                </div>
               </div>
-              <div class="zot-demo-item zot-item-active">
-                <div class="zot-item-icon">📰</div>
-                <div class="zot-item-text">Rose, J. (2024)<br><span>The Law as Justice...</span></div>
-              </div>
-              <div class="zot-demo-item">
-                <div class="zot-item-icon">📰</div>
-                <div class="zot-item-text">Smith, M. (2023)<br><span>Federal Courts and...</span></div>
-              </div>
-              <div class="zot-demo-item">
-                <div class="zot-item-icon">📄</div>
-                <div class="zot-item-text">Chen, L. (2024)<br><span>Administrative Law...</span></div>
+              <div class="zot-demo-info">
+                <div class="zot-demo-tabs">
+                  <span class="zot-tab zot-tab-active">Info</span>
+                  <span class="zot-tab">Notes</span>
+                  <span class="zot-tab">Tags</span>
+                </div>
+                <div class="zot-demo-fields">
+                  <div class="zot-field"><span class="zot-field-key">Title</span><span class="zot-field-val">The Law as Justice Gorsuch Sees It</span></div>
+                  <div class="zot-field"><span class="zot-field-key">Author</span><span class="zot-field-val">Rose, Rebecca J.</span></div>
+                  <div class="zot-field"><span class="zot-field-key">Publication</span><span class="zot-field-val">The Atlantic</span></div>
+                  <div class="zot-field"><span class="zot-field-key">Date</span><span class="zot-field-val">August 5, 2024</span></div>
+                  <div class="zot-field"><span class="zot-field-key">URL</span><span class="zot-field-val zot-url-val">theatlantic.com/ideas/archive/2024/08/...</span></div>
+                  <div class="zot-field zot-field-place">
+                    <span class="zot-field-key">Place</span>
+                    <span class="zot-field-val zot-place-val">
+                      <span class="zot-place-empty">—</span>
+                      <span class="zot-place-archiving"><span class="zot-spinner"></span> Archiving…</span>
+                      <span class="zot-place-done"><span class="zot-perma-link">[https://perma.cc/PT32-56LR]</span> <span class="zot-check">✓</span></span>
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
-
-            <!-- Info panel -->
-            <div class="zot-demo-info">
-              <div class="zot-demo-tabs">
-                <span class="zot-tab zot-tab-active">Info</span>
-                <span class="zot-tab">Notes</span>
-                <span class="zot-tab">Tags</span>
+            <div class="zot-demo-footer">
+              <div class="zot-demo-arrow">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                Bluebook footnote — auto-generated*
               </div>
-              <div class="zot-demo-fields">
-                <div class="zot-field">
-                  <span class="zot-field-key">Title</span>
-                  <span class="zot-field-val">The Law as Justice Gorsuch Sees It</span>
-                </div>
-                <div class="zot-field">
-                  <span class="zot-field-key">Author</span>
-                  <span class="zot-field-val">Rose, Rebecca J.</span>
-                </div>
-                <div class="zot-field">
-                  <span class="zot-field-key">Publication</span>
-                  <span class="zot-field-val">The Atlantic</span>
-                </div>
-                <div class="zot-field">
-                  <span class="zot-field-key">Date</span>
-                  <span class="zot-field-val">August 5, 2024</span>
-                </div>
-                <div class="zot-field">
-                  <span class="zot-field-key">URL</span>
-                  <span class="zot-field-val zot-url-val">theatlantic.com/ideas/archive/2024/08/...</span>
-                </div>
-                <!-- Animated Place field -->
-                <div class="zot-field zot-field-place">
-                  <span class="zot-field-key">Place</span>
-                  <span class="zot-field-val zot-place-val">
-                    <!-- State 1: empty -->
-                    <span class="zot-place-empty">—</span>
-                    <!-- State 2: archiving -->
-                    <span class="zot-place-archiving">
-                      <span class="zot-spinner"></span> Archiving…
-                    </span>
-                    <!-- State 3: done -->
-                    <span class="zot-place-done">
-                      <span class="zot-perma-link">[https://perma.cc/PT32-56LR]</span>
-                      <span class="zot-check">✓</span>
-                    </span>
-                  </span>
-                </div>
+              <div class="zot-demo-citation">
+                Rose, <em>The Law as Justice Gorsuch Sees It</em>, Atlantic (Aug. 5, 2024),
+                theatlantic.com/... (last visited Apr. 9, 2026)
+                <span class="zot-cite-bracket">[https://perma.cc/PT32-56LR]</span>.
               </div>
+              <div class="zot-csl-note">*with Bluebook Law Review (perma.cc) CSL Style</div>
             </div>
           </div>
 
-          <!-- Arrow + citation output -->
-          <div class="zot-demo-footer">
-            <div class="zot-demo-arrow">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
-              Bluebook footnote — auto-generated
+          <!-- ── View 2: Select & archive ──────────────────── -->
+          <div id="zot-view-bulk" class="zot-view-panel zot-view-hidden">
+            <div class="zot-demo-app zot-demo-app-bulk">
+              <!-- Sidebar: all items selected -->
+              <div class="zot-demo-sidebar">
+                <div class="zot-demo-lib">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                  My Library
+                </div>
+                <div class="zot-demo-item zot-item-selected">
+                  <div class="zot-item-icon">📰</div>
+                  <div class="zot-item-text">Rose, J. (2024)<br><span>The Law as Justice...</span></div>
+                </div>
+                <div class="zot-demo-item zot-item-selected">
+                  <div class="zot-item-icon">📰</div>
+                  <div class="zot-item-text">Smith, M. (2023)<br><span>Federal Courts and...</span></div>
+                </div>
+                <div class="zot-demo-item zot-item-selected">
+                  <div class="zot-item-icon">📄</div>
+                  <div class="zot-item-text">Chen, L. (2024)<br><span>Administrative Law...</span></div>
+                </div>
+              </div>
+              <!-- Info panel: 3 selected -->
+              <div class="zot-demo-info">
+                <div class="zot-demo-tabs">
+                  <span class="zot-tab zot-tab-active">Info</span>
+                  <span class="zot-tab">Notes</span>
+                  <span class="zot-tab">Tags</span>
+                </div>
+                <div class="zot-bulk-msg">3 items selected</div>
+              </div>
+              <!-- Right-click context menu -->
+              <div class="zot-ctx-menu">
+                <div class="zot-ctx-item zot-ctx-muted">Open in Browser</div>
+                <div class="zot-ctx-item zot-ctx-muted">Export Items…</div>
+                <div class="zot-ctx-sep"></div>
+                <div class="zot-ctx-item zot-ctx-primary">Archive to Perma.cc</div>
+                <div class="zot-ctx-sep"></div>
+                <div class="zot-ctx-item zot-ctx-muted">Remove Items…</div>
+              </div>
             </div>
-            <div class="zot-demo-citation">
-              Rose, <em>The Law as Justice Gorsuch Sees It</em>, Atlantic (Aug. 5, 2024),
-              theatlantic.com/... (last visited Apr. 9, 2026)
-              <span class="zot-cite-bracket">[https://perma.cc/PT32-56LR]</span>.
+            <!-- Footer spacer to keep height consistent -->
+            <div class="zot-demo-footer zot-bulk-footer">
+              <div class="zot-demo-arrow">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                Select items → right-click → Archive to Perma.cc
+              </div>
+              <div class="zot-demo-citation">
+                Plugin archives each item in the background. Failed items are tagged
+                <span class="zot-cite-bracket">perma-archive-failed</span> so nothing slips through.
+              </div>
             </div>
           </div>
 
@@ -917,6 +950,85 @@ const cslUrl = release.cslUrl;
 }
 [data-theme="dark"] .zot-cite-bracket { color: #4ADE80; }
 
+/* CSL note */
+.zot-csl-note {
+  font-size: 10px; color: #BBBBBB; margin-top: 5px;
+}
+[data-theme="dark"] .zot-csl-note { color: #444444; }
+
+/* ── View tabs ─────────────────────────────────────────── */
+.zot-view-tabs {
+  display: flex; gap: 4px; padding: 6px 8px;
+  background: #F0EFEB; border-bottom: 1px solid #E0DED8;
+}
+[data-theme="dark"] .zot-view-tabs { background: #181818; border-color: #2A2A2A; }
+
+.zot-view-tab {
+  all: unset; box-sizing: border-box;
+  font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 4px;
+  color: #888888; cursor: pointer; transition: background .12s, color .12s;
+}
+.zot-view-tab:hover { background: #E0DED8; color: #555555; }
+.zot-view-tab-active {
+  background: #FFFFFF; color: #111111;
+  box-shadow: 0 1px 3px rgba(0,0,0,.10);
+}
+[data-theme="dark"] .zot-view-tab { color: #666666; }
+[data-theme="dark"] .zot-view-tab:hover { background: #242424; color: #AAAAAA; }
+[data-theme="dark"] .zot-view-tab-active { background: #2A2A2A; color: #EEEEEE; box-shadow: none; }
+
+.zot-view-hidden { display: none; }
+
+/* ── Bulk view: selected items ──────────────────────────── */
+.zot-item-selected {
+  background: #DBEAFE; border-radius: 5px;
+}
+.zot-item-selected .zot-item-text        { color: #1D4ED8 !important; }
+.zot-item-selected .zot-item-text span   { color: #3B82F6 !important; }
+[data-theme="dark"] .zot-item-selected   { background: #1E3A5F; }
+[data-theme="dark"] .zot-item-selected .zot-item-text      { color: #93C5FD !important; }
+[data-theme="dark"] .zot-item-selected .zot-item-text span { color: #60A5FA !important; }
+
+/* ── Bulk view: context menu ────────────────────────────── */
+.zot-demo-app-bulk { position: relative; }
+
+.zot-ctx-menu {
+  position: absolute; top: 28px; left: 16px;
+  background: #FFFFFF; border: 1px solid #D0CEC9;
+  border-radius: 7px; padding: 3px;
+  min-width: 178px; z-index: 10;
+  box-shadow: 0 8px 28px rgba(0,0,0,.14), 0 2px 6px rgba(0,0,0,.07);
+  animation: zot-ctx-appear .25s ease;
+}
+[data-theme="dark"] .zot-ctx-menu {
+  background: #2A2A2A; border-color: #404040;
+  box-shadow: 0 8px 28px rgba(0,0,0,.5);
+}
+@keyframes zot-ctx-appear {
+  from { opacity: 0; transform: scale(.96) translateY(-3px); }
+  to   { opacity: 1; transform: scale(1)   translateY(0); }
+}
+.zot-ctx-item {
+  padding: 5px 10px; border-radius: 4px; font-size: 11px; cursor: default;
+}
+.zot-ctx-muted { color: #555555; }
+[data-theme="dark"] .zot-ctx-muted { color: #999999; }
+.zot-ctx-primary { background: #3B6FBF; color: #FFFFFF; font-weight: 500; }
+.zot-ctx-sep { height: 1px; background: #E0DED8; margin: 3px 0; }
+[data-theme="dark"] .zot-ctx-sep { background: #404040; }
+
+/* ── Bulk view: info panel message ─────────────────────── */
+.zot-bulk-msg {
+  padding: 14px 12px; font-size: 11px; color: #999999; font-style: italic;
+}
+[data-theme="dark"] .zot-bulk-msg { color: #555555; }
+
+/* ── Bulk footer ────────────────────────────────────────── */
+.zot-bulk-footer .zot-demo-citation {
+  color: #666666;
+}
+[data-theme="dark"] .zot-bulk-footer .zot-demo-citation { color: #666666; }
+
 /* ═══════════════════════════════════════════════════════════
    TWO-WORKFLOW CARDS
 ═══════════════════════════════════════════════════════════ */
@@ -1054,6 +1166,20 @@ kbd {
     const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('theme', next);
+  });
+
+  // Demo view tabs
+  document.querySelectorAll('.zot-view-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const targetId = tab.dataset.target;
+      document.querySelectorAll('.zot-view-tab').forEach(t => {
+        t.classList.toggle('zot-view-tab-active', t === tab);
+        t.setAttribute('aria-selected', String(t === tab));
+      });
+      document.querySelectorAll('.zot-view-panel').forEach(panel => {
+        panel.classList.toggle('zot-view-hidden', panel.id !== targetId);
+      });
+    });
   });
 
   // Tools dropdown
