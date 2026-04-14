@@ -59,8 +59,16 @@ body.dark  { --bg: #111111 !important; }
 }
 /* Hide tool's own dark toggle — replaced by navbar */
 .dark-toggle { display: none !important; }
-/* Trim tool container bottom padding; footer adds space */
-.container { padding-bottom: 48px !important; }
+/* Widen + repad tool container to match main site proportions */
+.container {
+  max-width: min(900px, calc(100vw - 48px)) !important;
+  padding-left: 32px !important;
+  padding-right: 32px !important;
+  padding-bottom: 48px !important;
+}
+@media (max-width: 600px) {
+  .container { padding-left: 20px !important; padding-right: 20px !important; }
+}
 
 /* ── Navbar ─────────────────────────────────────────────────── */
 #lrt-nav {
