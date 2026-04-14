@@ -42,6 +42,7 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip; /* prevent any element from causing horizontal page scroll */
   }
 
   body {
@@ -887,8 +888,15 @@
   align-items: start;
 }
 
+/* Both grid cells must allow shrinking below content size */
+.tech-inner > * { min-width: 0; }
+
+.tech-code-wrap {
+  overflow: hidden; /* code block cannot widen the grid cell */
+}
+
 @media (max-width: 800px) {
-  .tech-inner { grid-template-columns: 1fr; }
+  .tech-inner { grid-template-columns: 1fr; gap: 32px; }
 }
 
 .tech-title {
@@ -905,6 +913,7 @@
   color: var(--text-muted);
   line-height: 1.7;
   margin-bottom: 16px;
+  overflow-wrap: break-word;
 }
 
 .tech-links {
