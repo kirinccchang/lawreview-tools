@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 ---
 <Base
   title="Zotero Perma Archiver — lawreview.tools"
-  description="An open-source Zotero plugin that automatically generates perma.cc archive links as you build your research library."
+  description="An open-source Zotero plugin that automatically archives URLs to perma.cc as you build your research library. Bluebook 22nd ed. Rule 18.2.1(d) compliance — no technical knowledge required."
 >
 
 <nav class="navbar" id="navbar">
@@ -13,8 +13,10 @@ import Base from '../layouts/Base.astro';
       <span class="nav-logo-text">lawreview.tools</span>
     </a>
     <div class="nav-right">
-      <a href="/#tools" class="nav-link">Tools</a>
-      <a href="https://github.com/kirinccchang/zotero-perma-archiver" target="_blank" rel="noopener" class="nav-link nav-github" aria-label="GitHub">
+      <a href="/permadrop/" class="nav-link">PermaDrop</a>
+      <a href="/supradrop/" class="nav-link">SupraDrop</a>
+      <a href="/zotero" class="nav-link" style="font-weight:600;background:var(--nav-hover-bg,#F5F4F0);color:var(--text-primary,#111111)">Zotero Plugin</a>
+      <a href="https://github.com/kirinccchang" target="_blank" rel="noopener" class="nav-link nav-github" aria-label="GitHub">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
       </a>
       <button class="nav-theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
@@ -28,13 +30,32 @@ import Base from '../layouts/Base.astro';
 <main class="page-main">
   <div class="container">
 
+    <!-- ── HEADER ──────────────────────────────────────────── -->
     <div class="page-header">
       <div class="phase-label">WRITING PHASE · ZOTERO PLUGIN</div>
-      <h1 class="page-title">Zotero Perma Archiver</h1>
+      <div class="zot-title-row">
+        <h1 class="page-title">Zotero Perma Archiver</h1>
+        <a href="https://github.com/kirinccchang/zotero-perma-archiver/blob/main/README_zh.md" target="_blank" rel="noopener" class="zot-lang-link">繁體中文版 →</a>
+      </div>
+      <div class="zot-badge-row">
+        <span class="zot-badge">Zotero 7 &amp; 8</span>
+        <a href="https://github.com/kirinccchang/zotero-perma-archiver/releases/latest" target="_blank" rel="noopener" class="zot-badge zot-badge-link">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          GitHub Release
+        </a>
+        <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener" class="zot-badge zot-badge-link">AGPL v3</a>
+      </div>
       <p class="page-subtitle">
-        Save it once, archived forever. An open-source Zotero plugin that
-        automatically generates perma.cc archive links in the background
-        as you build your research library — before the URL ever breaks.
+        Automatically archives any Zotero item with a URL to perma.cc when you save it.
+        Already have a library full of unarchived items? Select them, right-click, and archive
+        them all at once. The [perma.cc/...] link appears in your Word citations automatically.
+        Bluebook 22nd ed. Rule 18.2.1(d) compliance — no technical knowledge required.
+      </p>
+      <p class="zot-dev">
+        Developed by <a href="https://kirinchang.com" target="_blank" rel="noopener" class="inline-link">Cheng-chi "Kirin" Chang</a>,
+        Research Fellow, U.S.-Asia Law Institute, NYU School of Law;
+        Affiliated Researcher, AI and Future of Work Program, Emory University School of Law
+        (former Associate Director and Academic Researcher).
       </p>
       <div class="page-ctas">
         <a
@@ -44,80 +65,267 @@ import Base from '../layouts/Base.astro';
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Download v1.3.2 (.xpi)
         </a>
-        <a href="https://github.com/kirinccchang/zotero-perma-archiver/releases" target="_blank" rel="noopener" class="btn-ghost">
-          All Releases →
-        </a>
+        <a href="https://github.com/kirinccchang/zotero-perma-archiver/releases" target="_blank" rel="noopener" class="btn-ghost">All Releases →</a>
+        <a href="https://github.com/kirinccchang/zotero-perma-archiver" target="_blank" rel="noopener" class="btn-ghost">GitHub →</a>
       </div>
-      <p class="compat-note">Compatible with Zotero 7 and 8 · AGPL v3</p>
+      <p class="compat-note">Compatible with Zotero 7 and 8 · macOS · Windows · AGPL v3</p>
+    </div>
+
+    <!-- ── TWO WORKFLOWS ───────────────────────────────────── -->
+    <div class="zot-two-col">
+      <div class="zot-workflow-card">
+        <div class="zot-workflow-label">New items</div>
+        <p>Save a webpage in Zotero → plugin archives to perma.cc in the background → Bluebook citations automatically include the [perma.cc/...] bracket. No extra steps.</p>
+      </div>
+      <div class="zot-workflow-card">
+        <div class="zot-workflow-label">Existing library</div>
+        <p>Select items → right-click → Archive to Perma.cc. The plugin works through your backlog and tags any failures so nothing slips through.</p>
+      </div>
+    </div>
+
+    <!-- ── BACKGROUND (collapsible) ───────────────────────── -->
+    <details class="zot-details">
+      <summary>What is Zotero? What is perma.cc? Why does this exist?</summary>
+      <div class="zot-details-body">
+        <p>Zotero is a free tool that saves webpages and articles into a research library with one click. Perma.cc is a free archiving service run by Harvard Law School that creates a permanent, unchanging copy of any webpage — so your citations never go dead. This plugin connects the two automatically.</p>
+        <p>The Bluebook 22nd edition (2025) made archiving internet citations mandatory. Studies show that over 70% of URLs cited in the <em>Harvard Law Review</em> no longer work. The traditional fix — manually visiting perma.cc for each URL, copying the archive link, and pasting it back into Zotero — takes five steps per item and is easy to skip. This plugin reduces that to zero steps for every item you save going forward, and one right-click for everything you've already saved.</p>
+      </div>
+    </details>
+
+    <div class="section-divider"></div>
+
+    <!-- ── BEFORE YOU START ────────────────────────────────── -->
+    <div class="docs-section">
+      <h2 class="docs-h2">Before You Start</h2>
+      <p class="docs-body">You will need:</p>
+      <ul class="docs-list">
+        <li>Zotero installed on your computer → <a href="https://www.zotero.org/download" target="_blank" rel="noopener" class="inline-link">Download free at zotero.org</a></li>
+        <li>A perma.cc account → <a href="https://perma.cc/sign-up" target="_blank" rel="noopener" class="inline-link">Register free at perma.cc</a> (takes 2 minutes)</li>
+        <li>A perma.cc API key → after logging in, go to <a href="https://perma.cc/settings/tools" target="_blank" rel="noopener" class="inline-link">perma.cc/settings/tools</a>. Click "Generate an API key" if you haven't yet — the key will appear on that page. Copy it.</li>
+      </ul>
+      <div class="zot-callout zot-callout-important">
+        <div class="zot-callout-label">Important</div>
+        New individual accounts start with only <strong>10 free trial links</strong>. After the trial, you need either an institutional account or a paid plan to keep archiving. Most law school libraries provide perma.cc access free of charge to students, faculty, and journal staff — check with your law librarian before signing up individually. You can check your remaining links at any time at <a href="https://perma.cc/settings/tools" target="_blank" rel="noopener" class="inline-link">perma.cc/settings/tools</a>.
+      </div>
     </div>
 
     <div class="section-divider"></div>
 
-    <div class="docs-grid">
+    <!-- ── INSTALLATION ────────────────────────────────────── -->
+    <div class="docs-section">
+      <h2 class="docs-h2">Installation</h2>
 
-      <div class="docs-section">
-        <h2 class="docs-h2">Installation</h2>
-        <ol class="docs-steps">
-          <li>
-            <strong>Download</strong> the <code>.xpi</code> file above.
-          </li>
-          <li>
-            Open Zotero. Go to <strong>Tools → Add-ons</strong>.
-          </li>
-          <li>
-            Click the gear icon (⚙) and select <strong>Install Add-on From File…</strong>
-          </li>
-          <li>
-            Select the downloaded <code>.xpi</code> file and click <strong>Install Now</strong>.
-          </li>
-          <li>
-            Restart Zotero when prompted.
-          </li>
-          <li>
-            Go to <strong>Tools → Perma Archiver → Configure</strong> and enter your
-            <a href="https://perma.cc/settings/tools" target="_blank" rel="noopener" class="inline-link">perma.cc API key</a>.
-          </li>
-        </ol>
-      </div>
-
-      <div class="docs-section">
-        <h2 class="docs-h2">How It Works</h2>
-        <p class="docs-body">
-          After installation, every item you save to Zotero is automatically
-          submitted to the perma.cc API in the background. The resulting
-          archive link is stored in the item's <strong>Place</strong> field.
-        </p>
-        <p class="docs-body">
-          When you cite the item in Word using Zotero's citation tools with
-          the included <strong>Bluebook Law Review CSL style</strong>, the
-          perma.cc link is automatically appended in the format required by
-          Bluebook Rule 18.2.
-        </p>
-        <div class="docs-callout">
-          <strong>No manual steps required.</strong> Archive links are generated
-          automatically — you never need to visit perma.cc manually for
-          sources you save through Zotero.
+      <!-- Step 1 -->
+      <div class="zot-step">
+        <div class="zot-step-header">
+          <span class="zot-step-num">1</span>
+          <span>Download and install the plugin file</span>
+        </div>
+        <div class="zot-step-body">
+          <p class="docs-body">
+            <a href="https://github.com/kirinccchang/zotero-perma-archiver/releases/download/v1.3.2/perma-archiver_v1.3.2.xpi" class="inline-link"><strong>Click here to download: perma-archiver_v1.3.2.xpi</strong></a>
+          </p>
+          <div class="zot-callout zot-callout-note">
+            <div class="zot-callout-label">Note</div>
+            Your browser may warn you about downloading a <code>.xpi</code> file — this is normal. Allow the download and save it somewhere easy to find (e.g., your Desktop).
+          </div>
+          <ol class="docs-steps">
+            <li>Open Zotero on your computer.</li>
+            <li>In the menu bar at the top of the screen, click <strong>Tools</strong>.</li>
+            <li>In the dropdown menu, click <strong>Plugins</strong>.</li>
+            <li>In the Plugins window, look for a small <strong>gear icon ⚙</strong> in the upper-right corner. Click it.</li>
+            <li>Click <strong>Install Add-on From File…</strong></li>
+            <li>A file browser will open. Navigate to where you saved the <code>.xpi</code> file, select it, and click <strong>Open</strong>.</li>
+            <li>When asked to restart Zotero, click <strong>Restart Now</strong>.</li>
+          </ol>
+          <div class="zot-callout zot-callout-note">
+            <div class="zot-callout-label">Note</div>
+            After restarting, you should see <strong>Perma Archiver</strong> listed under Tools in the menu bar. If you don't, see <a href="#troubleshooting" class="inline-link">Troubleshooting</a> below.
+          </div>
         </div>
       </div>
 
-      <div class="docs-section">
-        <h2 class="docs-h2">Requirements</h2>
-        <ul class="docs-list">
-          <li>Zotero 7.x or 8.x</li>
-          <li>A free <a href="https://perma.cc" target="_blank" rel="noopener" class="inline-link">perma.cc</a> account and API key</li>
-          <li>Internet connection (for archiving only — the plugin itself is local)</li>
-        </ul>
+      <!-- Step 2 -->
+      <div class="zot-step">
+        <div class="zot-step-header">
+          <span class="zot-step-num">2</span>
+          <span>Enter your perma.cc API key</span>
+        </div>
+        <div class="zot-step-body">
+          <ol class="docs-steps">
+            <li>In Zotero, click <strong>Tools</strong> in the menu bar.</li>
+            <li>Hover over <strong>Perma Archiver</strong>.</li>
+            <li>Click <strong>Set API Key…</strong></li>
+            <li>A small dialog box will appear. Paste your API key and click <strong>OK</strong>.</li>
+            <li>The plugin will immediately try to connect to perma.cc and show your folders — this confirms your key is working.</li>
+          </ol>
+          <div class="zot-callout zot-callout-important">
+            <div class="zot-callout-label">Important</div>
+            The plugin will not archive anything until you complete this step. Your API key is what connects the plugin to your perma.cc account.
+            <br><br>
+            If a folder list does not appear after entering the key, the key was not accepted. Double-check that you copied it correctly from <a href="https://perma.cc/settings/tools" target="_blank" rel="noopener" class="inline-link">perma.cc/settings/tools</a>. If you have not generated a key yet, click the "Generate an API key" button on that page first.
+          </div>
+          <p class="docs-body"><strong>Optional — Choose a save folder:</strong> By default, all archives are saved to your perma.cc Personal Links folder. After entering your API key, a folder selection dialog will open automatically. You can also access it later via <strong>Tools → Perma Archiver → Choose Save Folder…</strong></p>
+          <div class="zot-callout zot-callout-tip">
+            <div class="zot-callout-label">Tip</div>
+            Law school accounts often have shared organizational folders set up by the library. Ask your law librarian if your institution has a dedicated perma.cc folder for student journal work.
+          </div>
+        </div>
       </div>
 
-      <div class="docs-section">
-        <h2 class="docs-h2">Privacy</h2>
-        <p class="docs-body">
-          The plugin communicates only with the perma.cc API, using your own
-          API key. No usage data, telemetry, or document content is ever
-          sent elsewhere. The source code is fully auditable on GitHub.
-        </p>
+      <!-- Step 3 -->
+      <div class="zot-step">
+        <div class="zot-step-header">
+          <span class="zot-step-num">3</span>
+          <span>Install the Bluebook citation style <span class="zot-optional">optional — for Word users</span></span>
+        </div>
+        <div class="zot-step-body">
+          <div class="zot-callout zot-callout-note">
+            <div class="zot-callout-label">Note</div>
+            Steps 1 and 2 are all you need. Once the plugin is installed and your API key is entered, the perma.cc link is saved directly into your Zotero item — you can see it there, copy it manually, or use it however you like.
+            <br><br>
+            Step 3 is only needed if you use Zotero's Word plugin to insert citations into Microsoft Word or Google Docs. If you do, this small style file makes the [https://perma.cc/...] bracket appear in your footnotes automatically.
+          </div>
+          <p class="docs-body">
+            <a href="https://raw.githubusercontent.com/kirinccchang/zotero-perma-archiver/main/bluebook-law-review-perma.csl" class="inline-link"><strong>Click here to download: bluebook-law-review-perma.csl</strong></a>
+          </p>
+          <p class="docs-body zot-small">If your browser opens it as text instead of downloading, right-click the link and choose <em>Save Link As…</em></p>
+          <ol class="docs-steps">
+            <li>In Zotero, open <strong>Settings</strong> (Mac: <strong>Zotero → Settings</strong>; Windows: <strong>Edit → Preferences</strong>).</li>
+            <li>Click the <strong>Cite</strong> tab.</li>
+            <li>Under "Citation Styles," click the <strong>+</strong> button or <strong>Add from File…</strong></li>
+            <li>Select the <code>.csl</code> file you just downloaded and click <strong>Open</strong>.</li>
+            <li>When inserting citations in Word or Google Docs, choose <strong>Bluebook Law Review (perma.cc)</strong> as your citation style.</li>
+          </ol>
+          <div class="zot-callout zot-callout-tip">
+            <div class="zot-callout-label">Tip</div>
+            Once installed, the style works automatically. Just use Zotero's "Add/Edit Citation" as you normally would — the perma.cc link will appear on its own.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ── WHAT HAPPENS AFTER SETUP ────────────────────────── -->
+    <div class="docs-section">
+      <h2 class="docs-h2">What Happens After Setup</h2>
+
+      <h3 class="docs-h3">Automatic archiving — new saves</h3>
+      <p class="docs-body">Once the plugin is installed and your API key is entered, every new save is handled automatically:</p>
+      <ol class="docs-steps">
+        <li>You click the Zotero browser extension icon to save any item with a URL.</li>
+        <li>The plugin calls perma.cc in the background (takes a few seconds).</li>
+        <li>The perma.cc link is saved directly into your Zotero item. To see it: click the item in Zotero, then look at the <strong>Info</strong> tab on the right side panel.
+          <ul class="docs-list zot-sublist">
+            <li>For most item types (news articles, web pages, government documents, etc.), it appears in the <strong>Place</strong> field.</li>
+            <li>For blog posts and forum posts, which do not have a Place field, it is appended to the end of the <strong>URL</strong> field in brackets: <code>https://original-url [https://perma.cc/XXXX-XXXX]</code>.</li>
+          </ul>
+        </li>
+      </ol>
+      <p class="docs-body">If you use the Bluebook Law Review (perma.cc) citation style, Word citations will include the perma.cc bracket automatically:</p>
+      <div class="zot-citation-block">
+        Rebecca J. Rose, <em>The Law as Justice Gorsuch Sees It</em>, Atlantic (Aug. 5, 2024),<br>
+        https://www.theatlantic.com/ideas/archive/2024/08/interview-justice-neil-gorsuch-over-ruled/679342/<br>
+        (last visited Apr. 9, 2026) [https://perma.cc/PT32-56LR].
       </div>
 
+      <h3 class="docs-h3">Batch archiving — your existing library</h3>
+      <p class="docs-body">Already have items in Zotero that were saved before you installed this plugin? You can archive them all retroactively:</p>
+      <ol class="docs-steps">
+        <li>Select any items in your Zotero library (<kbd>⌘A</kbd> or <kbd>Ctrl+A</kbd> to select all, or hold <kbd>⌘</kbd>/<kbd>Ctrl</kbd> to pick specific ones).</li>
+        <li>Right-click the selection.</li>
+        <li>Choose <strong>Archive to Perma.cc</strong>.</li>
+        <li>Confirm — the plugin works through each item and shows a summary when done.</li>
+      </ol>
+      <p class="docs-body">Items that fail (e.g., paywalled pages) are automatically tagged <code>perma-failed</code> — a colored label that appears in your Zotero library so you can find and handle them manually. If you retry and it succeeds, the tag is removed automatically. Works with any Zotero item that has a URL — webpages, blog posts, newspaper articles, reports, government documents, and more.</p>
+      <div class="zot-callout zot-callout-important">
+        <div class="zot-callout-label">Important</div>
+        Check your link quota before running a batch archive on a large library. Individual trial accounts have only 10 links total — if you run out mid-batch, remaining items will be tagged <code>perma-failed</code>. Institutional accounts (through law school libraries) typically have unlimited links. Check your remaining quota at <a href="https://perma.cc/settings/tools" target="_blank" rel="noopener" class="inline-link">perma.cc/settings/tools</a> before starting.
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ── KNOWN LIMITATIONS ───────────────────────────────── -->
+    <div class="docs-section" id="known-limitations">
+      <h2 class="docs-h2">Known Limitations</h2>
+      <div class="zot-callout zot-callout-warning">
+        <div class="zot-callout-label">Warning</div>
+        A perma.cc link is not a guarantee the content was captured. If the original page was already unavailable, returning an error, or behind a paywall at the moment of capture, perma.cc may still issue a link — but the archived snapshot will be empty or show a "Capture Failed" error. <strong>Always verify your perma.cc links before submitting</strong> by clicking each one and confirming the content appears correctly.
+        <br><br>
+        If a capture failed, you can fix it manually without losing the link: open the perma.cc link → click "Show record details" → use "Upload file" to replace the failed capture with a screenshot (JPG, PNG, GIF) or a PDF of the page — up to 200 MB. This lets you preserve the same perma.cc URL while supplying a working snapshot.
+      </div>
+      <div class="zot-callout zot-callout-warning">
+        <div class="zot-callout-label">Warning</div>
+        Paywalled sites (NYT, WSJ, SSRN login-required pages, etc.) may fail to archive — perma.cc cannot bypass paywalls. For these, archive manually at <a href="https://perma.cc" target="_blank" rel="noopener" class="inline-link">perma.cc</a> and add <em>(on file with the author)</em> to your citation per Rule 18.2.1(d).
+      </div>
+      <div class="zot-callout zot-callout-note">
+        <div class="zot-callout-label">Note</div>
+        Blog posts without a publication date will show the [perma.cc] bracket slightly out of order in the citation. Fix by manually entering the publication date in the Zotero item.
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ── TROUBLESHOOTING ─────────────────────────────────── -->
+    <div class="docs-section" id="troubleshooting">
+      <h2 class="docs-h2">Troubleshooting</h2>
+      <details class="zot-details">
+        <summary>Plugin menu doesn't appear after installation</summary>
+        <div class="zot-details-body">
+          <p>Make sure Zotero was fully restarted after installation. If Perma Archiver doesn't appear under Tools after restarting, try reinstalling: go to <strong>Tools → Plugins</strong>, find Perma Archiver, click <strong>Remove</strong>, restart Zotero, then install the <code>.xpi</code> file again from scratch.</p>
+        </div>
+      </details>
+      <details class="zot-details">
+        <summary>Archives not appearing in citations</summary>
+        <div class="zot-details-body">
+          <p>Confirm you have installed the Bluebook Law Review (perma.cc) CSL style (Step 3) and selected it as your citation style in the Zotero Word plugin. Also verify that the perma.cc link appears in the item's <strong>Place</strong> or <strong>URL</strong> field in Zotero — if it's missing, the item was probably saved before the plugin was installed and needs to be batch-archived retroactively.</p>
+        </div>
+      </details>
+      <details class="zot-details">
+        <summary>The plugin is running but nothing is being archived</summary>
+        <div class="zot-details-body">
+          <p>The most common cause is a missing or invalid API key. Go to <strong>Tools → Perma Archiver → Set API Key…</strong> and re-enter your key. If a folder list does not appear after entering the key, the key was not accepted — verify it at <a href="https://perma.cc/settings/tools" target="_blank" rel="noopener" class="inline-link">perma.cc/settings/tools</a>. Also check that you have remaining links in your quota.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ── TESTED ON ───────────────────────────────────────── -->
+    <div class="docs-section">
+      <h2 class="docs-h2">Tested On</h2>
+      <ul class="docs-list">
+        <li>macOS Sequoia 15.7.1 · Zotero 8.0.5</li>
+        <li>Windows 11 Enterprise (26200.8037) · Zotero 8.0.4</li>
+        <li>Windows 11 Enterprise (26200.8037) · Zotero 7.0.32</li>
+      </ul>
+      <p class="docs-body zot-small">Other platforms and Zotero versions may work but have not been verified.</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ── LICENSE ─────────────────────────────────────────── -->
+    <div class="docs-section">
+      <h2 class="docs-h2">License</h2>
+      <p class="docs-body">
+        <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener" class="inline-link">GNU Affero General Public License v3.0</a>.
+        Modifications to the plugin source files must remain open source under AGPL-3.0.
+        The included CSL style (<code>bluebook-law-review-perma.csl</code>) is separately licensed under
+        <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener" class="inline-link">CC BY-SA 3.0</a>
+        as required by the CSL project.
+      </p>
+    </div>
+
+    <!-- ── ACKNOWLEDGMENTS ─────────────────────────────────── -->
+    <div class="docs-section">
+      <h2 class="docs-h2">Acknowledgments</h2>
+      <p class="docs-body">
+        CSL style based on <em>Bluebook Law Review</em> by Bruce D'Arcus, Nancy Sims, and contributors.
+        Locator handling (at X, ¶ X, n.X) draws on Jonathan Choi's enhanced Bluebook style (2019).
+        Further enhanced for Bluebook 22nd edition compliance and perma.cc archiving support.
+      </p>
     </div>
 
     <div class="docs-footer-nav">
@@ -128,22 +336,376 @@ import Base from '../layouts/Base.astro';
   </div>
 </main>
 
-<footer class="page-footer">
+<!-- ── AUTHOR ──────────────────────────────────────────────── -->
+<section class="author-section">
   <div class="container">
+    <div class="section-divider"></div>
+    <div class="author-inner">
+      <img
+        src="/avatar.jpeg"
+        alt="Kirin Chang"
+        class="author-avatar"
+        width="80"
+        height="80"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+      />
+      <div class="author-avatar-fallback" style="display:none" aria-hidden="true">KC</div>
+      <div class="author-body">
+        <h2 class="author-name">Built by Kirin Chang</h2>
+        <p class="author-roles">
+          Research Fellow, U.S.-Asia Law Institute · NYU School of Law<br>
+          Affiliate Research Fellow, AI &amp; the Future of Work · Emory Law<br>
+          Member of the New York and Texas Bars
+        </p>
+        <p class="author-pubs">
+          Appeared or is forthcoming in print and online journals and books with the
+          <em>NYU Law Review</em>, <em>UCLA Law Review</em>,
+          <em>Georgetown Law Journal</em>, <em>Minnesota Law Review</em>,
+          <em>University of Illinois Law Review</em>, <em>Wisconsin Law Review</em>,
+          <em>University of Pennsylvania Journal of International Law</em>,
+          among others.
+        </p>
+        <div class="author-links">
+          <a href="https://kirinchang.com" target="_blank" rel="noopener" class="author-link">kirinchang.com</a>
+          <span class="author-link-sep">·</span>
+          <a href="https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=5438024" target="_blank" rel="noopener" class="author-link">SSRN</a>
+          <span class="author-link-sep">·</span>
+          <a href="https://scholar.google.com/citations?user=D-z05L0AAAAJ&hl=en" target="_blank" rel="noopener" class="author-link">Google Scholar</a>
+          <span class="author-link-sep">·</span>
+          <a href="https://github.com/kirinccchang" target="_blank" rel="noopener" class="author-link">GitHub</a>
+          <span class="author-link-sep">·</span>
+          <a href="https://twitter.com/chengchi_chang" target="_blank" rel="noopener" class="author-link">@chengchi_chang</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ──────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="footer-logo">
+          <span aria-hidden="true">⚖</span> lawreview.tools
+        </a>
+        <p class="footer-tagline">
+          Free, private Bluebook tools<br>for law review editors<br>and legal scholars.
+        </p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Tools</div>
+        <a href="/permadrop/" class="footer-link">PermaDrop</a>
+        <a href="/supradrop/" class="footer-link">SupraDrop</a>
+        <a href="/zotero" class="footer-link">Zotero Plugin</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Resources</div>
+        <a href="https://github.com/kirinccchang" target="_blank" rel="noopener" class="footer-link">GitHub</a>
+        <a href="/zotero" class="footer-link">Docs</a>
+        <a href="https://github.com/kirinccchang/zotero-perma-archiver/releases" target="_blank" rel="noopener" class="footer-link">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener" class="footer-link">AGPL v3 License</a>
+        <a href="/privacy" class="footer-link">Privacy Policy</a>
+      </div>
+    </div>
     <div class="footer-bottom">
-      © 2026 Kirin Chang · <a href="/">lawreview.tools</a> · Open source under AGPL v3 ·
-      <a href="/privacy">Privacy Policy</a>
+      © 2026 <a href="https://kirinchang.com/" target="_blank" rel="noopener">Kirin Chang</a> · <a href="/">lawreview.tools</a> · Open source under AGPL v3
     </div>
   </div>
 </footer>
 
 </Base>
 
+<style>
+/* ── Zotero page–specific styles ──────────────────────────── */
+
+.zot-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.zot-title-row .page-title { margin-bottom: 0; }
+
+.zot-lang-link {
+  font-size: 14px;
+  color: #888888;
+  text-decoration: none;
+  transition: color .15s;
+  white-space: nowrap;
+}
+.zot-lang-link:hover { color: #111111; }
+[data-theme="dark"] .zot-lang-link { color: #666666; }
+[data-theme="dark"] .zot-lang-link:hover { color: #EEEEEE; }
+
+.zot-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.zot-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 100px;
+  background: #F5F4F0;
+  color: #3D3D3D;
+  border: 1px solid #E0DED8;
+  white-space: nowrap;
+}
+[data-theme="dark"] .zot-badge {
+  background: #1A1A1A;
+  color: #AAAAAA;
+  border-color: #333333;
+}
+.zot-badge-link {
+  text-decoration: none;
+  transition: background .15s, color .15s;
+}
+.zot-badge-link:hover {
+  background: #ECEAE3;
+  color: #111111;
+}
+[data-theme="dark"] .zot-badge-link:hover {
+  background: #252525;
+  color: #EEEEEE;
+}
+
+.zot-dev {
+  font-size: 14px;
+  color: #888888;
+  line-height: 1.65;
+  margin-bottom: 24px;
+  max-width: 660px;
+}
+[data-theme="dark"] .zot-dev { color: #666666; }
+
+/* Two-column workflow summary */
+.zot-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 32px 0;
+}
+@media (max-width: 600px) { .zot-two-col { grid-template-columns: 1fr; } }
+
+.zot-workflow-card {
+  background: #F5F4F0;
+  border-radius: 8px;
+  padding: 20px 24px;
+}
+[data-theme="dark"] .zot-workflow-card { background: #1A1A1A; }
+.zot-workflow-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #888888;
+  margin-bottom: 10px;
+}
+[data-theme="dark"] .zot-workflow-label { color: #666666; }
+.zot-workflow-card p {
+  font-size: 14px;
+  line-height: 1.65;
+  color: #3D3D3D;
+  margin: 0;
+}
+[data-theme="dark"] .zot-workflow-card p { color: #AAAAAA; }
+
+/* Collapsible details */
+.zot-details {
+  border: 1px solid #E0DED8;
+  border-radius: 8px;
+  margin: 24px 0;
+  overflow: hidden;
+}
+[data-theme="dark"] .zot-details { border-color: #333333; }
+.zot-details > summary {
+  padding: 14px 20px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #3D3D3D;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #F5F4F0;
+  transition: background .15s;
+}
+.zot-details > summary::-webkit-details-marker { display: none; }
+.zot-details > summary::before {
+  content: '▶';
+  font-size: 10px;
+  color: #888888;
+  transition: transform .2s;
+  flex-shrink: 0;
+}
+.zot-details[open] > summary::before { transform: rotate(90deg); }
+.zot-details > summary:hover { background: #ECEAE3; }
+[data-theme="dark"] .zot-details > summary { background: #1A1A1A; color: #AAAAAA; }
+[data-theme="dark"] .zot-details > summary:hover { background: #222222; }
+.zot-details-body {
+  padding: 20px 24px;
+  border-top: 1px solid #E0DED8;
+}
+[data-theme="dark"] .zot-details-body { border-top-color: #333333; }
+.zot-details-body p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #3D3D3D;
+  margin-bottom: 12px;
+}
+.zot-details-body p:last-child { margin-bottom: 0; }
+[data-theme="dark"] .zot-details-body p { color: #AAAAAA; }
+
+/* Callout boxes */
+.zot-callout {
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin: 16px 0;
+  font-size: 14px;
+  line-height: 1.65;
+  border-left: 3px solid;
+}
+.zot-callout-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.zot-callout-tip    { background: #F0FAF0; border-color: #22C55E; color: #1A5C2A; }
+.zot-callout-tip    .zot-callout-label { color: #16A34A; }
+.zot-callout-note   { background: #EFF6FF; border-color: #60A5FA; color: #1E3A5F; }
+.zot-callout-note   .zot-callout-label { color: #2563EB; }
+.zot-callout-important { background: #FFF7ED; border-color: #FB923C; color: #7C2D12; }
+.zot-callout-important .zot-callout-label { color: #EA580C; }
+.zot-callout-warning { background: #FEF2F2; border-color: #F87171; color: #7F1D1D; }
+.zot-callout-warning .zot-callout-label { color: #DC2626; }
+
+[data-theme="dark"] .zot-callout-tip    { background: #052E16; color: #86EFAC; }
+[data-theme="dark"] .zot-callout-tip    .zot-callout-label { color: #4ADE80; }
+[data-theme="dark"] .zot-callout-note   { background: #0C1A2E; color: #93C5FD; }
+[data-theme="dark"] .zot-callout-note   .zot-callout-label { color: #60A5FA; }
+[data-theme="dark"] .zot-callout-important { background: #2D1506; color: #FDBA74; }
+[data-theme="dark"] .zot-callout-important .zot-callout-label { color: #FB923C; }
+[data-theme="dark"] .zot-callout-warning { background: #2D0606; color: #FCA5A5; }
+[data-theme="dark"] .zot-callout-warning .zot-callout-label { color: #F87171; }
+
+/* Installation steps */
+.zot-step {
+  border: 1px solid #E0DED8;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+[data-theme="dark"] .zot-step { border-color: #333333; }
+.zot-step-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  background: #F5F4F0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111111;
+}
+[data-theme="dark"] .zot-step-header { background: #1A1A1A; color: #EEEEEE; }
+.zot-step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #111111;
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+[data-theme="dark"] .zot-step-num { background: #EEEEEE; color: #111111; }
+.zot-step-body { padding: 20px 20px 20px 20px; }
+.zot-optional {
+  font-size: 13px;
+  font-weight: 400;
+  color: #888888;
+  margin-left: 4px;
+}
+
+/* h3 within docs sections */
+.docs-h3 {
+  font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #111111;
+  margin-top: 32px;
+  margin-bottom: 12px;
+}
+[data-theme="dark"] .docs-h3 { color: #EEEEEE; }
+
+/* Citation example block */
+.zot-citation-block {
+  background: #F5F4F0;
+  border-left: 3px solid #D0CEC9;
+  border-radius: 0 6px 6px 0;
+  padding: 16px 20px;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #3D3D3D;
+  margin: 16px 0;
+}
+[data-theme="dark"] .zot-citation-block {
+  background: #1A1A1A;
+  border-color: #444444;
+  color: #AAAAAA;
+}
+.zot-citation-block em { font-style: italic; }
+
+/* Sub-list inside numbered steps */
+.zot-sublist {
+  margin-top: 8px;
+  padding-left: 20px;
+}
+
+/* kbd keys */
+kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 12px;
+  color: #3D3D3D;
+  background: #F5F4F0;
+  border: 1px solid #D0CEC9;
+  border-radius: 4px;
+  box-shadow: 0 1px 0 #D0CEC9;
+}
+[data-theme="dark"] kbd { color: #AAAAAA; background: #1A1A1A; border-color: #444444; box-shadow: 0 1px 0 #444444; }
+
+/* Small text variant */
+.zot-small { font-size: 13px; color: #888888; }
+[data-theme="dark"] .zot-small { color: #666666; }
+</style>
+
 <script>
   const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
-    navbar?.classList.toggle('scrolled', window.scrollY > 100);
+    navbar?.classList.toggle('scrolled', window.scrollY > 10);
   }, { passive: true });
+
   const toggle = document.getElementById('themeToggle');
   toggle?.addEventListener('click', () => {
     const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
@@ -151,4 +713,3 @@ import Base from '../layouts/Base.astro';
     localStorage.setItem('theme', next);
   });
 </script>
-
