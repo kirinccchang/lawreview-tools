@@ -1,3 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <text y="26" font-size="26">⚖</text>
+  <style>
+    .bg { fill: #111111; }
+    .fg { fill: #FFFFFF; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #EEEEEE; }
+      .fg { fill: #111111; }
+    }
+  </style>
+  <rect class="bg" width="32" height="32" rx="5"/>
+  <text class="fg" x="16" y="24" text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="22" font-weight="bold">L</text>
 </svg>
