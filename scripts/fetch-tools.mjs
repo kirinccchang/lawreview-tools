@@ -811,9 +811,9 @@ console.log('\n📦 Fetching and integrating tool builds...\n');
 
 // 1. Fetch tool HTML
 for (const tool of TOOLS) {
-  const url = `https://raw.githubusercontent.com/${tool.repo}/main/index.html`;
+  const url = `https://raw.githubusercontent.com/${tool.repo}/main/index.html?t=${Date.now()}`;
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, { cache: 'no-store' });
     if (!res.ok) { console.warn(`  ⚠  ${tool.repo}: HTTP ${res.status}`); continue; }
     writeFileSync(tool.dest, transform(await res.text(), tool), 'utf-8');
     console.log(`  ✓  ${tool.repo} → ${tool.dest}`);

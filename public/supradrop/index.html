@@ -1802,15 +1802,19 @@ function app() {
           const lcWordCount = (quotedContent.match(/\b[a-z]{4,}/g) || []).length;
           const isLikelyDirectQuote = lcWordCount >= 2 || quotedContent.length >= 40;
           if (isLikelyDirectQuote) {
-            // Statutory/rule citations use subdivision notation as pincite, not page numbers.
-            // e.g. Fed. R. Civ. P. 11(b)(2), 42 U.S.C. § 1983(a), U.S. Const. art. I, § 8, cl. 3
-            // Detect: known statutory prefix AND at least one single-char subdivision like (a) or (2).
-            // \(\s*[a-zA-Z0-9]\s*\) matches (a), (b), (2) but NOT (noting...) or (S.D.N.Y. 2012).
-            const isStatutoryWithSubdivision =
-              /(?:Fed\.\s*R\.|U\.S\.C\.|C\.F\.R\.|U\.S\.\s*Const\.|Rev\.\s*Stat\.|§)/.test(text) &&
-              /\(\s*[a-zA-Z0-9]\s*\)/.test(text);
+            // Statutory/rule citations use section numbers or subdivisions as pincite — no page needed.
+            // Statutory/rule citations use section numbers or subdivisions as pincite — no page needed.
+            // Three cases:
+            //   § + number: section IS the pincite (28 U.S.C. § 1927, C.F.R. § 404.1520)
+            //   Fed. R. + rule number: rule number IS the pincite (Fed. R. Civ. P. 11(b)(2))
+            //   U.S. Const. + article/amendment: locator IS the pincite
+            const isStatutoryCitation =
+              /§\s*\d+/.test(text) ||
+              /Fed\.\s*R\./.test(text) ||
+              /U\.S\.\s*Const\./.test(text) ||
+              /Rev\.\s*Stat\./.test(text);
             const hasPincite =
-              isStatutoryWithSubdivision ||
+              isStatutoryCitation ||
               /\bat\s+\*?\d+/.test(text) ||
               // General reporter pattern: [vol] [Reporter] [start], [pincite]
               // Covers F.R.D., F.2d, F.Supp.2d, U.S., S.Ct., N.Y., etc.
