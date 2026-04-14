@@ -251,6 +251,12 @@
     .tab-btn.active { background: var(--text); color: var(--surface); border-color: var(--text); }
     .tab-btn:hover:not(.active) { background: var(--hover-bg); }
 
+    /* Severity filter pills */
+    .sev-pills { display: flex; gap: 5px; margin-bottom: 12px; flex-wrap: wrap; }
+    .sev-pill { padding: 3px 11px; border-radius: 99px; font-size: 11px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--text-muted); transition: all 0.15s; }
+    .sev-pill.active { background: var(--text); color: var(--surface); border-color: var(--text); font-weight: 600; }
+    .sev-pill:hover:not(.active) { background: var(--hover-bg); }
+
     /* Sister tool banner */
     .sister-banner { display: flex; align-items: center; gap: 10px; background: var(--preview-bg); border: 1px solid var(--border); border-radius: 7px; padding: 9px 13px; margin-top: 10px; }
     .sister-banner p { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
@@ -430,7 +436,17 @@
 
           <!-- Issues tab -->
           <div x-show="fo.activeTab === 'issues' && fo.issues.length > 0">
-            <template x-for="fn in fo.issues.filter(f => !f.dismissed && f.problems.some(p => fileEnabledRules(fo).has(p.rule)))" :key="fn.footnoteNum">
+
+            <!-- Severity filter pills -->
+            <div class="sev-pills">
+              <template x-for="sv in [{v:'all',label:'All'},{v:'error',label:'Errors'},{v:'warning',label:'Warnings'}]" :key="sv.v">
+                <button class="sev-pill" :class="fo.severityFilter === sv.v ? 'active' : ''"
+                        @click="fo.severityFilter = sv.v"
+                        x-text="sv.label + ' (' + severityCount(fo, sv.v) + ')'"></button>
+              </template>
+            </div>
+
+            <template x-for="fn in fo.issues.filter(f => !f.dismissed && f.problems.some(p => fileEnabledRules(fo).has(p.rule) && (fo.severityFilter === 'all' || p.type === fo.severityFilter)))" :key="fn.footnoteNum">
               <div class="issue-group" :class="fn.confirmed ? 'confirmed' : ''">
                 <div class="issue-group-header" @click="toggleFn(fo, fn.footnoteNum)">
                   <span class="issue-fn-num" x-text="'fn. ' + fn.footnoteNum"></span>
@@ -459,7 +475,7 @@
                   <div class="issue-text-preview" x-html="highlightText(fn.text)"></div>
 
                   <!-- Problems list -->
-                  <template x-for="(prob, pi) in fn.problems.filter(p => fileEnabledRules(fo).has(p.rule))" :key="fn.footnoteNum + '-' + pi">
+                  <template x-for="(prob, pi) in fn.problems.filter(p => fileEnabledRules(fo).has(p.rule) && (fo.severityFilter === 'all' || p.type === fo.severityFilter))" :key="fn.footnoteNum + '-' + pi">
                     <div>
                       <div class="issue-problem">
                         <span class="issue-problem-icon" x-text="prob.type === 'error' ? '✕' : '⚠'"></span>
@@ -517,9 +533,9 @@
             </div>
           </div>
 
-          <!-- No visible issues (all dismissed or filtered out) -->
-          <div x-show="fo.activeTab === 'issues' && fo.issues.filter(f=>!f.dismissed && f.problems.some(p=>fileEnabledRules(fo).has(p.rule))).length === 0 && fo.stats.total > 0 && fo.issues.length > 0">
-            <div class="all-clear"><p>No issues to display.</p></div>
+          <!-- No visible issues (all dismissed or filtered out by checks/severity) -->
+          <div x-show="fo.activeTab === 'issues' && fo.issues.filter(f=>!f.dismissed && f.problems.some(p=>fileEnabledRules(fo).has(p.rule) && (fo.severityFilter==='all'||p.type===fo.severityFilter))).length === 0 && fo.stats.total > 0 && fo.issues.length > 0">
+            <div class="all-clear"><p x-text="fo.severityFilter !== 'all' ? 'No ' + fo.severityFilter + 's to display for the enabled checks.' : 'No issues to display.'"></p></div>
           </div>
 
           <!-- Footnote browser tab -->
@@ -705,6 +721,14 @@ function app() {
       return new Set((fo.ruleGroups || []).flatMap(g => g.enabled ? g.rules : []));
     },
 
+    // Count footnotes with ≥1 visible problem matching a given severity ('all'|'error'|'warning')
+    severityCount(fo, sv) {
+      const e = this.fileEnabledRules(fo);
+      return fo.issues.filter(f => !f.dismissed && f.problems.some(p =>
+        e.has(p.rule) && (sv === 'all' || p.type === sv)
+      )).length;
+    },
+
     init() {
       const mq = window.matchMedia('(prefers-color-scheme: dark)');
       this.darkMode = mq.matches;
@@ -762,8 +786,9 @@ function app() {
         issues:        [],
         stats:         { total: 0, supraRefs: 0, idRefs: 0 },
         expandedFn:    null,
-        activeTab:     'issues',
-        showDismissed: false,
+        activeTab:      'issues',
+        showDismissed:  false,
+        severityFilter: 'all',
         ruleGroups:    JSON.parse(JSON.stringify(this.defaultRuleGroups)),
       });
 
@@ -1457,12 +1482,13 @@ function app() {
     downloadCsv(fo) {
       const e = this.fileEnabledRules(fo);
       const enabledLabel = fo.ruleGroups.filter(g => g.enabled).map(g => g.label).join(', ');
+      const severityLabel = fo.severityFilter === 'all' ? 'All (errors + warnings)' : fo.severityFilter === 'error' ? 'Errors only' : 'Warnings only';
       const rows = [
-        [`SupraDrop Citation Report — Checks: ${enabledLabel}`],
+        [`SupraDrop Citation Report — Checks: ${enabledLabel} — Showing: ${severityLabel}`],
         ['Footnote', 'Severity', 'Review Status', 'Rule', 'Message', 'Footnote Text Preview'],
       ];
       for (const fn of fo.issues) {
-        const visible = fn.problems.filter(p => e.has(p.rule));
+        const visible = fn.problems.filter(p => e.has(p.rule) && (fo.severityFilter === 'all' || p.type === fo.severityFilter));
         if (!visible.length) continue;
         const status = fn.confirmed ? 'confirmed error' : 'unreviewed';
         for (const p of visible) {
@@ -1478,11 +1504,13 @@ function app() {
       const e = this.fileEnabledRules(fo);
       const ec = this.fileErrorCount(fo), wc = this.fileWarningCount(fo);
       const enabledLabel = fo.ruleGroups.filter(g => g.enabled).map(g => g.label).join(', ');
+      const severityLabel = fo.severityFilter === 'all' ? 'All (errors + warnings)' : fo.severityFilter === 'error' ? 'Errors only' : 'Warnings only';
       const lines = [
         `SupraDrop Citation Validation Report`,
         `File: ${fo.name}`,
         `Generated: ${new Date().toLocaleString()}`,
         `Checks enabled: ${enabledLabel}`,
+        `Showing: ${severityLabel}`,
         ``,
         `Summary: ${fo.stats.total} footnotes, ${fo.stats.supraRefs} supra refs, ${fo.stats.idRefs} Id. refs`,
         `Issues: ${ec} error(s), ${wc} warning(s)`,
@@ -1492,7 +1520,7 @@ function app() {
       ];
       let hasAny = false;
       for (const fn of fo.issues) {
-        const visible = fn.problems.filter(p => e.has(p.rule));
+        const visible = fn.problems.filter(p => e.has(p.rule) && (fo.severityFilter === 'all' || p.type === fo.severityFilter));
         if (!visible.length) continue;
         hasAny = true;
         lines.push(`Footnote ${fn.footnoteNum}:`);
@@ -1518,7 +1546,7 @@ function app() {
         if (issue.dismissed) continue;
         const fn = fo.footnotes.find(f => f.num === issue.footnoteNum);
         if (!fn) continue;
-        const visible = issue.problems.filter(p => enabled.has(p.rule));
+        const visible = issue.problems.filter(p => enabled.has(p.rule) && (fo.severityFilter === 'all' || p.type === fo.severityFilter));
         if (!visible.length) continue;
         blocks.push({
           xmlId: fn.xmlId,
