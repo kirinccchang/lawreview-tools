@@ -342,17 +342,24 @@ import Base from '../layouts/Base.astro';
     <div class="tech-copy">
       <h2 class="tech-title">How it works, technically.</h2>
       <p class="tech-body">
-        Both web apps parse .docx files using JSZip to extract
-        the raw XML, then run citation logic checks entirely
-        in your browser — no frameworks, no telemetry, no
-        dependency on external services beyond perma.cc.
+        The <strong>Zotero Perma Archiver</strong> is a native Zotero plugin
+        built on the Zotero JavaScript plugin API. It hooks into your library
+        events and calls the perma.cc REST API in the background as you save
+        items — running entirely inside your Zotero desktop app, no browser
+        required.
       </p>
       <p class="tech-body">
-        The source code for every tool is publicly available
-        on GitHub under the AGPL v3 license. You can read
-        exactly what runs on your machine.
+        <strong>PermaDrop</strong> and <strong>SupraDrop</strong> parse .docx files
+        using JSZip to extract raw XML, then run all citation logic entirely
+        in your browser — no frameworks, no telemetry, no dependency on
+        external services beyond perma.cc.
+      </p>
+      <p class="tech-body">
+        Every tool is publicly available on GitHub under the AGPL v3 license.
+        You can read exactly what runs on your machine.
       </p>
       <div class="tech-links">
+        <a href="https://github.com/kirinccchang/zotero-perma-archiver" target="_blank" rel="noopener" class="btn-text-link">Zotero plugin source →</a>
         <a href="https://github.com/kirinccchang/supradrop" target="_blank" rel="noopener" class="btn-text-link">SupraDrop source →</a>
         <a href="https://github.com/kirinccchang/permadrop" target="_blank" rel="noopener" class="btn-text-link">PermaDrop source →</a>
       </div>
@@ -421,8 +428,6 @@ footnotes.<span class="c-fn">forEach</span>(fn =&gt; &#123;
           <a href="https://kirinchang.com" target="_blank" rel="noopener" class="author-link">kirinchang.com</a>
           <span class="author-link-sep">·</span>
           <a href="https://github.com/kirinccchang" target="_blank" rel="noopener" class="author-link">GitHub</a>
-          <span class="author-link-sep">·</span>
-          <a href="https://kirin.law" target="_blank" rel="noopener" class="author-link">kirin.law</a>
           <span class="author-link-sep">·</span>
           <a href="https://twitter.com/chengchi_chang" target="_blank" rel="noopener" class="author-link">@chengchi_chang</a>
         </div>
