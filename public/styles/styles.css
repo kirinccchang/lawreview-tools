@@ -188,12 +188,6 @@
 }
 
 /* -- HERO ------------------------------------------------- */
-/* Override .container max-width specifically for the hero — use most of
-   the viewport up to 1600px, instead of the standard 1100px reading width */
-.hero .container {
-  max-width: min(1720px, calc(100vw - 64px));
-}
-
 .hero {
   position: relative;
   min-height: 100vh;
@@ -220,7 +214,6 @@
   align-items: center;
   padding-top: 80px;
   padding-bottom: 80px;
-  max-width: 1320px;
 }
 
 @media (max-width: 900px) {
