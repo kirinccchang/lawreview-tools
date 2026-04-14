@@ -26,9 +26,9 @@ const TOOLS = [
 ];
 
 const NAV_TOOLS = [
-  { id: 'permadrop', label: 'PermaDrop',    href: 'https://lawreview.tools/permadrop/' },
-  { id: 'supradrop', label: 'SupraDrop',    href: 'https://lawreview.tools/supradrop/' },
-  { id: 'zotero',   label: 'Zotero Plugin', href: 'https://lawreview.tools/zotero'     },
+  { id: 'zotero',    label: 'Zotero Plugin', href: 'https://lawreview.tools/zotero'      },
+  { id: 'permadrop', label: 'PermaDrop',     href: 'https://lawreview.tools/permadrop/'  },
+  { id: 'supradrop', label: 'SupraDrop',     href: 'https://lawreview.tools/supradrop/'  },
 ];
 
 /* ══════════════════════════════════════════════════════════════
