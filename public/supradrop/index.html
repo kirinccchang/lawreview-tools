@@ -1847,7 +1847,8 @@ function app() {
             // Exclusion 4: end too small to be a meaningful pincite
             if (end < 10) continue;
             // Exclusion 5: docket/case number — preceded by No., Civ., Case No., Dkt., etc.
-            if (/\b(?:No|Civ(?:\.?\s*No)?|Case\s+No|Dkt|Docket)\.\s*$/.test(text.slice(0, pm.index))) continue;
+            // Handles: No. 24-1391, No. CV 24-5205, Civ. No. 24-1234, Dkt. 25-20086
+            if (/\b(?:No|Civ(?:\.?\s*No)?|Case\s+No|Dkt|Docket)\.\s*(?:[A-Z]{1,5}\s+)?$/.test(text.slice(0, pm.index))) continue;
 
             if (dash === '-') {
               problems.push({
