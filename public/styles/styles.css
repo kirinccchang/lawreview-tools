@@ -71,9 +71,9 @@
 
   /* ── Utilities ──────────────────────────────────────────── */
   .container {
-    max-width: 1100px;
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 32px;
   }
 
   .section-divider {
@@ -190,7 +190,7 @@
 /* Override .container max-width specifically for the hero — use most of
    the viewport up to 1600px, instead of the standard 1100px reading width */
 .hero .container {
-  max-width: min(1600px, calc(100vw - 48px));
+  max-width: min(1600px, calc(100vw - 64px));
 }
 
 .hero {
@@ -268,7 +268,7 @@
   padding: 6px 10px;
   border-radius: 4px;
   white-space: normal;
-  max-width: min(300px, calc(100vw - 48px));
+  max-width: min(300px, calc(100vw - 64px));
   line-height: 1.4;
   pointer-events: none;
   opacity: 0;
