@@ -587,8 +587,8 @@
         <div><span class="badge badge-error" style="margin-right:6px;">error</span> <strong>SUPRA_FORWARD</strong> — supra must refer to an earlier footnote, not a later one (R. 4.2).</div>
         <div><span class="badge badge-error" style="margin-right:6px;">error</span> <strong>SUPRA_TO_SHORT_CITE</strong> — the referenced footnote is itself a short citation (Id. or supra); supra must point to a full citation (R. 4.2).</div>
         <div><span class="badge badge-error" style="margin-right:6px;">error</span> <strong>SUPRA_MISMATCH</strong> — the author/title label before "supra" does not appear in the referenced footnote; the footnote number is likely wrong.</div>
-        <div><span class="badge badge-warning" style="margin-right:6px;">warn</span> <strong>SUPRA_NO_PINCITE</strong> — missing ", at [page]" after supra note N; R. 4.2 requires a pincite when referring to a specific page.</div>
         <div><span class="badge badge-error" style="margin-right:6px;">error</span> <strong>SUPRA_WRONG_SOURCE_TYPE</strong> — supra is prohibited for cases, statutes, and constitutions (R. 4.2(a)); use a short-form citation instead.</div>
+        <div><span class="badge badge-warning" style="margin-right:6px;">warn</span> <strong>SUPRA_NO_PINCITE</strong> — missing ", at [page]" after supra note N; R. 4.2 requires a pincite when referring to a specific page.</div>
       </div>
     </div>
 
@@ -612,10 +612,10 @@
         <span style="font-size:11px; color:var(--text-faint);" x-text="legendOpen.signals ? '▲' : '▼'"></span>
       </button>
       <div x-show="legendOpen.signals" x-transition style="padding:4px 13px 12px; display:grid; gap:7px; font-size:12px; color:var(--text-2); line-height:1.6; border-top:1px solid var(--border);">
-        <div><span class="badge badge-warning" style="margin-right:6px;">warn</span> <strong>SEE_GEN_NO_PAREN</strong> — <em>See generally</em> without an explanatory parenthetical; R. 1.2, R. 1.5 strongly prefer one beginning with a present participle.</div>
         <div><span class="badge badge-error" style="margin-right:6px;">error</span> <strong>CF_NO_PAREN</strong> — <em>Cf.</em> always requires an explanatory parenthetical beginning with a present participle (R. 1.2, R. 1.5).</div>
         <div><span class="badge badge-error" style="margin-right:6px;">error</span> <strong>BUT_CF_NO_PAREN</strong> — <em>But cf.</em> always requires an explanatory parenthetical beginning with a present participle (R. 1.2, R. 1.5).</div>
         <div><span class="badge badge-error" style="margin-right:6px;">error</span> <strong>COMPARE_WITH_NO_PAREN</strong> — <em>Compare…with…</em> requires an explanatory parenthetical on each cited authority (R. 1.2, R. 1.5).</div>
+        <div><span class="badge badge-warning" style="margin-right:6px;">warn</span> <strong>SEE_GEN_NO_PAREN</strong> — <em>See generally</em> without an explanatory parenthetical; R. 1.2, R. 1.5 strongly prefer one beginning with a present participle.</div>
       </div>
     </div>
 
@@ -699,11 +699,11 @@ function app() {
     // Default rule groups — cloned into each fo.ruleGroups on file load
     defaultRuleGroups: [
       { id: 'supra',       label: 'Supra',       enabled: true,
-        rules: ['SUPRA_NONEXISTENT','SUPRA_FORWARD','SUPRA_TO_SHORT_CITE','SUPRA_MISMATCH','SUPRA_NO_PINCITE','SUPRA_WRONG_SOURCE_TYPE'] },
+        rules: ['SUPRA_NONEXISTENT','SUPRA_FORWARD','SUPRA_TO_SHORT_CITE','SUPRA_MISMATCH','SUPRA_WRONG_SOURCE_TYPE','SUPRA_NO_PINCITE'] },
       { id: 'id',          label: 'Id.',          enabled: true,
         rules: ['ID_NO_PRECEDING','ID_AMBIGUOUS','ID_STALE'] },
       { id: 'signals',     label: 'Signals',      enabled: true,
-        rules: ['SEE_GEN_NO_PAREN','CF_NO_PAREN','BUT_CF_NO_PAREN','COMPARE_WITH_NO_PAREN'] },
+        rules: ['CF_NO_PAREN','BUT_CF_NO_PAREN','COMPARE_WITH_NO_PAREN','SEE_GEN_NO_PAREN'] },
       { id: 'pincites',    label: 'Quotes & Pincites', enabled: true,
         rules: ['QUOTE_NO_PINCITE', 'PINCITE_HYPHEN', 'PINCITE_UNSHORTENED'] },
       { id: 'format',      label: 'Format',       enabled: true,
