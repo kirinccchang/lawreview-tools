@@ -10,22 +10,22 @@ const cslUrl = release.cslUrl;
   description="An open-source Zotero plugin that automatically archives URLs to perma.cc as you build your research library. Bluebook 22nd ed. Rule 18.2.1(d) compliance — no technical knowledge required."
 >
 
-<nav class="navbar" id="navbar">
-  <div class="nav-inner">
-    <a href="/" class="nav-logo">
-      <span>⚖</span>
-      <span class="nav-logo-text">lawreview.tools</span>
+<nav id="lrt-nav" aria-label="lawreview.tools">
+  <div id="lrt-nav-inner">
+    <a href="/" id="lrt-logo">
+      <span aria-hidden="true">⚖</span>lawreview.tools
     </a>
-    <div class="nav-right">
-      <a href="/zotero" class="nav-link nav-link-current">Zotero Plugin</a>
-      <a href="/permadrop/" class="nav-link">PermaDrop</a>
-      <a href="/supradrop/" class="nav-link">SupraDrop</a>
-      <a href="https://github.com/kirinccchang" target="_blank" rel="noopener" class="nav-link nav-github" aria-label="GitHub">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+    <div id="lrt-nav-right">
+      <a href="/zotero" class="lrt-nav-link lrt-current">Zotero Plugin</a>
+      <a href="/permadrop/" class="lrt-nav-link">PermaDrop</a>
+      <a href="/supradrop/" class="lrt-nav-link">SupraDrop</a>
+      <a href="https://github.com/kirinccchang" target="_blank" rel="noopener noreferrer"
+         class="lrt-nav-link lrt-gh-link" aria-label="GitHub">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
       </a>
-      <button class="nav-theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <button id="lrt-theme-btn" aria-label="Toggle dark mode">
+        <svg class="lrt-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="lrt-sun"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
       </button>
     </div>
   </div>
@@ -533,50 +533,75 @@ const cslUrl = release.cslUrl;
   .zot-hero-right { order: -1; }
 }
 
-/* ── Theme toggle button ────────────────────────────────────
-   styles.css has no rules for this button — add them here   */
-.nav-theme-toggle {
+/* ── Navbar (identical to injected lrt-* CSS, data-theme variant) ── */
+#lrt-nav {
+  position: sticky; top: 0; z-index: 9999;
+  height: 68px; background: #FFFFFF;
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s, background .2s;
+  font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+#lrt-nav.lrt-scrolled { border-bottom-color: #D0CEC9; }
+[data-theme="dark"] #lrt-nav { background: #111111; }
+[data-theme="dark"] #lrt-nav.lrt-scrolled { border-bottom-color: #333333; }
+
+#lrt-nav-inner {
+  max-width: min(1440px, calc(100vw - 64px));
+  margin: 0 auto; padding: 0 32px; height: 100%;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+#lrt-logo {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  font-size: 20px; font-weight: 400; letter-spacing: -0.01em;
+  color: #111111; text-decoration: none;
+  flex-shrink: 0; white-space: nowrap; transition: opacity .15s;
+}
+#lrt-logo:hover { opacity: .65; }
+[data-theme="dark"] #lrt-logo { color: #EEEEEE; }
+
+#lrt-nav-right { display: flex; align-items: center; gap: 6px; }
+
+.lrt-nav-link {
+  font-size: 15px; font-weight: 500; color: #3D3D3D;
+  text-decoration: none; padding: 5px 10px; border-radius: 4px;
+  transition: background .15s, color .15s; white-space: nowrap;
+}
+.lrt-nav-link:hover { background: #F5F4F0; color: #111111; }
+.lrt-current { background: #F5F4F0; color: #111111; font-weight: 600; }
+[data-theme="dark"] .lrt-nav-link { color: #AAAAAA; }
+[data-theme="dark"] .lrt-nav-link:hover { background: #1A1A1A; color: #EEEEEE; }
+[data-theme="dark"] .lrt-current { background: #1A1A1A; color: #EEEEEE; }
+
+.lrt-gh-link { display: flex; align-items: center; padding: 5px 6px; }
+.lrt-gh-link svg { width: 18px; height: 18px; display: block; }
+
+#lrt-theme-btn {
+  all: unset;
   -webkit-appearance: none;
   appearance: none;
   background: transparent;
   border: none;
   outline: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
+  box-sizing: border-box;
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px;
   border-radius: 4px;
-  color: var(--text-muted, #3D3D3D);
+  color: #3D3D3D;
   cursor: pointer;
   transition: background .15s, color .15s;
   flex-shrink: 0;
-  padding: 0;
 }
-.nav-theme-toggle:hover { background: #F5F4F0; color: #111111; }
-[data-theme="dark"] .nav-theme-toggle:hover { background: #1A1A1A; color: #EEEEEE; }
-.nav-theme-toggle svg { width: 18px; height: 18px; display: block; pointer-events: none; }
+#lrt-theme-btn:hover { background: #F5F4F0; color: #111111; }
+[data-theme="dark"] #lrt-theme-btn { color: #AAAAAA; }
+[data-theme="dark"] #lrt-theme-btn:hover { background: #1A1A1A; color: #EEEEEE; }
+#lrt-theme-btn svg { width: 18px; height: 18px; display: block; pointer-events: none; }
 
-/* Moon in light mode, sun in dark mode.
-   Scoped under .nav-theme-toggle (class+class=20) to beat
-   .nav-theme-toggle svg (class+element=11) above. */
-.nav-theme-toggle .icon-moon { display: block; }
-.nav-theme-toggle .icon-sun  { display: none; }
-[data-theme="dark"] .nav-theme-toggle .icon-moon { display: none; }
-[data-theme="dark"] .nav-theme-toggle .icon-sun  { display: block; }
-
-/* ── Active nav link (matches injected .lrt-current style) ─ */
-.nav-link-current {
-  background: #F5F4F0;
-  color: #111111 !important;
-  font-weight: 600;
-  padding: 5px 10px;
-  border-radius: 4px;
-}
-[data-theme="dark"] .nav-link-current {
-  background: #1A1A1A;
-  color: #EEEEEE !important;
-}
+/* Moon/sun: scoped (ID+class=110) beats svg rule (ID+element=101) */
+#lrt-theme-btn .lrt-moon { display: block; }
+#lrt-theme-btn .lrt-sun  { display: none; }
+[data-theme="dark"] #lrt-theme-btn .lrt-moon { display: none; }
+[data-theme="dark"] #lrt-theme-btn .lrt-sun  { display: block; }
 
 /* ── Badges ─────────────────────────────────────────────── */
 .zot-badge-row {
@@ -951,13 +976,12 @@ kbd {
 </style>
 
 <script>
-  const navbar = document.getElementById('navbar');
+  const nav = document.getElementById('lrt-nav');
   window.addEventListener('scroll', () => {
-    navbar?.classList.toggle('scrolled', window.scrollY > 10);
+    nav?.classList.toggle('lrt-scrolled', window.scrollY > 10);
   }, { passive: true });
 
-  const toggle = document.getElementById('themeToggle');
-  toggle?.addEventListener('click', () => {
+  document.getElementById('lrt-theme-btn')?.addEventListener('click', () => {
     const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('theme', next);
