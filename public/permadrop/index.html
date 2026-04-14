@@ -237,16 +237,26 @@
     .file-dl-row:last-child { border-bottom:none; }
     .file-dl-name { flex:1; min-width:120px; font-size:13px; font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--text); }
   </style>
+<!-- ══ lawreview.tools suite: fonts ════════════════════════ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
-<style id="lrt-nav-css">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- ══ lawreview.tools suite: shared design layer ══════════ -->
+<style id="lrt-design">
+
+  /* ── Navbar shell ─────────────────────────────────────── */
   #lrt-nav {
     position: sticky; top: 0; z-index: 9999;
-    height: 54px;
-    background: var(--bg, #f4f4f5);
-    border-bottom: 1px solid var(--border, #e4e4e7);
+    height: 60px;
+    /* hardcoded to match lawreview.tools exactly */
+    background: #FFFFFF;
+    border-bottom: 1px solid #D0CEC9;
     transition: background .2s, border-color .2s;
+  }
+  body.dark #lrt-nav {
+    background: #111111;
+    border-bottom-color: #333333;
   }
   #lrt-inner {
     max-width: min(1440px, calc(100vw - 48px));
@@ -257,49 +267,107 @@
   #lrt-logo {
     display: flex; align-items: center; gap: 7px;
     font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
-    font-size: 17px; font-weight: 400;
-    color: var(--text, #18181b);
+    font-size: 18px; font-weight: 400; letter-spacing: -0.01em;
+    color: #111111;
     text-decoration: none; flex-shrink: 0; white-space: nowrap;
-    letter-spacing: -0.01em;
+    transition: opacity .15s;
   }
-  #lrt-logo:hover { opacity: .7; transition: opacity .15s; }
+  #lrt-logo:hover { opacity: .65; }
+  body.dark #lrt-logo { color: #EEEEEE; }
+
   #lrt-links { display: flex; align-items: center; gap: 2px; }
   .lrt-link {
-    font-size: 13px; font-weight: 500;
-    color: var(--text-muted, #71717a);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    font-size: 14px; font-weight: 500;
+    color: #3D3D3D;
     text-decoration: none;
-    padding: 5px 10px; border-radius: 6px;
+    padding: 5px 10px; border-radius: 5px;
     transition: background .15s, color .15s; white-space: nowrap;
   }
-  .lrt-link:hover {
-    background: var(--hover-bg, #f0f0f0);
-    color: var(--text, #18181b);
+  .lrt-link:hover   { background: #F5F4F0; color: #111111; }
+  .lrt-current      { background: #F5F4F0; color: #111111; font-weight: 600; }
+  body.dark .lrt-link          { color: #AAAAAA; }
+  body.dark .lrt-link:hover    { background: #1A1A1A; color: #EEEEEE; }
+  body.dark .lrt-current       { background: #1A1A1A; color: #EEEEEE; }
+
+  /* Theme toggle button in navbar */
+  #lrt-theme-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px; border-radius: 5px;
+    background: none; border: none; cursor: pointer;
+    color: #3D3D3D; transition: background .15s, color .15s;
+    flex-shrink: 0;
   }
-  .lrt-current {
-    background: var(--hover-bg, #f0f0f0);
-    color: var(--text, #18181b);
-    font-weight: 600;
+  #lrt-theme-btn:hover { background: #F5F4F0; color: #111111; }
+  body.dark #lrt-theme-btn          { color: #AAAAAA; }
+  body.dark #lrt-theme-btn:hover    { background: #1A1A1A; color: #EEEEEE; }
+
+  /* Moon shows in light mode, sun in dark mode */
+  .lrt-icon-sun  { display: none; }
+  .lrt-icon-moon { display: block; }
+  body.dark .lrt-icon-sun  { display: block; }
+  body.dark .lrt-icon-moon { display: none; }
+
+  /* ── Body: white background, unified font ─────────────── */
+  body {
+    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    background: #FFFFFF !important;
   }
+  body.dark { background: #111111 !important; }
+
+  /* Override the tool's gray --bg so cards stay correct */
+  :root   { --bg: #FFFFFF !important; }
+  body.dark { --bg: #111111 !important; }
+
+  /* ── App h1: Source Serif 4, lighter — editorial feel ─── */
+  .container h1 {
+    font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.02em !important;
+  }
+
+  /* ── Hide the tool's own dark-mode toggle ─────────────── */
+  /* (replaced by the navbar theme button above)             */
+  .dark-toggle { display: none !important; }
+
+  /* ── Mobile ───────────────────────────────────────────── */
   @media (max-width: 500px) {
-    #lrt-logo span.lrt-wordmark { display: none; }
-    .lrt-link { font-size: 12px; padding: 4px 7px; }
+    #lrt-logo { font-size: 15px; }
+    .lrt-link  { font-size: 12px; padding: 4px 7px; }
   }
 </style>
+<!-- ══ end suite design ═════════════════════════════════════ -->
 </head>
 <body>
-<nav id="lrt-nav" aria-label="lawreview.tools">
+<!-- ══ lawreview.tools suite navbar ══════════════════════════ -->
+<nav id="lrt-nav" aria-label="lawreview.tools suite navigation">
   <div id="lrt-inner">
     <a href="https://lawreview.tools/" id="lrt-logo">
-      <span aria-hidden="true">⚖</span>
-      <span class="lrt-wordmark">lawreview.tools</span>
+      <span aria-hidden="true">⚖</span>lawreview.tools
     </a>
-    <div id="lrt-links">
-      <a href="https://lawreview.tools/permadrop/" class="lrt-link lrt-current">PermaDrop</a>
+    <div style="display:flex;align-items:center;gap:6px;">
+      <div id="lrt-links">
+        <a href="https://lawreview.tools/permadrop/" class="lrt-link lrt-current">PermaDrop</a>
       <a href="https://lawreview.tools/supradrop/" class="lrt-link">SupraDrop</a>
       <a href="https://lawreview.tools/zotero" class="lrt-link">Zotero Plugin</a>
+      </div>
+      <button id="lrt-theme-btn" aria-label="Toggle dark mode"><svg class="lrt-icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="lrt-icon-sun"  width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button>
     </div>
   </div>
 </nav>
+<script>
+  // Forward navbar theme toggle → tool's hidden .dark-toggle (Alpine handles state)
+  document.addEventListener('DOMContentLoaded', function () {
+    var btn = document.getElementById('lrt-theme-btn');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var toolBtn = document.querySelector('.dark-toggle');
+      if (toolBtn) { toolBtn.click(); }
+      else { document.body.classList.toggle('dark'); }
+    });
+  });
+</script>
+<!-- ══ end suite navbar ═══════════════════════════════════════ -->
 
 <div class="container" x-data="app()">
 
