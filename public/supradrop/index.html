@@ -1649,11 +1649,23 @@ function app() {
               const labelKey = cleanLabel.split(/[\s,]+/).find(w => w.length >= 4) || '';
 
               if (labelKey && !target.text.toLowerCase().includes(labelKey.toLowerCase())) {
-                // Label absent from target footnote → footnote number is likely wrong
+                // Search prior footnotes for the correct target
+                const candidates = [];
+                for (const [fnNum, fn] of fnMap) {
+                  if (fnNum < num && fn.text.toLowerCase().includes(labelKey.toLowerCase())) {
+                    candidates.push(fnNum);
+                  }
+                }
+                candidates.sort((a, b) => a - b);
+                const suggestion = candidates.length === 1
+                  ? ` Did you mean footnote ${candidates[0]}?`
+                  : candidates.length > 1
+                    ? ` The label appears in footnotes: ${candidates.join(', ')}.`
+                    : '';
                 problems.push({
                   type: 'error',
                   rule: 'SUPRA_MISMATCH',
-                  msg:  `"${ref.fullMatch}" — "${cleanLabel.slice(0, 60)}" not found in footnote ${ref.refNum}. The footnote number is likely wrong.`,
+                  msg:  `"${ref.fullMatch}" — "${cleanLabel.slice(0, 60)}" not found in footnote ${ref.refNum}. The footnote number is likely wrong.${suggestion}`,
                 });
               } else {
                 // Statute / rule: U.S.C., Fed. R. Civ. P., § N, Pub. L., Rev. Stat., etc.
