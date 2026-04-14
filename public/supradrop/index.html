@@ -1804,23 +1804,22 @@ function app() {
           if (isLikelyDirectQuote) {
             // Statutory/rule citations use section numbers or subdivisions as pincite — no page needed.
             // Statutory/rule citations use section numbers or subdivisions as pincite — no page needed.
-            // Three cases:
-            //   § + number: section IS the pincite (28 U.S.C. § 1927, C.F.R. § 404.1520)
-            //   Fed. R. + rule number: rule number IS the pincite (Fed. R. Civ. P. 11(b)(2))
-            //   U.S. Const. + article/amendment: locator IS the pincite
             const isStatutoryCitation =
-              /§\s*\d+/.test(text) ||
-              /Fed\.\s*R\./.test(text) ||
-              /U\.S\.\s*Const\./.test(text) ||
-              /Rev\.\s*Stat\./.test(text);
+              /§\s*\d+/.test(text) ||                 // § 1927, § 1983(a)
+              /Fed\.\s*R\./.test(text) ||              // Fed. R. Civ. P., Fed. R. Evid.
+              /U\.S\.\s*Const\./.test(text) ||         // U.S. Const. art. I
+              /Rev\.\s*Stat\./.test(text) ||            // Rev. Stat.
+              /\br\.\s*\d/.test(text);                 // Model Rules r. 1.6, Restatement r. 12
             const hasPincite =
               isStatutoryCitation ||
-              /\bat\s+\*?\d+/.test(text) ||
-              // General reporter pattern: [vol] [Reporter] [start], [pincite]
-              // Covers F.R.D., F.2d, F.Supp.2d, U.S., S.Ct., N.Y., etc.
+              // "at N" or "at ¶¶ N" — covers paragraph pincites in orders/slip opinions
+              /\bat\s+(?:¶+\s*)?\*?\d+/.test(text) ||
+              // Reporter citation with comma-separated pincite: [vol] [Reporter] [start], [pincite]
               /\d+\s+[A-Z][A-Za-z0-9.]*\s+\d+\s*,\s*\d+/.test(text) ||
-              // Pincite followed by parenthetical containing a year, e.g. (S.D.N.Y. 2012)
-              /,\s*\d{1,4}(?:\s+n\.\d+(?:\.\d+)?)?\s*(?:\([^)]*\d{4}[^)]*\)|$)/.test(text);
+              // Pincite before court/year parenthetical: , 187 (S.D.N.Y. 2012)
+              /,\s*\d{1,4}(?:\s+n\.\d+(?:\.\d+)?)?\s*(?:\([^)]*\d{4}[^)]*\)|$)/.test(text) ||
+              // Pincite AFTER court/year parenthetical: (E.D. Cal. 2025) 1067
+              /\([^)]*\d{4}[^)]*\)\s+\d+/.test(text);
             if (!hasPincite) {
               problems.push({
                 type: 'warning',
