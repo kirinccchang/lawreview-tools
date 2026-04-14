@@ -98,31 +98,117 @@ import Base from '../layouts/Base.astro';
       </div>
     </div>
 
-    <!-- Right column: mock UI card -->
+    <!-- Right column: 3-tool showcase -->
     <div class="hero-visual anim-5" aria-hidden="true">
-      <div class="mock-card">
-        <div class="mock-card-header">
-          <span class="mock-warn-icon">⚠</span>
-          <span>3 issues found in <strong>Article.docx</strong></span>
-        </div>
-        <div class="mock-card-body">
-          <div class="mock-issue">
-            <span class="mock-x">✗</span>
-            <span><span class="mock-fn">fn.47</span> <code>supra note 12</code> → target not found</span>
+
+      <div class="mock-tabs">
+        <button class="mock-tab active" data-tab="0">Zotero Plugin</button>
+        <button class="mock-tab" data-tab="1">PermaDrop</button>
+        <button class="mock-tab" data-tab="2">SupraDrop</button>
+      </div>
+
+      <!-- Panel 0: Zotero Perma Archiver -->
+      <div class="mock-panel active" data-panel="0">
+        <div class="mock-card">
+          <div class="mock-card-header">
+            <span class="mock-dot-live"></span>
+            <span>Zotero Perma Archiver — <strong>running</strong></span>
           </div>
-          <div class="mock-issue">
-            <span class="mock-x">✗</span>
-            <span><span class="mock-fn">fn.83</span> <code>Id.</code> follows multi-source fn.81</span>
+          <div class="mock-card-body">
+            <div class="mock-lib-item">
+              <span class="mock-check">✓</span>
+              <div class="mock-lib-content">
+                <div class="mock-lib-title">Doe v. Smith, 2024 WL 12345</div>
+                <div class="mock-lib-url">casetext.com/case/doe-v-smith-2024</div>
+                <div class="mock-lib-perma">→ perma.cc/K8MN-3XYZ</div>
+              </div>
+            </div>
+            <div class="mock-lib-item">
+              <span class="mock-check">✓</span>
+              <div class="mock-lib-content">
+                <div class="mock-lib-title">Barnett, "Standing Doctrine..." (2024)</div>
+                <div class="mock-lib-url">ssrn.com/abstract/4928312</div>
+                <div class="mock-lib-perma">→ perma.cc/P5JQ-8MNR</div>
+              </div>
+            </div>
+            <div class="mock-lib-item">
+              <span class="mock-spin">◌</span>
+              <div class="mock-lib-content">
+                <div class="mock-lib-title">HRW, World Report 2024</div>
+                <div class="mock-lib-url">hrw.org/world-report/2024/us</div>
+                <div class="mock-progress-bar"><div class="mock-progress-fill"></div></div>
+              </div>
+            </div>
           </div>
-          <div class="mock-issue mock-issue-warning">
-            <span class="mock-x mock-x-warn">!</span>
-            <span><span class="mock-fn">fn.91</span> <code>"see also"</code> signal — consider <code>"cf."</code></span>
+          <div class="mock-card-footer">
+            <span class="mock-status">Zotero Perma Archiver · 2 / 3 archived</span>
           </div>
-        </div>
-        <div class="mock-card-footer">
-          <span class="mock-status">SupraDrop · 94 footnotes scanned</span>
         </div>
       </div>
+
+      <!-- Panel 1: PermaDrop -->
+      <div class="mock-panel" data-panel="1">
+        <div class="mock-card">
+          <div class="mock-card-header">
+            <span style="font-size:15px;line-height:1">📄</span>
+            <span><strong>Article.docx</strong> — 4 URLs found</span>
+          </div>
+          <div class="mock-card-body">
+            <div class="mock-url-row">
+              <span class="mock-checkbox">☑</span>
+              <span class="mock-fn">fn.12</span>
+              <span class="mock-url-text">lawfaremedia.org/2024/01/...</span>
+            </div>
+            <div class="mock-url-row">
+              <span class="mock-checkbox">☑</span>
+              <span class="mock-fn">fn.23</span>
+              <span class="mock-url-text">harvardlawreview.org/vol/137/...</span>
+            </div>
+            <div class="mock-url-row">
+              <span class="mock-checkbox">☑</span>
+              <span class="mock-fn">fn.44</span>
+              <span class="mock-url-text">oyez.org/cases/2024/22-451</span>
+            </div>
+            <div class="mock-url-row mock-url-row-dim">
+              <span class="mock-checkbox mock-checkbox-empty">☐</span>
+              <span class="mock-fn">fn.67</span>
+              <span class="mock-url-text">jstor.org/stable/4838291</span>
+            </div>
+            <div class="mock-perma-btn">Archive 3 URLs →</div>
+          </div>
+          <div class="mock-card-footer">
+            <span class="mock-status">PermaDrop · Rule 18.2 compliant output</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 2: SupraDrop -->
+      <div class="mock-panel" data-panel="2">
+        <div class="mock-card">
+          <div class="mock-card-header">
+            <span class="mock-warn-icon">⚠</span>
+            <span>3 issues found in <strong>Article.docx</strong></span>
+          </div>
+          <div class="mock-card-body">
+            <div class="mock-issue">
+              <span class="mock-x">✗</span>
+              <span><span class="mock-fn">fn.47</span> <code>supra note 12</code> → target not found</span>
+            </div>
+            <div class="mock-issue">
+              <span class="mock-x">✗</span>
+              <span><span class="mock-fn">fn.83</span> <code>Id.</code> follows multi-source fn.81</span>
+            </div>
+            <div class="mock-issue mock-issue-warning">
+              <span class="mock-x mock-x-warn">!</span>
+              <span><span class="mock-fn">fn.91</span> <code>"see also"</code> signal — consider <code>"cf."</code></span>
+            </div>
+          </div>
+          <div class="mock-card-footer">
+            <span class="mock-status">SupraDrop · 94 footnotes scanned</span>
+          </div>
+        </div>
+      </div>
+
     </div>
 
   </div>
@@ -403,4 +489,35 @@ footnotes.<span class="c-fn">forEach</span>(fn =&gt; &#123;
     document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('theme', next);
   });
+
+  // Hero tool showcase: auto-cycling tab switcher
+  const mockTabs = document.querySelectorAll('.mock-tab');
+  const mockPanels = document.querySelectorAll('.mock-panel');
+  let activeTab = 0;
+  let mockTimer: ReturnType<typeof setInterval>;
+
+  function switchMockTab(idx: number) {
+    mockTabs[activeTab].classList.remove('active');
+    mockPanels[activeTab].classList.remove('active');
+    activeTab = idx;
+    mockTabs[activeTab].classList.add('active');
+    mockPanels[activeTab].classList.add('active');
+  }
+
+  function startMockCycle() {
+    mockTimer = setInterval(() => {
+      switchMockTab((activeTab + 1) % mockTabs.length);
+    }, 4000);
+  }
+
+  if (mockTabs.length) {
+    mockTabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => {
+        clearInterval(mockTimer);
+        switchMockTab(i);
+        startMockCycle();
+      });
+    });
+    startMockCycle();
+  }
 </script>
