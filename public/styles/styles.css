@@ -1070,11 +1070,17 @@
 }
 
 .footer-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-family: var(--font-display);
   font-size: 16px;
   color: var(--text);
+  text-decoration: none;
   margin-bottom: 10px;
+  transition: opacity 0.15s;
 }
+.footer-logo:hover { opacity: 0.7; }
 
 .footer-tagline {
   font-size: 13px;
