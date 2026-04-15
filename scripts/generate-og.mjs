@@ -38,7 +38,7 @@ const PAGES = [
     out:      'public/og-supradrop.png',
     phase:    'SUBMISSION PHASE · AUDITING',
     title:    'SupraDrop',
-    subtitle: 'Audit supra, Id., and signal citations across\nyour footnotes. 19 Bluebook rules.',
+    subtitle: 'Audit supra, Id., and signal citations across\nyour footnotes. 24 Bluebook rules.',
     footer:   'Free · Private · Runs entirely in-browser',
   },
 ];
