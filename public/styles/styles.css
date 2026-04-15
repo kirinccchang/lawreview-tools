@@ -890,8 +890,16 @@
 
 .badge-new::before { content: '★'; font-size: 9px; }
 
+.badge-beta {
+  background: #EFEFED;
+  color: #3D3D3D;
+}
+
+.badge-beta::before { content: 'β'; font-size: 10px; }
+
 [data-theme="dark"] .badge-live { background: #2A2A2A; color: #AAAAAA; }
 [data-theme="dark"] .badge-new  { background: #2A2A2A; color: #AAAAAA; }
+[data-theme="dark"] .badge-beta { background: #2A2A2A; color: #AAAAAA; }
 
 /* -- PRIVACY BANNER --------------------------------------- */
 .privacy-banner {
