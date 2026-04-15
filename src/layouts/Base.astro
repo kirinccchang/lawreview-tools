@@ -4,36 +4,61 @@ export interface Props {
   description?: string;
   ogImage?: string;
   canonical?: string;
+  jsonLd?: object | object[];
 }
 
 const {
   title,
-  description = "A free, private suite of Bluebook tools for law review editors and legal scholars. Built at NYU Law.",
-  ogImage = "/og-image.png",
+  description = "Free Bluebook citation tools for law review editors and legal scholars. Audit supra, Id., and footnote citations. Archive URLs to perma.cc. 100% private — runs in your browser.",
+  ogImage = "/og-home.png",
   canonical,
+  jsonLd,
 } = Astro.props;
 
 const canonicalURL = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
+const ogImageURL   = ogImage.startsWith('http') ? ogImage : new URL(ogImage, Astro.site).href;
+
+const jsonLdArray  = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 ---
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="index, follow" />
   <link rel="canonical" href={canonicalURL} />
 
   <title>{title}</title>
   <meta name="description" content={description} />
 
-  <meta property="og:title" content={title} />
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="lawreview.tools" />
+  <meta property="og:locale"    content="en_US" />
+  <meta property="og:type"      content="website" />
+  <meta property="og:title"       content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:image" content={ogImage} />
-  <meta property="og:url" content={canonicalURL} />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content={title} />
+  <meta property="og:url"         content={canonicalURL} />
+  <meta property="og:image"       content={ogImageURL} />
+  <meta property="og:image:width"  content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt"    content={title} />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:site"        content="@chengchi_chang" />
+  <meta name="twitter:creator"     content="@chengchi_chang" />
+  <meta name="twitter:title"       content={title} />
   <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content={ogImage} />
+  <meta name="twitter:image"       content={ogImageURL} />
+
+  <!-- Theme -->
+  <meta name="theme-color" content="#0C0C0B" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+
+  <!-- JSON-LD structured data -->
+  {jsonLdArray.map(schema => (
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  ))}
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -58,4 +83,3 @@ const canonicalURL = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
   <slot />
 </body>
 </html>
-

@@ -4,10 +4,36 @@ import release from '../data/zotero-release.json';
 const ver    = release.version ?? '1.3.2';
 const xpiUrl = release.xpiUrl;
 const cslUrl = release.cslUrl;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Zotero Perma Archiver",
+  "alternateName": "zotero-perma-archiver",
+  "url": "https://lawreview.tools/zotero",
+  "downloadUrl": "https://github.com/kirinccchang/zotero-perma-archiver/releases/latest",
+  "description": "Free Zotero plugin that automatically archives URLs to perma.cc as you save items to your research library. Bluebook Rule 18.2.1(d) compliant. No technical setup required.",
+  "applicationCategory": "LegalApplication",
+  "applicationSubCategory": "Citation Management",
+  "operatingSystem": "Windows, macOS, Linux",
+  "softwareVersion": ver,
+  "featureList": [
+    "Auto-archives URLs to perma.cc on save",
+    "Batch archive existing library items",
+    "Inserts [perma.cc/...] link into Zotero Extra field",
+    "Bluebook Rule 18.2.1(d) compliant",
+    "Supports Zotero 7 and 8"
+  ],
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "license": "https://www.gnu.org/licenses/agpl-3.0.html",
+  "author": { "@type": "Person", "name": "Kirin Chang", "url": "https://kirinchang.com" }
+};
 ---
 <Base
-  title="Zotero Perma Archiver — lawreview.tools"
-  description="An open-source Zotero plugin that automatically archives URLs to perma.cc as you build your research library. Bluebook 22nd ed. Rule 18.2.1(d) compliance — no technical knowledge required."
+  title="Zotero Perma Archiver — Free Perma.cc Plugin for Zotero"
+  description="Free Zotero plugin that auto-archives URLs to perma.cc as you save items. Bluebook Rule 18.2.1(d) compliant. No technical setup required. Supports Zotero 7 & 8."
+  ogImage="/og-zotero.png"
+  jsonLd={jsonLd}
 >
 
 <nav id="lrt-nav" aria-label="lawreview.tools">

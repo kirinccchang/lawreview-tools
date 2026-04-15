@@ -1,9 +1,54 @@
 ---
 import Base from '../layouts/Base.astro';
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "lawreview.tools",
+    "url": "https://lawreview.tools/",
+    "description": "Free Bluebook citation tools for law review editors and legal scholars. Audit supra, Id., and footnote citations. Archive URLs to perma.cc. 100% private.",
+    "publisher": {
+      "@type": "Person",
+      "name": "Kirin Chang",
+      "url": "https://kirinchang.com"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "lawreview.tools — Bluebook Tool Suite",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Zotero Perma Archiver",
+        "url": "https://lawreview.tools/zotero",
+        "description": "Free Zotero plugin that auto-archives URLs to perma.cc as you save items. Bluebook Rule 18.2.1(d) compliant."
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "PermaDrop",
+        "url": "https://lawreview.tools/permadrop/",
+        "description": "Batch-archive every URL in your Word manuscript to perma.cc. Bluebook Rule 18.2 compliant output."
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "SupraDrop",
+        "url": "https://lawreview.tools/supradrop/",
+        "description": "Audit supra, Id., signal parentheticals, and pincites across all footnotes. Checks 19 Bluebook citation rules."
+      }
+    ]
+  }
+];
 ---
 <Base
-  title="lawreview.tools — Bluebook Citation & Archiving Suite"
-  description="A free, private suite of Bluebook tools for law review editors and legal scholars. Built at NYU Law."
+  title="lawreview.tools — Free Bluebook Tools for Law Review"
+  description="Free Bluebook citation tools for law review editors. Audit supra, Id., and footnote citations. Archive URLs to perma.cc. 100% private — runs in your browser."
+  ogImage="/og-home.png"
+  jsonLd={jsonLd}
 >
 
 <!-- ══════════════════════════════════════════════════════════
