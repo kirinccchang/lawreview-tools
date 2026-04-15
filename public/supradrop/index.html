@@ -721,6 +721,15 @@ function app() {
       return new Set((fo.ruleGroups || []).flatMap(g => g.enabled ? g.rules : []));
     },
 
+    // Strip HTML for plain-text contexts (Word comments, CSV, TXT).
+    // Converts <a href="URL">text</a> → "text (URL)", then removes remaining tags.
+    _msgPlain(msg) {
+      return msg
+        .replace(/<a\s[^>]*href="([^"]*)"[^>]*>([^<]*)<\/a>/gi, '$2 ($1)')
+        .replace(/<[^>]+>/g, '')
+        .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ');
+    },
+
     // Count footnotes with ≥1 visible problem matching a given severity ('all'|'error'|'warning')
     severityCount(fo, sv) {
       const e = this.fileEnabledRules(fo);
@@ -1493,7 +1502,7 @@ function app() {
         const status = fn.confirmed ? 'confirmed error' : 'unreviewed';
         for (const p of visible) {
           const preview = fn.text.slice(0, 120).replace(/\r?\n/g, ' ');
-          rows.push([fn.footnoteNum, p.type, status, p.rule, p.msg, preview]);
+          rows.push([fn.footnoteNum, p.type, status, p.rule, this._msgPlain(p.msg), preview]);
         }
       }
       const csv = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\r\n');
@@ -1526,7 +1535,7 @@ function app() {
         lines.push(`Footnote ${fn.footnoteNum}:`);
         lines.push(`  Text: ${fn.text.slice(0, 200)}${fn.text.length > 200 ? '…' : ''}`);
         for (const p of visible) {
-          lines.push(`  [${p.type.toUpperCase()}] ${p.rule}: ${p.msg}`);
+          lines.push(`  [${p.type.toUpperCase()}] ${p.rule}: ${this._msgPlain(p.msg)}`);
         }
         lines.push('');
       }
@@ -1550,7 +1559,7 @@ function app() {
         if (!visible.length) continue;
         blocks.push({
           xmlId: fn.xmlId,
-          problems: visible.map(p => ({ id: nextCommentId++, rule: p.rule, msg: p.msg, type: p.type })),
+          problems: visible.map(p => ({ id: nextCommentId++, rule: p.rule, msg: this._msgPlain(p.msg), type: p.type })),
         });
       }
       if (!blocks.length) { alert('No visible issues to annotate.'); return; }
