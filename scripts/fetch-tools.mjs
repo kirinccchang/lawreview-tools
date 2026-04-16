@@ -41,8 +41,10 @@ const SHELL_CSS = `
 <style id="lrt-shell">
 
 /* ── Prevent horizontal overflow on mobile ─────────────────── */
-html { overflow-x: hidden; }
-body { overflow-x: hidden; max-width: 100%; }
+/* overflow-x: clip (not hidden) — same visual clipping but does NOT create  */
+/* a new scroll container, so position:sticky on #lrt-nav continues to work. */
+html { overflow-x: clip; }
+body { overflow-x: clip; max-width: 100%; }
 
 /* ── Body + typography ─────────────────────────────────────── */
 body {
