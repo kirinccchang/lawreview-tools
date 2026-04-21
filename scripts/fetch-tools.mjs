@@ -5,31 +5,16 @@
  * shared shell: navbar, author section, footer, typography, dark-mode.
  */
 
-import { writeFileSync } from 'fs';
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-/* ── Tool manifest ─────────────────────────────────────────── */
-const TOOLS = [
-  {
-    id:           'permadrop',
-    repo:         'kirinccchang/permadrop',
-    dest:         'public/permadrop/index.html',
-    oldBase:      'https://permadrop.kirinchang.com',
-    newCanonical: 'https://lawreview.tools/permadrop/',
-  },
-  {
-    id:           'supradrop',
-    repo:         'kirinccchang/supradrop',
-    dest:         'public/supradrop/index.html',
-    oldBase:      'https://supradrop.kirinchang.com',
-    newCanonical: 'https://lawreview.tools/supradrop/',
-  },
-];
+import { embeddedTools, navTools } from '../src/data/tools.js';
 
-const NAV_TOOLS = [
-  { id: 'zotero',    label: 'Zotero Plugin', href: 'https://lawreview.tools/zotero'      },
-  { id: 'permadrop', label: 'PermaDrop',     href: 'https://lawreview.tools/permadrop/'  },
-  { id: 'supradrop', label: 'SupraDrop',     href: 'https://lawreview.tools/supradrop/'  },
-];
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+
+const TOOLS = embeddedTools;
+const NAV_TOOLS = navTools;
 
 /* ══════════════════════════════════════════════════════════════
    SHARED SHELL CSS
@@ -685,6 +670,7 @@ function buildFooter(tool) {
         <a href="https://lawreview.tools/zotero" class="lrt-flink">Zotero Plugin</a>
         <a href="https://lawreview.tools/permadrop/" class="lrt-flink">PermaDrop</a>
         <a href="https://lawreview.tools/supradrop/" class="lrt-flink">SupraDrop</a>
+        <a href="https://lawreview.tools/docx-redline-name-cleaner/" class="lrt-flink">Redline Cleaner</a>
       </div>
       <div class="lrt-fcol">
         <div class="lrt-fheading">This Tool</div>
@@ -802,11 +788,22 @@ function transform(html, tool) {
       '<meta charset="UTF-8">\n  <link rel="icon" type="image/svg+xml" href="/favicon.svg">'
     );
 
+  if (tool.id === 'docx-redline-name-cleaner') {
+    html = html
+      .replace(/<header class="site-header">[\s\S]*?<\/header>\s*/i, '')
+      .replace(/\s*<section class="footer-card">[\s\S]*?<\/section>\s*/i, '\n');
+  }
+
   html = html.replace('</head>', SHELL_CSS + '\n</head>');
   html = html.replace('<body>',  '<body>\n' + buildNavbar(tool.id) + '\n' + SYNC_SCRIPT + '\n');
   html = html.replace('</body>', AUTHOR_HTML + '\n' + buildFooter(tool) + '\n</body>');
 
   return html;
+}
+
+function getWorkspaceSourcePath(tool, relativePath = 'index.html') {
+  if (!tool.workspaceDir) return null;
+  return path.resolve(ROOT, tool.workspaceDir, relativePath);
 }
 
 /* ── Main ──────────────────────────────────────────────────── */
@@ -816,10 +813,41 @@ console.log('\n📦 Fetching and integrating tool builds...\n');
 for (const tool of TOOLS) {
   const url = `https://raw.githubusercontent.com/${tool.repo}/main/index.html?t=${Date.now()}`;
   try {
+    mkdirSync(path.dirname(tool.dest), { recursive: true });
+    let html;
     const res = await fetch(url, { cache: 'no-store' });
-    if (!res.ok) { console.warn(`  ⚠  ${tool.repo}: HTTP ${res.status}`); continue; }
-    writeFileSync(tool.dest, transform(await res.text(), tool), 'utf-8');
+    if (res.ok) {
+      html = await res.text();
+    } else {
+      const localIndexPath = getWorkspaceSourcePath(tool);
+      if (!localIndexPath) {
+        console.warn(`  ⚠  ${tool.repo}: HTTP ${res.status}`);
+        continue;
+      }
+      html = readFileSync(localIndexPath, 'utf-8');
+      console.log(`  ↳ local fallback ${path.relative(ROOT, localIndexPath)}`);
+    }
+
+    writeFileSync(tool.dest, transform(html, tool), 'utf-8');
     console.log(`  ✓  ${tool.repo} → ${tool.dest}`);
+
+    for (const assetPath of tool.assetPaths ?? []) {
+      const assetUrl = `https://raw.githubusercontent.com/${tool.repo}/main/${assetPath}?t=${Date.now()}`;
+      const assetDest = path.join(path.dirname(tool.dest), assetPath);
+      mkdirSync(path.dirname(assetDest), { recursive: true });
+      const assetRes = await fetch(assetUrl, { cache: 'no-store' });
+      if (assetRes.ok) {
+        writeFileSync(assetDest, await assetRes.text(), 'utf-8');
+      } else {
+        const localAssetPath = getWorkspaceSourcePath(tool, assetPath);
+        if (!localAssetPath) {
+          console.warn(`  ⚠  ${tool.repo}: asset ${assetPath} HTTP ${assetRes.status}`);
+          continue;
+        }
+        copyFileSync(localAssetPath, assetDest);
+      }
+      console.log(`     ↳ asset ${assetPath}`);
+    }
   } catch (err) {
     console.warn(`  ⚠  ${tool.repo}: ${err.message}`);
   }

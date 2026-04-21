@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0C0C0B"/>
+      <stop offset="100%" stop-color="#131310"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="0" y="0" width="1200" height="3" fill="#F2F0EB" opacity="0.07"/>
+
+  <text x="80" y="72"
+    font-family="Georgia, 'Times New Roman', serif" font-size="30" fill="#2E2E2B">⚖</text>
+
+  <text x="1120" y="68" text-anchor="end"
+    font-family="-apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="17" font-weight="400"
+    fill="#6B6B66" letter-spacing="0.3">lawreview.tools</text>
+
+  <text x="80" y="152"
+    font-family="-apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="600"
+    fill="#2E2E2B" letter-spacing="2.2">SUBMISSION PHASE · AUDITING</text>
+
+  <rect x="80" y="170" width="1040" height="1" fill="#222220"/>
+
+  <text x="80" y="320"
+      font-family="Georgia, 'Times New Roman', serif" font-size="80" font-weight="400"
+      fill="#F2F0EB" letter-spacing="-1">SupraDrop</text>
+  <text x="80" y="438"
+      font-family="-apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="26" font-weight="300"
+      fill="#6B6B66">Audit supra, Id., and signal citations across</text>
+  <text x="80" y="478"
+      font-family="-apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="26" font-weight="300"
+      fill="#6B6B66">your footnotes. 24 Bluebook rules.</text>
+
+  <rect x="80" y="550" width="1040" height="1" fill="#222220"/>
+
+  <text x="80" y="582"
+    font-family="-apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="400"
+    fill="#2E2E2B" letter-spacing="0.3">Free · Private · Runs entirely in-browser</text>
+</svg>

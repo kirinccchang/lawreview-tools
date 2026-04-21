@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { siteTools } from '../data/tools.js';
 
 const jsonLd = [
   {
@@ -19,35 +20,19 @@ const jsonLd = [
     "@context": "https://schema.org",
     "@type": "ItemList",
     "name": "lawreview.tools — Bluebook Tool Suite",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Zotero Perma Archiver",
-        "url": "https://lawreview.tools/zotero",
-        "description": "Free Zotero plugin that auto-archives URLs to perma.cc as you save items. Bluebook Rule 18.2.1(d) compliant."
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "PermaDrop",
-        "url": "https://lawreview.tools/permadrop/",
-        "description": "Batch-archive every URL in your Word manuscript to perma.cc. Bluebook Rule 18.2 compliant output."
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "name": "SupraDrop",
-        "url": "https://lawreview.tools/supradrop/",
-        "description": "Audit supra, Id., signal parentheticals, and pincites across all footnotes. Checks 24 Bluebook citation rules."
-      }
-    ]
+    "itemListElement": siteTools.map((tool, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": tool.name,
+      "url": tool.fullUrl,
+      "description": tool.homeDescription
+    }))
   }
 ];
 ---
 <Base
   title="lawreview.tools — Free Bluebook Tools for Law Review"
-  description="Free Bluebook citation tools for law review editors. Audit supra, Id., and footnote citations. Archive URLs to perma.cc. 100% private — runs in your browser."
+  description="Free Bluebook citation tools for law review editors. Audit supra, Id., and footnote citations. Archive URLs to perma.cc. Clean Word redline identities. 100% private — runs in your browser."
   ogImage="/og-home.png"
   jsonLd={jsonLd}
 >
@@ -65,6 +50,7 @@ const jsonLd = [
         <a href="/zotero" class="lrt-nav-link">Zotero Plugin</a>
         <a href="/permadrop/" class="lrt-nav-link">PermaDrop</a>
         <a href="/supradrop/" class="lrt-nav-link">SupraDrop</a>
+        <a href="/docx-redline-name-cleaner/" class="lrt-nav-link">Redline Cleaner</a>
       </div>
       <a href="https://github.com/kirinccchang" target="_blank" rel="noopener noreferrer"
          class="lrt-nav-link lrt-gh-link" aria-label="GitHub">
@@ -82,6 +68,7 @@ const jsonLd = [
           <a href="/zotero">Zotero Plugin</a>
           <a href="/permadrop/">PermaDrop</a>
           <a href="/supradrop/">SupraDrop</a>
+          <a href="/docx-redline-name-cleaner/">Redline Cleaner</a>
           <div class="lrt-menu-divider" role="separator"></div>
           <a href="https://github.com/kirinccchang" target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>GitHub
@@ -144,13 +131,14 @@ const jsonLd = [
       </div>
     </div>
 
-    <!-- Right column: 3-tool showcase -->
+    <!-- Right column: 4-tool showcase -->
     <div class="hero-visual anim-5" aria-hidden="true">
 
       <div class="mock-tabs">
         <button class="mock-tab active" data-tab="0">Zotero Plugin</button>
         <button class="mock-tab" data-tab="1">PermaDrop</button>
         <button class="mock-tab" data-tab="2">SupraDrop</button>
+        <button class="mock-tab" data-tab="3">Redline Cleaner</button>
       </div>
 
       <!-- Panel 0: Zotero Perma Archiver -->
@@ -255,6 +243,37 @@ const jsonLd = [
         </div>
       </div>
 
+      <!-- Panel 3: Redline Name Cleaner -->
+      <div class="mock-panel" data-panel="3">
+        <div class="mock-card">
+          <div class="mock-card-header">
+            <span style="font-size:15px;line-height:1">✎</span>
+            <span><strong>Reply Draft.docx</strong> — 3 review identities found</span>
+          </div>
+          <div class="mock-card-body">
+            <div class="mock-url-row">
+              <span class="mock-checkbox">☑</span>
+              <span class="mock-fn">edit</span>
+              <span class="mock-url-text">Jane Editor → NYU Law Review</span>
+            </div>
+            <div class="mock-url-row">
+              <span class="mock-checkbox">☑</span>
+              <span class="mock-fn">edit</span>
+              <span class="mock-url-text">Research Assistant 2 → NYU Law Review</span>
+            </div>
+            <div class="mock-url-row mock-url-row-dim">
+              <span class="mock-checkbox mock-checkbox-empty">☐</span>
+              <span class="mock-fn">keep</span>
+              <span class="mock-url-text">Professor Smith remains unchanged</span>
+            </div>
+            <div class="mock-perma-btn">Apply unified review name →</div>
+          </div>
+          <div class="mock-card-footer">
+            <span class="mock-status">Redline Name Cleaner · Private .docx cleanup</span>
+          </div>
+        </div>
+      </div>
+
     </div>
 
   </div>
@@ -335,6 +354,26 @@ const jsonLd = [
         </div>
       </div>
 
+      <!-- Card 4: Redline Name Cleaner -->
+      <div class="tool-card">
+        <div class="tool-phase-label">SUBMISSION PHASE · CLEANUP</div>
+        <div class="tool-name-row">
+          <h3 class="tool-name">Redline Name Cleaner</h3>
+          <span class="badge badge-live">Live</span>
+        </div>
+        <p class="tool-tagline">Standardize visible review identities before circulation.</p>
+        <p class="tool-desc">
+          Upload one or more .docx files, review the names Word found
+          in comments and tracked changes, and unify internal editor or
+          assistant identities into a clean outward-facing label before sharing.
+        </p>
+        <div class="tool-ctas">
+          <a href="/docx-redline-name-cleaner/" class="btn-primary btn-sm">
+            Launch App →
+          </a>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -346,14 +385,15 @@ const jsonLd = [
   <div class="container privacy-inner">
     <h2 class="privacy-title">Your manuscripts never leave your computer.</h2>
     <p class="privacy-body">
-      PermaDrop and SupraDrop are built with 100% client-side
-      JavaScript and WebAssembly. Your .docx files are parsed
-      entirely in your browser's memory.
+      PermaDrop, SupraDrop, and Redline Name Cleaner are built with
+      100% client-side JavaScript and WebAssembly. Your .docx files
+      are parsed entirely in your browser's memory.
     </p>
     <p class="privacy-body">
       We transmit nothing to any server — except the URLs you
       explicitly choose to archive, which are sent directly to
-      the perma.cc API using your own API key.
+      the perma.cc API using your own API key. Redline Name Cleaner
+      never sends document content or review metadata anywhere.
     </p>
     <p class="privacy-proof">
       Don't believe us? Disconnect your internet after the
@@ -374,7 +414,7 @@ const jsonLd = [
       <div class="privacy-feature">
         <div class="privacy-feature-icon">📂</div>
         <div class="privacy-feature-title">Open Source</div>
-        <div class="privacy-feature-desc">AGPL v3 · Audit the code yourself</div>
+        <div class="privacy-feature-desc">All four tools are AGPL v3 · Audit the code yourself</div>
       </div>
     </div>
   </div>
@@ -401,6 +441,11 @@ const jsonLd = [
         external services beyond perma.cc.
       </p>
       <p class="tech-body">
+        <strong>Redline Name Cleaner</strong> uses the same fully client-side
+        approach to inspect Word revision metadata, rewrite reviewer names,
+        and export cleaned copies without uploading drafts or exposing internal identities.
+      </p>
+      <p class="tech-body">
         Every tool is publicly available on GitHub under the AGPL v3 license.
         You can read exactly what runs on your machine.
       </p>
@@ -408,6 +453,7 @@ const jsonLd = [
         <a href="https://github.com/kirinccchang/zotero-perma-archiver" target="_blank" rel="noopener" class="btn-text-link">Zotero plugin source →</a>
         <a href="https://github.com/kirinccchang/supradrop" target="_blank" rel="noopener" class="btn-text-link">SupraDrop source →</a>
         <a href="https://github.com/kirinccchang/permadrop" target="_blank" rel="noopener" class="btn-text-link">PermaDrop source →</a>
+        <a href="https://github.com/kirinccchang/docx-redline-name-cleaner" target="_blank" rel="noopener" class="btn-text-link">Redline Name Cleaner source →</a>
       </div>
     </div>
     <div class="tech-code-wrap">
@@ -508,6 +554,7 @@ footnotes.<span class="c-fn">forEach</span>(fn =&gt; &#123;
         <a href="/zotero" class="footer-link">Zotero Plugin</a>
         <a href="/permadrop/" class="footer-link">PermaDrop</a>
         <a href="/supradrop/" class="footer-link">SupraDrop</a>
+        <a href="/docx-redline-name-cleaner/" class="footer-link">Redline Cleaner</a>
       </div>
       <div class="footer-col">
         <div class="footer-col-title">Legal</div>

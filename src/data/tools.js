@@ -1,0 +1,112 @@
+export const siteTools = [
+  {
+    id: 'zotero',
+    navLabel: 'Zotero Plugin',
+    name: 'Zotero Perma Archiver',
+    href: '/zotero',
+    fullUrl: 'https://lawreview.tools/zotero',
+    repo: 'kirinccchang/zotero-perma-archiver',
+    phase: 'WRITING PHASE · ZOTERO PLUGIN',
+    tagline: 'Save it once, archived forever.',
+    homeDescription: 'Free Zotero plugin that auto-archives URLs to perma.cc as you save items. Bluebook Rule 18.2.1(d) compliant.',
+    homepageCardDescription: 'An open-source Zotero plugin that automatically generates perma.cc archive links in the background as you build your research library — before the URL ever breaks.',
+    og: {
+      out: 'public/og-zotero.png',
+      title: 'Zotero Perma\nArchiver',
+      subtitle: 'Auto-archives URLs to perma.cc as you\nbuild your Zotero research library.',
+      footer: 'Free · AGPL v3 · Zotero 7 & 8',
+    },
+  },
+  {
+    id: 'permadrop',
+    navLabel: 'PermaDrop',
+    name: 'PermaDrop',
+    href: '/permadrop/',
+    fullUrl: 'https://lawreview.tools/permadrop/',
+    repo: 'kirinccchang/permadrop',
+    phase: 'SUBMISSION PHASE · ARCHIVING',
+    tagline: 'Batch-archive every URL in your manuscript.',
+    statusLabel: 'Live',
+    statusVariant: 'live',
+    homeDescription: 'Batch-archive every URL in your Word manuscript to perma.cc. Bluebook Rule 18.2 compliant output.',
+    homepageCardDescription: 'Drag in your .docx, select the URLs you want archived, and get back a Bluebook Rule 18.2-compliant document — with perma.cc links inserted directly into footnotes. Clean copy or Track Changes redline.',
+    embed: {
+      dest: 'public/permadrop/index.html',
+      oldBase: 'https://permadrop.kirinchang.com',
+      newCanonical: 'https://lawreview.tools/permadrop/',
+      assetPaths: [],
+    },
+    og: {
+      out: 'public/og-permadrop.png',
+      title: 'PermaDrop',
+      subtitle: 'Batch-archive every URL in your manuscript\nto perma.cc in one click.',
+      footer: 'Free · Private · Bluebook Rule 18.2 Compliant',
+    },
+  },
+  {
+    id: 'supradrop',
+    navLabel: 'SupraDrop',
+    name: 'SupraDrop',
+    href: '/supradrop/',
+    fullUrl: 'https://lawreview.tools/supradrop/',
+    repo: 'kirinccchang/supradrop',
+    phase: 'SUBMISSION PHASE · AUDITING',
+    tagline: 'Find citation logic errors before your editor does.',
+    statusLabel: 'Beta',
+    statusVariant: 'beta',
+    homeDescription: 'Audit supra, Id., signal parentheticals, and pincites across all footnotes. Checks 24 Bluebook citation rules.',
+    homepageCardDescription: 'Automatically audits supra, Id., signal parentheticals, hereinafter, and pincite patterns across all footnotes in your Word document. No installation. No uploads.',
+    embed: {
+      dest: 'public/supradrop/index.html',
+      oldBase: 'https://supradrop.kirinchang.com',
+      newCanonical: 'https://lawreview.tools/supradrop/',
+      assetPaths: [],
+    },
+    og: {
+      out: 'public/og-supradrop.png',
+      title: 'SupraDrop',
+      subtitle: 'Audit supra, Id., and signal citations across\nyour footnotes. 24 Bluebook rules.',
+      footer: 'Free · Private · Runs entirely in-browser',
+    },
+  },
+  {
+    id: 'docx-redline-name-cleaner',
+    navLabel: 'Redline Cleaner',
+    name: 'Redline Name Cleaner',
+    href: '/docx-redline-name-cleaner/',
+    fullUrl: 'https://lawreview.tools/docx-redline-name-cleaner/',
+    repo: 'kirinccchang/docx-redline-name-cleaner',
+    phase: 'SUBMISSION PHASE · CLEANUP',
+    tagline: 'Standardize visible review identities before circulation.',
+    statusLabel: 'Live',
+    statusVariant: 'live',
+    homeDescription: 'Standardize comment and tracked-change names in Word documents before external circulation. 100% private and in-browser.',
+    homepageCardDescription: 'Upload one or more .docx files, review detected review identities, and unify internal editor or assistant names into a clean outward-facing label before sharing the redline.',
+    embed: {
+      dest: 'public/docx-redline-name-cleaner/index.html',
+      oldBase: 'https://lawreview.tools/docx-redline-name-cleaner/',
+      newCanonical: 'https://lawreview.tools/docx-redline-name-cleaner/',
+      workspaceDir: '../docx-redline-name-cleaner',
+      assetPaths: ['assets/vendor/jszip.min.js'],
+    },
+    og: {
+      out: 'public/og-redline-name-cleaner.png',
+      title: 'Redline Name\nCleaner',
+      subtitle: 'Standardize comment and tracked-change names\nacross Word redlines before sharing.',
+      footer: 'Free · Private · Runs entirely in-browser',
+    },
+  },
+];
+
+export const navTools = siteTools.map(({ id, navLabel, href }) => ({
+  id,
+  label: navLabel,
+  href: `https://lawreview.tools${href}`,
+}));
+
+export const embeddedTools = siteTools
+  .filter(tool => tool.embed)
+  .map(tool => ({
+    ...tool,
+    ...tool.embed,
+  }));

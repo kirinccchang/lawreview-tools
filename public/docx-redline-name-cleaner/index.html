@@ -1,0 +1,2529 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redline Name Cleaner — Review Identity Cleanup for Word</title>
+<meta name="description" content="Standardize comment and tracked-change names in Word documents before external circulation. Fully client-side, private, and open source.">
+<meta name="author" content="Kirin Chang">
+<link rel="canonical" href="https://lawreview.tools/docx-redline-name-cleaner/">
+<meta name="theme-color" content="#0C0C0B" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F5F3EE" media="(prefers-color-scheme: light)">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="lawreview.tools">
+<meta property="og:title" content="Redline Name Cleaner — Review Identity Cleanup for Word">
+<meta property="og:description" content="Standardize comment and tracked-change names in Word redlines before external circulation. 100% private and fully in-browser.">
+<meta property="og:url" content="https://lawreview.tools/docx-redline-name-cleaner/">
+<meta property="og:image" content="https://lawreview.tools/og-redline-name-cleaner.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Redline Name Cleaner — standardize Word review identities before sharing">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@chengchi_chang">
+<meta name="twitter:creator" content="@chengchi_chang">
+<meta name="twitter:title" content="Redline Name Cleaner — Review Identity Cleanup for Word">
+<meta name="twitter:description" content="Standardize comment and tracked-change names in Word redlines before external circulation. 100% private and fully in-browser.">
+<meta name="twitter:image" content="https://lawreview.tools/og-redline-name-cleaner.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Redline Name Cleaner",
+  "url": "https://lawreview.tools/docx-redline-name-cleaner/",
+  "description": "Standardize comment and tracked-change names in Word documents before external circulation. Fully client-side, private, and open source.",
+  "applicationCategory": "LegalApplication",
+  "applicationSubCategory": "Document Cleanup",
+  "operatingSystem": "Windows, macOS, Linux",
+  "browserRequirements": "Requires a modern web browser with JavaScript enabled",
+  "featureList": [
+    "Standardizes comment and tracked-change names in .docx files",
+    "Processes multiple Word documents in one batch",
+    "Stores reusable replacement-name presets in your browser",
+    "Exports cleaned files individually or as a zip archive",
+    "100% client-side — files never leave your browser"
+  ],
+  "image": "https://lawreview.tools/og-redline-name-cleaner.png",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "license": "https://www.gnu.org/licenses/agpl-3.0.html",
+  "author": {
+    "@type": "Person",
+    "name": "Kirin Chang",
+    "url": "https://kirinchang.com"
+  }
+}
+</script>
+<script src="assets/vendor/jszip.min.js"></script>
+<style>
+  :root {
+    --bg: #f5f3ee;
+    --surface: #ffffff;
+    --surface-muted: #fcfaf6;
+    --ink: #171717;
+    --muted: #5f5b55;
+    --line: #ddd5c9;
+    --line-strong: #cfc3b2;
+    --brand: #102a43;
+    --brand-soft: #eaf1f8;
+    --accent: #7b2f2f;
+    --accent-soft: #f8eaea;
+    --ok: #155e3b;
+    --ok-soft: #e7f4ec;
+    --warn: #7a4b04;
+    --warn-soft: #fff4db;
+    --button-text: #171717;
+    --shadow: 0 18px 44px rgba(16, 42, 67, 0.08);
+    --radius: 18px;
+    --radius-sm: 12px;
+    --max: 1180px;
+    --font-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    --font-ui: "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  }
+
+  body.dark {
+    --bg: #111111;
+    --surface: #1a1a1a;
+    --surface-muted: #181818;
+    --ink: #eeeeee;
+    --muted: #aaaaaa;
+    --line: #333333;
+    --line-strong: #444444;
+    --brand: #eeeeee;
+    --brand-soft: #202020;
+    --accent: #f0b4b4;
+    --accent-soft: #2a1818;
+    --ok: #86efac;
+    --ok-soft: #052e16;
+    --warn: #facc15;
+    --warn-soft: #1c1408;
+    --button-text: #111111;
+    --shadow: none;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    min-height: 100%;
+    background:
+      radial-gradient(circle at top left, rgba(16, 42, 67, 0.06), transparent 24%),
+      linear-gradient(180deg, #f8f5f0 0%, #f3efe8 100%);
+    color: var(--ink);
+    font-family: var(--font-ui);
+  }
+
+  body.dark {
+    background:
+      radial-gradient(circle at top left, rgba(255, 255, 255, 0.04), transparent 24%),
+      linear-gradient(180deg, #111111 0%, #171717 100%);
+  }
+
+  a {
+    color: inherit;
+  }
+
+  .shell {
+    width: min(var(--max), calc(100% - 24px));
+    margin: 0 auto;
+  }
+
+  .site-header {
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(207, 195, 178, 0.8);
+    background: rgba(245, 243, 238, 0.82);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+
+  .site-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .site-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    font-weight: 700;
+  }
+
+  .site-brand-mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    color: var(--brand);
+    background: var(--brand-soft);
+    border: 1px solid rgba(16, 42, 67, 0.12);
+    font-size: 18px;
+  }
+
+  .site-brand-text {
+    display: grid;
+    gap: 2px;
+  }
+
+  .site-brand-text strong {
+    font-size: 1rem;
+  }
+
+  .site-brand-text span {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .site-nav,
+  .site-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .nav-pill,
+  .ghost-link,
+  .dark-toggle {
+    text-decoration: none;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.75);
+    font-size: 0.92rem;
+    color: inherit;
+  }
+
+  .dark-toggle {
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .nav-pill.is-current {
+    border-color: rgba(16, 42, 67, 0.2);
+    background: var(--brand-soft);
+    color: var(--brand);
+    font-weight: 700;
+  }
+
+  body.dark .site-header {
+    background: rgba(17, 17, 17, 0.82);
+    border-bottom-color: rgba(51, 51, 51, 0.85);
+  }
+
+  body.dark .site-brand-mark {
+    color: #eeeeee;
+    background: #202020;
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  body.dark .nav-pill,
+  body.dark .ghost-link,
+  body.dark .dark-toggle {
+    background: rgba(26, 26, 26, 0.92);
+  }
+
+  .page {
+    padding: 28px 0 56px;
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.95fr);
+    gap: 18px;
+    margin-bottom: 22px;
+  }
+
+  .hero-card,
+  .panel,
+  .footer-card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(221, 213, 201, 0.95);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  body.dark .hero-card,
+  body.dark .panel,
+  body.dark .footer-card,
+  body.dark .doc-card,
+  body.dark .preset-item,
+  body.dark .doc-empty,
+  body.dark .table-wrap,
+  body.dark .callout,
+  body.dark .dropzone,
+  body.dark .doc-caret,
+  body.dark input[type="text"],
+  body.dark select,
+  body.dark button,
+  body.dark .button-link {
+    background: var(--surface);
+    border-color: var(--line);
+    color: var(--ink);
+    box-shadow: none;
+  }
+
+  body.dark .preset-item,
+  body.dark .doc-empty,
+  body.dark .doc-card,
+  body.dark .footer-card {
+    background: var(--surface-muted);
+  }
+
+  .hero-copy {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--brand);
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h1, h2, h3 {
+    margin: 0;
+    font-family: var(--font-serif);
+    letter-spacing: -0.02em;
+  }
+
+  h1 {
+    margin-top: 14px;
+    font-size: clamp(2.2rem, 5vw, 3.7rem);
+    line-height: 1.02;
+  }
+
+  .hero-copy p {
+    margin: 16px 0 0;
+    max-width: 65ch;
+    color: var(--muted);
+    font-size: 1.05rem;
+    line-height: 1.65;
+  }
+
+  .hero-meta {
+    margin-top: 18px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .meta-pill {
+    border: 1px solid var(--line);
+    background: var(--surface-muted);
+    border-radius: 999px;
+    padding: 9px 13px;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .hero-side {
+    padding: 22px;
+    display: grid;
+    gap: 16px;
+    align-content: start;
+  }
+
+  .hero-side h2,
+  .panel-head h2,
+  .footer-card h2 {
+    font-size: 1.05rem;
+  }
+
+  .hero-side p,
+  .hero-side li,
+  .panel-copy,
+  .callout,
+  .footer-card,
+  .status,
+  .helper {
+    font-size: 0.96rem;
+    line-height: 1.6;
+  }
+
+  .hero-side ul,
+  .panel ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  .hero-side li,
+  .panel li {
+    margin: 8px 0;
+    color: var(--muted);
+  }
+
+  body.dark .doc-card summary:hover {
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.9fr);
+    gap: 22px;
+  }
+
+  .tool-stack,
+  .info-stack {
+    display: grid;
+    gap: 18px;
+  }
+
+  .panel {
+    overflow: hidden;
+  }
+
+  .panel-head {
+    padding: 20px 22px;
+    border-bottom: 1px solid rgba(221, 213, 201, 0.85);
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    align-items: start;
+    flex-wrap: wrap;
+  }
+
+  .panel-head small,
+  .muted {
+    color: var(--muted);
+  }
+
+  .panel-body {
+    padding: 20px 22px 22px;
+  }
+
+  .toolbar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .toolbar-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  button,
+  select,
+  input[type="text"],
+  input[type="file"] {
+    font: inherit;
+  }
+
+  button,
+  .button-link {
+    appearance: none;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--ink);
+    padding: 10px 15px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 150ms ease, background 150ms ease, border-color 150ms ease;
+  }
+
+  button:hover:not(:disabled),
+  .button-link:hover,
+  button:focus-visible,
+  .button-link:focus-visible {
+    transform: translateY(-1px);
+    border-color: var(--brand);
+    outline: none;
+  }
+
+  button.primary {
+    background: var(--brand);
+    border-color: var(--brand);
+    color: var(--button-text);
+  }
+
+  button.primary:hover:not(:disabled),
+  button.primary:focus-visible {
+    background: #0a2238;
+    border-color: #0a2238;
+    color: #fff;
+  }
+
+  body.dark button.primary {
+    background: #eeeeee;
+    border-color: #eeeeee;
+    color: #111111;
+  }
+
+  body.dark button.primary:hover:not(:disabled),
+  body.dark button.primary:focus-visible {
+    background: #d6d6d6;
+    border-color: #d6d6d6;
+    color: #111111;
+  }
+
+  button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .dropzone {
+    width: 100%;
+    border: 2px dashed var(--line-strong);
+    border-radius: 16px;
+    padding: 30px 22px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(248, 245, 239, 0.9));
+    text-align: center;
+  }
+
+  .dropzone.dragover {
+    border-color: var(--brand);
+    background: linear-gradient(180deg, rgba(234, 241, 248, 0.95), rgba(255, 255, 255, 0.96));
+  }
+
+  body.dark .dropzone {
+    background: linear-gradient(180deg, rgba(26, 26, 26, 0.98), rgba(20, 20, 20, 0.98));
+  }
+
+  body.dark .dropzone.dragover {
+    background: linear-gradient(180deg, rgba(42, 42, 42, 0.98), rgba(24, 24, 24, 0.98));
+  }
+
+  .dropzone strong {
+    display: block;
+    font-size: 1.02rem;
+    margin-bottom: 8px;
+  }
+
+  .status {
+    min-height: 24px;
+    color: var(--muted);
+  }
+
+  .status.err { color: #8f1d1d; }
+  .status.ok { color: var(--ok); }
+
+  .split-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .field {
+    min-width: 0;
+  }
+
+  label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.94rem;
+    margin-bottom: 6px;
+  }
+
+  input[type="text"],
+  select {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 11px 12px;
+    background: #fff;
+    color: var(--ink);
+  }
+
+  input[type="text"]:focus-visible,
+  select:focus-visible {
+    outline: 2px solid rgba(16, 42, 67, 0.15);
+    border-color: var(--brand);
+  }
+
+  .helper {
+    color: var(--muted);
+  }
+
+  .preset-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .preset-item,
+  .doc-empty {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface-muted);
+    padding: 14px 15px;
+  }
+
+  .preset-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .preset-item strong {
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .doc-list {
+    display: grid;
+    gap: 14px;
+  }
+
+  .doc-card {
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--surface-muted);
+    overflow: hidden;
+  }
+
+  .doc-card summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 16px 18px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .doc-card summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .doc-card summary:hover {
+    background: rgba(16, 42, 67, 0.03);
+  }
+
+  .doc-heading {
+    min-width: 0;
+  }
+
+  .doc-title {
+    font-weight: 700;
+    word-break: break-word;
+  }
+
+  .doc-subtitle {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-top: 4px;
+  }
+
+  .doc-caret {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 11px;
+    font-size: 0.86rem;
+    white-space: nowrap;
+    background: #fff;
+  }
+
+  .doc-card[open] .doc-caret::before {
+    content: "Collapse";
+  }
+
+  .doc-card:not([open]) .doc-caret::before {
+    content: "Expand";
+  }
+
+  .doc-body {
+    padding: 0 18px 18px;
+    display: grid;
+    gap: 14px;
+  }
+
+  .mini-toolbar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: end;
+  }
+
+  .mini-toolbar .field {
+    flex: 1 1 240px;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #fff;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(221, 213, 201, 0.85);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    color: var(--muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  body.dark th,
+  body.dark td,
+  body.dark .footer-bottom {
+    border-color: rgba(51, 51, 51, 0.9);
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .checkbox-cell {
+    width: 92px;
+    white-space: nowrap;
+  }
+
+  .checkbox-wrap {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .count-cell {
+    width: 110px;
+    text-align: right;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .callout {
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    padding: 14px 15px;
+    background: #fff;
+  }
+
+  .callout strong {
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  .callout.info {
+    background: var(--brand-soft);
+    border-color: rgba(16, 42, 67, 0.12);
+  }
+
+  .callout.warn {
+    background: var(--warn-soft);
+    border-color: rgba(122, 75, 4, 0.15);
+  }
+
+  .callout.ok {
+    background: var(--ok-soft);
+    border-color: rgba(21, 94, 59, 0.12);
+  }
+
+  .footer-card {
+    margin-top: 24px;
+    padding: 22px;
+    display: grid;
+    gap: 16px;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .footer-card p,
+  .footer-card li {
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .footer-card ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  .footer-card a {
+    text-decoration: none;
+  }
+
+  .footer-bottom {
+    padding-top: 12px;
+    border-top: 1px solid rgba(221, 213, 201, 0.85);
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+
+  @media (max-width: 980px) {
+    .hero,
+    .layout,
+    .footer-grid,
+    .split-fields {
+      grid-template-columns: 1fr;
+    }
+
+    .page {
+      padding-top: 18px;
+    }
+  }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style id="lrt-shell">
+
+/* ── Prevent horizontal overflow on mobile ─────────────────── */
+/* overflow-x: clip (not hidden) — same visual clipping but does NOT create  */
+/* a new scroll container, so position:sticky on #lrt-nav continues to work. */
+html { overflow-x: clip; }
+body { overflow-x: clip; max-width: 100%; }
+
+/* ── Body + typography ─────────────────────────────────────── */
+body {
+  font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  background: #FFFFFF !important;
+}
+body.dark { background: #111111 !important; }
+:root      { --bg: #FFFFFF !important; }
+body.dark  { --bg: #111111 !important; }
+.container h1 {
+  font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.02em !important;
+}
+/* Hide tool's own dark toggle — replaced by navbar */
+.dark-toggle { display: none !important; }
+/* Widen + repad tool container to match main site proportions */
+.container {
+  max-width: min(900px, calc(100vw - 48px)) !important;
+  padding-left: 32px !important;
+  padding-right: 32px !important;
+  padding-bottom: 48px !important;
+}
+@media (max-width: 600px) {
+  .container { padding-left: 20px !important; padding-right: 20px !important; }
+}
+
+/* ── Navbar ─────────────────────────────────────────────────── */
+#lrt-nav {
+  position: sticky; top: 0; z-index: 9999;
+  height: 68px;
+  background: #FFFFFF;
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s, background .2s;
+  font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+#lrt-nav.lrt-scrolled          { border-bottom-color: #D0CEC9; }
+body.dark #lrt-nav             { background: #111111; }
+body.dark #lrt-nav.lrt-scrolled{ border-bottom-color: #333333; }
+
+#lrt-nav-inner {
+  max-width: min(1440px, calc(100vw - 64px));
+  margin: 0 auto; padding: 0 32px; height: 100%;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+#lrt-logo {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  font-size: 20px; font-weight: 400; letter-spacing: -0.01em;
+  color: #111111; text-decoration: none;
+  flex-shrink: 0; white-space: nowrap; transition: opacity .15s;
+}
+#lrt-logo:hover           { opacity: .65; }
+body.dark #lrt-logo       { color: #EEEEEE; }
+
+#lrt-nav-right { display: flex; align-items: center; gap: 6px; }
+
+.lrt-nav-link {
+  font-size: 15px; font-weight: 500; color: #3D3D3D;
+  text-decoration: none; padding: 5px 10px; border-radius: 4px;
+  transition: background .15s, color .15s; white-space: nowrap;
+}
+.lrt-nav-link:hover            { background: #F5F4F0; color: #111111; }
+.lrt-current                   { background: #F5F4F0; color: #111111; font-weight: 600; }
+body.dark .lrt-nav-link        { color: #AAAAAA; }
+body.dark .lrt-nav-link:hover  { background: #1A1A1A; color: #EEEEEE; }
+body.dark .lrt-current         { background: #1A1A1A; color: #EEEEEE; }
+
+/* GitHub icon link */
+.lrt-gh-link {
+  display: flex; align-items: center;
+  padding: 5px 6px; flex-shrink: 0;
+}
+.lrt-gh-link svg { width: 18px; height: 18px; display: block; }
+
+#lrt-nav-links { display: flex !important; align-items: center !important; gap: 6px !important; }
+
+/* ── Responsive nav: hamburger ──────────────────────────────── */
+#lrt-hamburger { display: none; position: relative; }
+
+#lrt-hamburger-btn {
+  all: unset !important;
+  -webkit-appearance: none !important; appearance: none !important;
+  background: transparent !important; border: none !important;
+  outline: none !important; box-sizing: border-box !important;
+  display: flex !important; align-items: center !important; justify-content: center !important;
+  width: 34px !important; height: 34px !important;
+  border-radius: 4px !important; cursor: pointer !important;
+  color: #3D3D3D !important; flex-shrink: 0 !important;
+  transition: background .15s, color .15s !important;
+}
+#lrt-hamburger-btn:hover         { background: #F5F4F0 !important; color: #111111 !important; }
+body.dark #lrt-hamburger-btn     { color: #AAAAAA !important; }
+body.dark #lrt-hamburger-btn:hover { background: #1A1A1A !important; color: #EEEEEE !important; }
+#lrt-hamburger-btn svg { width: 18px !important; height: 18px !important; display: block !important; pointer-events: none; }
+
+#lrt-hamburger-menu {
+  display: none;
+  position: absolute; top: calc(100% + 6px); right: 0;
+  background: #FFFFFF; border: 1px solid #D0CEC9;
+  border-radius: 8px; padding: 4px;
+  min-width: 180px; z-index: 99999;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  flex-direction: column; gap: 1px;
+}
+#lrt-hamburger-menu.lrt-open { display: flex; }
+body.dark #lrt-hamburger-menu { background: #1A1A1A; border-color: #333333; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+
+#lrt-hamburger-menu a,
+#lrt-hamburger-menu #lrt-hm-theme-btn {
+  all: unset !important; box-sizing: border-box !important;
+  display: flex !important; align-items: center !important; gap: 8px !important;
+  font-family: 'IBM Plex Sans', sans-serif !important;
+  font-size: 14px !important; font-weight: 500 !important;
+  color: #3D3D3D !important; text-decoration: none !important;
+  padding: 7px 10px !important; border-radius: 5px !important;
+  transition: background .12s, color .12s !important;
+  white-space: nowrap !important; width: 100% !important; cursor: pointer !important;
+}
+#lrt-hamburger-menu a:hover,
+#lrt-hamburger-menu #lrt-hm-theme-btn:hover { background: #F5F4F0 !important; color: #111111 !important; }
+#lrt-hamburger-menu a.lrt-current { background: #F5F4F0 !important; color: #111111 !important; font-weight: 600 !important; }
+body.dark #lrt-hamburger-menu a,
+body.dark #lrt-hamburger-menu #lrt-hm-theme-btn { color: #AAAAAA !important; }
+body.dark #lrt-hamburger-menu a:hover,
+body.dark #lrt-hamburger-menu #lrt-hm-theme-btn:hover { background: #242424 !important; color: #EEEEEE !important; }
+body.dark #lrt-hamburger-menu a.lrt-current { background: #242424 !important; color: #EEEEEE !important; }
+#lrt-hamburger-menu svg { width: 14px !important; height: 14px !important; display: block !important; flex-shrink: 0 !important; pointer-events: none; }
+
+.lrt-menu-divider { height: 1px !important; background: #E0DED8 !important; margin: 3px 4px !important; }
+body.dark .lrt-menu-divider { background: #333333 !important; }
+
+/* Theme toggle — fully reset to defeat tool button CSS + UA stylesheet */
+#lrt-theme-btn {
+  all: unset !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-sizing: border-box !important;
+  display: flex !important; align-items: center !important; justify-content: center !important;
+  width: 34px !important; height: 34px !important;
+  border-radius: 4px !important;
+  color: #3D3D3D !important;
+  cursor: pointer !important;
+  transition: background .15s, color .15s !important;
+  flex-shrink: 0 !important;
+}
+#lrt-theme-btn:hover           { background: #F5F4F0 !important; color: #111111 !important; }
+body.dark #lrt-theme-btn       { color: #AAAAAA !important; }
+body.dark #lrt-theme-btn:hover { background: #1A1A1A !important; color: #EEEEEE !important; }
+#lrt-theme-btn svg { width: 18px !important; height: 18px !important; display: block !important; pointer-events: none; }
+
+/* Show moon in light mode, sun in dark mode. */
+#lrt-theme-btn .lrt-moon { display: block !important; }
+#lrt-theme-btn .lrt-sun  { display: none  !important; }
+body.dark #lrt-theme-btn .lrt-moon { display: none  !important; }
+body.dark #lrt-theme-btn .lrt-sun  { display: block !important; }
+
+/* Media query last — must follow all base rules to correctly override display values */
+@media (max-width: 680px) {
+  #lrt-nav-links { display: none !important; }
+  .lrt-gh-link   { display: none !important; }
+  #lrt-theme-btn { display: none !important; }
+  #lrt-hamburger { display: block; }
+}
+
+/* ── Author section ─────────────────────────────────────────── */
+#lrt-author {
+  padding: 0 0 80px;
+  font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #FFFFFF;
+}
+body.dark #lrt-author { background: #111111; }
+#lrt-author-divider {
+  width: 100%; height: 2px; background: #D0CEC9; margin-bottom: 48px;
+}
+body.dark #lrt-author-divider { background: #333333; }
+
+#lrt-author-inner {
+  max-width: min(1440px, calc(100vw - 64px));
+  margin: 0 auto; padding: 0 32px;
+}
+#lrt-author-flex {
+  display: flex; gap: 32px; align-items: flex-start; max-width: 700px;
+}
+@media (max-width: 600px) { #lrt-author-flex { flex-direction: column; } }
+
+#lrt-avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  object-fit: cover; flex-shrink: 0;
+  box-shadow: 0 1px 2px rgba(0,0,0,.06);
+}
+#lrt-avatar-fallback {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: #111111; color: #FFFFFF;
+  font-family: 'Source Serif 4', Georgia, serif; font-size: 24px;
+  display: none; align-items: center; justify-content: center; flex-shrink: 0;
+}
+body.dark #lrt-avatar-fallback { background: #EEEEEE; color: #111111; }
+
+#lrt-author-name {
+  font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  font-size: 22px; font-weight: 400; letter-spacing: -0.01em;
+  color: #111111; margin-bottom: 8px;
+}
+body.dark #lrt-author-name { color: #EEEEEE; }
+
+#lrt-author-roles {
+  font-size: 14px; color: #3D3D3D; line-height: 1.7; margin-bottom: 12px;
+}
+body.dark #lrt-author-roles { color: #AAAAAA; }
+
+#lrt-author-pubs {
+  font-size: 14px; color: #888888; line-height: 1.65; margin-bottom: 16px;
+}
+#lrt-author-pubs em { font-style: italic; }
+body.dark #lrt-author-pubs { color: #666666; }
+
+#lrt-author-links { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.lrt-alink {
+  font-size: 14px; color: #111111; text-decoration: none; transition: opacity .15s;
+}
+.lrt-alink:hover { opacity: .65; }
+body.dark .lrt-alink { color: #EEEEEE; }
+.lrt-asep { color: #888888; font-size: 14px; }
+body.dark .lrt-asep { color: #666666; }
+
+/* ── Footer ─────────────────────────────────────────────────── */
+#lrt-footer {
+  border-top: 1px solid #D0CEC9;
+  padding: 56px 0 32px;
+  font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #FFFFFF;
+}
+body.dark #lrt-footer { border-top-color: #333333; background: #111111; }
+
+#lrt-footer-inner {
+  max-width: min(1440px, calc(100vw - 64px));
+  margin: 0 auto; padding: 0 32px;
+}
+#lrt-footer-grid {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 2rem; margin-bottom: 48px;
+}
+@media (max-width: 768px) {
+  #lrt-footer-grid { grid-template-columns: 1fr 1fr; }
+  .lrt-fbrand { grid-column: 1 / -1; }
+}
+@media (max-width: 480px) {
+  #lrt-footer-grid { grid-template-columns: 1fr; }
+  #lrt-nav-inner, #lrt-author-inner, #lrt-footer-inner { padding: 0 20px; }
+}
+.lrt-flogo {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 16px; color: #111111; text-decoration: none;
+  margin-bottom: 10px; transition: opacity .15s;
+}
+.lrt-flogo:hover { opacity: .7; }
+body.dark .lrt-flogo { color: #EEEEEE; }
+.lrt-ftagline { font-size: 13px; color: #888888; line-height: 1.6; }
+body.dark .lrt-ftagline { color: #666666; }
+.lrt-fcol { display: flex; flex-direction: column; gap: 10px; }
+.lrt-fheading {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; color: #888888; margin-bottom: 4px;
+}
+body.dark .lrt-fheading { color: #666666; }
+.lrt-flink { font-size: 14px; color: #3D3D3D; text-decoration: none; transition: color .15s; }
+.lrt-flink:hover { color: #111111; }
+body.dark .lrt-flink       { color: #AAAAAA; }
+body.dark .lrt-flink:hover { color: #EEEEEE; }
+#lrt-footer-bottom {
+  border-top: 1px solid #D0CEC9; padding-top: 24px;
+  font-size: 13px; color: #888888;
+}
+body.dark #lrt-footer-bottom { border-top-color: #333333; color: #666666; }
+#lrt-footer-bottom a { color: #3D3D3D; text-decoration: none; transition: color .15s; }
+#lrt-footer-bottom a:hover { color: #111111; }
+body.dark #lrt-footer-bottom a       { color: #AAAAAA; }
+body.dark #lrt-footer-bottom a:hover { color: #EEEEEE; }
+
+/* ══════════════════════════════════════════════════════════════
+   TOOL RESKIN — harmonize tool UI with lawreview.tools aesthetic
+   Overrides tool's cool-zinc palette with warm off-white palette.
+   Only visual properties changed; no layout or functionality affected.
+══════════════════════════════════════════════════════════════ */
+
+/* ── Warm palette CSS variable overrides (light mode) ─────── */
+:root {
+  --surface:        #FFFFFF !important;
+  --border:         #D0CEC9 !important;
+  --border-input:   #C0BDB8 !important;
+  --text:           #111111 !important;
+  --text-2:         #3D3D3D !important;
+  --text-muted:     #888888 !important;
+  --text-faint:     #BBBBBB !important;
+  --hover-bg:       #EDECEA !important;
+  --preview-bg:     #F0EFEB !important;
+  --divider:        #D0CEC9 !important;
+  --privacy-bg:     #F0FDF4 !important;
+  --privacy-border: #BBF7D0 !important;
+  --privacy-text:   #166534 !important;
+  --badge-personal: #EDECEA !important;
+  --progress-track: #D0CEC9 !important;
+  --wayback-bg:     #FFFBEB !important;
+  --wayback-border: #FDE68A !important;
+  --wayback-text:   #92400E !important;
+  --note-bg:        #FFFBEB !important;
+  --note-border:    #FDE68A !important;
+  --note-text:      #78350F !important;
+  --error-bg:       #FEF2F2 !important;
+  --error-border:   #FECACA !important;
+  --error-text:     #991B1B !important;
+  --warn-bg:        #FFFBEB !important;
+  --warn-border:    #FDE68A !important;
+  --warn-text:      #92400E !important;
+  --ok-bg:          #F0FDF4 !important;
+  --ok-border:      #BBF7D0 !important;
+  --ok-text:        #166534 !important;
+}
+
+/* ── Warm palette CSS variable overrides (dark mode) ──────── */
+body.dark {
+  --surface:        #1A1A1A !important;
+  --border:         #333333 !important;
+  --border-input:   #444444 !important;
+  --text:           #EEEEEE !important;
+  --text-2:         #AAAAAA !important;
+  --text-muted:     #777777 !important;
+  --text-faint:     #555555 !important;
+  --hover-bg:       #242424 !important;
+  --preview-bg:     #181818 !important;
+  --divider:        #333333 !important;
+  --privacy-bg:     #052E16 !important;
+  --privacy-border: #14532D !important;
+  --privacy-text:   #86EFAC !important;
+  --badge-personal: #333333 !important;
+  --progress-track: #333333 !important;
+  --wayback-bg:     #1C1408 !important;
+  --wayback-border: #78350F !important;
+  --wayback-text:   #FDE68A !important;
+  --note-bg:        #1C1408 !important;
+  --note-border:    #78350F !important;
+  --note-text:      #FDE68A !important;
+  --error-bg:       #1F0A0A !important;
+  --error-border:   #7F1D1D !important;
+  --error-text:     #FCA5A5 !important;
+  --warn-bg:        #1C1408 !important;
+  --warn-border:    #78350F !important;
+  --warn-text:      #FDE68A !important;
+  --ok-bg:          #052E16 !important;
+  --ok-border:      #14532D !important;
+  --ok-text:        #86EFAC !important;
+}
+
+/* ── Typography ────────────────────────────────────────────── */
+h1 {
+  font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif !important;
+  font-size: clamp(2rem, 4vw, 3rem) !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.1 !important;
+  color: #111111 !important;
+}
+body.dark h1 { color: #EEEEEE !important; }
+
+.card-title {
+  font-family: 'IBM Plex Sans', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: #888888 !important;
+}
+body.dark .card-title { color: #777777 !important; }
+
+.subtitle {
+  font-family: 'IBM Plex Sans', sans-serif !important;
+  font-size: 18px !important;
+  line-height: 1.65 !important;
+  color: #3D3D3D !important;
+  margin-bottom: 28px !important;
+}
+body.dark .subtitle { color: #AAAAAA !important; }
+
+/* ── Cards ─────────────────────────────────────────────────── */
+.card {
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+
+/* ── Step badges ────────────────────────────────────────────── */
+.step-badge.active {
+  background: #111111 !important;
+  color: #FFFFFF !important;
+}
+body.dark .step-badge.active {
+  background: #EEEEEE !important;
+  color: #111111 !important;
+}
+.step-badge.done {
+  background: transparent !important;
+  color: #166534 !important;
+  border: 2px solid #BBF7D0 !important;
+  font-size: 13px !important;
+}
+body.dark .step-badge.done {
+  color: #86EFAC !important;
+  border-color: #14532D !important;
+}
+
+/* ── Inputs ─────────────────────────────────────────────────── */
+input[type=password], input[type=text], input[type=email], input[type=url], textarea {
+  font-family: 'IBM Plex Sans', sans-serif !important;
+  border-radius: 6px !important;
+}
+input[type=password]:focus, input[type=text]:focus,
+input[type=email]:focus, input[type=url]:focus, textarea:focus {
+  border-color: #111111 !important;
+  box-shadow: 0 0 0 2px rgba(17,17,17,0.07) !important;
+}
+body.dark input[type=password]:focus, body.dark input[type=text]:focus,
+body.dark input[type=email]:focus, body.dark input[type=url]:focus, body.dark textarea:focus {
+  border-color: #EEEEEE !important;
+  box-shadow: 0 0 0 2px rgba(238,238,238,0.07) !important;
+}
+
+/* ── Buttons ────────────────────────────────────────────────── */
+button {
+  font-family: 'IBM Plex Sans', sans-serif !important;
+  border-radius: 6px !important;
+}
+.btn-primary {
+  background: #111111 !important;
+  color: #FFFFFF !important;
+}
+.btn-primary:hover:not(:disabled) { opacity: 0.82 !important; }
+.btn-primary:disabled { background: #BBBBBB !important; }
+body.dark .btn-primary { background: #EEEEEE !important; color: #111111 !important; }
+body.dark .btn-primary:disabled { background: #444444 !important; color: #777777 !important; }
+.btn-success { background: #166534 !important; color: #FFFFFF !important; }
+.btn-success:hover:not(:disabled) { background: #14532D !important; }
+body.dark .btn-success { background: #22C55E !important; color: #111111 !important; }
+.btn-ghost { border-color: var(--border) !important; }
+
+/* ── Drop zone ──────────────────────────────────────────────── */
+.drop-zone { border-radius: 6px !important; }
+.drop-zone:hover, .drop-zone.dragover { border-color: #111111 !important; }
+body.dark .drop-zone:hover, body.dark .drop-zone.dragover { border-color: #EEEEEE !important; }
+
+/* ── URL items, file chips, folder options ──────────────────── */
+.url-item    { border-radius: 6px !important; }
+.file-chip   { border-radius: 6px !important; }
+.file-group  { border-radius: 6px !important; }
+.folder-option { border-radius: 6px !important; }
+.folder-option.selected { border-color: #111111 !important; }
+body.dark .folder-option.selected { border-color: #EEEEEE !important; }
+
+/* ── Progress bar fill ──────────────────────────────────────── */
+.progress-fill { background: #111111 !important; }
+body.dark .progress-fill { background: #EEEEEE !important; }
+
+/* ── SupraDrop: stat boxes ──────────────────────────────────── */
+.stat-box { border-radius: 6px !important; }
+.stat-box .stat-val {
+  font-family: 'Source Serif 4', Georgia, serif !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* ── SupraDrop: issue groups ────────────────────────────────── */
+.issue-group { border-radius: 6px !important; }
+
+/* ── SupraDrop: tabs ────────────────────────────────────────── */
+.tab-btn {
+  font-family: 'IBM Plex Sans', sans-serif !important;
+  border-radius: 4px !important;
+}
+.tab-btn.active {
+  background: #111111 !important;
+  color: #FFFFFF !important;
+  border-color: #111111 !important;
+}
+body.dark .tab-btn.active {
+  background: #EEEEEE !important;
+  color: #111111 !important;
+  border-color: #EEEEEE !important;
+}
+
+/* ── SupraDrop: sister banner & all-clear ───────────────────── */
+.sister-banner { border-radius: 6px !important; }
+.all-clear     { border-radius: 6px !important; }
+.note-box      { border-radius: 6px !important; }
+.privacy-note  { border-radius: 6px !important; }
+
+/* ── Wayback button ─────────────────────────────────────────── */
+.btn-wayback { border-radius: 4px !important; }
+
+/* ── Toast ──────────────────────────────────────────────────── */
+.toast { border-radius: 6px !important; }
+.toast-success { background: #111111 !important; }
+body.dark .toast-success { background: #EEEEEE !important; color: #111111 !important; }
+
+</style>
+</head>
+<body>
+<!-- ══ lawreview.tools navbar ═══════════════════════════════ -->
+<nav id="lrt-nav" aria-label="lawreview.tools">
+  <div id="lrt-nav-inner">
+    <a href="https://lawreview.tools/" id="lrt-logo">
+      <span aria-hidden="true">⚖</span>lawreview.tools
+    </a>
+    <div id="lrt-nav-right">
+      <!-- Wide: individual tool links -->
+      <div id="lrt-nav-links">
+        <a href="https://lawreview.tools/zotero" class="lrt-nav-link">Zotero Plugin</a>
+        <a href="https://lawreview.tools/permadrop/" class="lrt-nav-link">PermaDrop</a>
+        <a href="https://lawreview.tools/supradrop/" class="lrt-nav-link">SupraDrop</a>
+        <a href="https://lawreview.tools/docx-redline-name-cleaner/" class="lrt-nav-link lrt-current">Redline Cleaner</a>
+      </div>
+      <a href="https://github.com/kirinccchang" target="_blank" rel="noopener noreferrer"
+         class="lrt-nav-link lrt-gh-link" aria-label="GitHub"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></a>
+      <button id="lrt-theme-btn" aria-label="Toggle dark mode">
+        <svg class="lrt-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="lrt-sun"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+      <!-- Narrow: hamburger -->
+      <div id="lrt-hamburger">
+        <button id="lrt-hamburger-btn" aria-label="Open menu" aria-expanded="false" aria-haspopup="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div id="lrt-hamburger-menu" role="menu">
+          <a href="https://lawreview.tools/zotero">Zotero Plugin</a>
+          <a href="https://lawreview.tools/permadrop/">PermaDrop</a>
+          <a href="https://lawreview.tools/supradrop/">SupraDrop</a>
+          <a href="https://lawreview.tools/docx-redline-name-cleaner/" class="lrt-current">Redline Cleaner</a>
+          <div class="lrt-menu-divider" role="separator"></div>
+          <a href="https://github.com/kirinccchang" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>GitHub
+          </a>
+          <button id="lrt-hm-theme-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><span id="lrt-hm-theme-label">Dark mode</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+<!-- ══ end navbar ═══════════════════════════════════════════ -->
+<script id="lrt-sync">
+(function () {
+  // Scroll → border
+  var nav = document.getElementById('lrt-nav');
+  if (nav) window.addEventListener('scroll', function () {
+    nav.classList.toggle('lrt-scrolled', window.scrollY > 10);
+  }, { passive: true });
+
+  // On Alpine init: apply stored theme preference
+  document.addEventListener('alpine:initialized', function () {
+    var stored = localStorage.getItem('theme');
+    if (stored) {
+      var wantsDark = stored === 'dark';
+      var isDark    = document.body.classList.contains('dark');
+      if (wantsDark !== isDark) {
+        var tb = document.querySelector('.dark-toggle');
+        if (tb) tb.click();
+      }
+    }
+  });
+
+  // Persist any dark-mode change to localStorage
+  new MutationObserver(function () {
+    localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+  }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+  // Navbar toggle → forward to tool's hidden button
+  document.addEventListener('DOMContentLoaded', function () {
+    var btn = document.getElementById('lrt-theme-btn');
+    if (btn) btn.addEventListener('click', function () {
+      var tb = document.querySelector('.dark-toggle');
+      if (tb) tb.click(); else document.body.classList.toggle('dark');
+    });
+
+    // Hamburger toggle
+    var hBtn  = document.getElementById('lrt-hamburger-btn');
+    var hMenu = document.getElementById('lrt-hamburger-menu');
+    if (hBtn && hMenu) {
+      hBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var open = hMenu.classList.toggle('lrt-open');
+        hBtn.setAttribute('aria-expanded', String(open));
+      });
+      document.addEventListener('click', function () {
+        hMenu.classList.remove('lrt-open');
+        hBtn.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    // Theme toggle inside hamburger
+    var hmBtn   = document.getElementById('lrt-hm-theme-btn');
+    var hmLabel = document.getElementById('lrt-hm-theme-label');
+    function syncHmLabel() {
+      if (hmLabel) hmLabel.textContent = document.body.classList.contains('dark') ? 'Light mode' : 'Dark mode';
+    }
+    syncHmLabel();
+    if (hmBtn) {
+      hmBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var tb = document.querySelector('.dark-toggle');
+        if (tb) tb.click(); else document.body.classList.toggle('dark');
+        syncHmLabel();
+      });
+    }
+    new MutationObserver(syncHmLabel).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  });
+}());
+</script>
+
+<script>
+(() => {
+  try {
+    const stored = window.localStorage.getItem("theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const theme = stored || (prefersDark ? "dark" : "light");
+    if (theme === "dark") {
+      document.body.classList.add("dark");
+    }
+  } catch (error) {
+    // Ignore localStorage or media-query failures and fall back to light mode.
+  }
+})();
+</script>
+<main class="page">
+  <div class="shell">
+    <section class="hero">
+      <article class="hero-card hero-copy">
+        <div class="eyebrow">Submission Phase · Cleanup</div>
+        <h1>Redline Name Cleaner</h1>
+        <p>
+          Standardize comment and tracked-change names in Word documents before you share them
+          externally. Rename internal editors, research assistants, or other review identities into
+          a clean outward-facing label without sending the document to any server.
+        </p>
+        <div class="hero-meta">
+          <span class="meta-pill">Free &amp; open source</span>
+          <span class="meta-pill">100% in-browser</span>
+          <span class="meta-pill">Multiple files supported</span>
+        </div>
+      </article>
+
+      <aside class="hero-card hero-side">
+        <div>
+          <h2>What It Does</h2>
+          <ul>
+            <li>Detects comment and revision names across one or more <code>.docx</code> files.</li>
+            <li>Lets you keep file-specific settings separate so different documents are never mixed together.</li>
+            <li>Makes author merges explicit before download, so no identity collapse happens by surprise.</li>
+          </ul>
+        </div>
+        <div class="callout info">
+          <strong>Privacy</strong>
+          Your documents are processed directly in your browser. No file is uploaded. No server receives your document content.
+        </div>
+      </aside>
+    </section>
+
+    <section class="layout">
+      <div class="tool-stack">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <small>1</small>
+              <h2>Upload Word Document(s)</h2>
+            </div>
+            <div class="toolbar-group">
+              <button type="button" id="addFilesBtn">Add files</button>
+              <button type="button" id="downloadAllBtn">Download all edited files</button>
+              <button type="button" id="clearAllBtn">Clear all</button>
+            </div>
+          </div>
+          <div class="panel-body">
+            <button type="button" class="dropzone" id="dropzone">
+              <strong>Click to choose or drag &amp; drop <code>.docx</code> files</strong>
+              <span class="muted">Multiple files allowed. Files stay in your browser.</span>
+            </button>
+            <input type="file" id="fileInput" accept=".docx" multiple hidden>
+            <div id="uploadStatus" class="status" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <small>2</small>
+              <h2>Saved Presets In This Browser</h2>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="split-fields">
+              <div class="field">
+                <label for="presetLabel">Preset label</label>
+                <input id="presetLabel" type="text" placeholder="Example: Public editor identity" autocomplete="off">
+              </div>
+              <div class="field">
+                <label for="presetValue">Replacement name</label>
+                <input id="presetValue" type="text" placeholder="Example: NYU Law Review" autocomplete="off">
+              </div>
+            </div>
+            <div class="toolbar" style="margin-top:14px;">
+              <div class="helper">Save a replacement name you use often, then apply it to selected people inside any file.</div>
+              <button type="button" id="savePresetBtn">Save preset</button>
+            </div>
+            <div id="presetStatus" class="status" aria-live="polite"></div>
+            <div id="presetList" class="preset-list"></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <small>3</small>
+              <h2>Review Detected Names</h2>
+            </div>
+            <div class="panel-copy muted">Each file keeps its own selections and replacement names.</div>
+          </div>
+          <div class="panel-body">
+            <div id="documentList" class="doc-list"></div>
+            <div id="emptyState" class="doc-empty muted">
+              No documents loaded yet. Add one or more <code>.docx</code> files to begin.
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="info-stack">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>How To Use</h2>
+            </div>
+          </div>
+          <div class="panel-body">
+            <ul>
+              <li>Upload one file or a batch of files.</li>
+              <li>Open a file card to review the names Word found in comments and tracked changes.</li>
+              <li>Select only the people you want to unify, then apply a typed name or a saved preset.</li>
+              <li>Download each edited file separately, or bundle all edited files into one zip.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Important Merge Behavior</h2>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="callout warn">
+              <strong>Word treats exact output matches as one visible identity.</strong>
+              If two or more original names in the same document are changed to the exact same replacement name,
+              Word will display those comments and revisions as coming from the same visible author identity.
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Sister Tools</h2>
+            </div>
+          </div>
+          <div class="panel-body">
+            <ul>
+              <li><a href="https://lawreview.tools/permadrop/">PermaDrop</a> batch-archives URLs in Word documents to perma.cc.</li>
+              <li><a href="https://lawreview.tools/supradrop/">SupraDrop</a> audits Bluebook citation logic across footnotes.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Status</h2>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div id="sideSummary" class="callout ok">
+              <strong>Ready</strong>
+              Upload files to start building per-document name mappings.
+            </div>
+          </div>
+        </section>
+      </aside>
+    </section>
+</div>
+</main>
+
+<script>
+(() => {
+  "use strict";
+
+  const STORAGE_KEY = "redlineNameCleaner.presets";
+  const THEME_STORAGE_KEY = "theme";
+  const XML_FILE_SUFFIX = ".xml";
+  const AUTHOR_TAG_RE = /<[^>]*\bw:author="[^"]*"[^>]*>/g;
+  const AUTHOR_ATTR_RE = /\bw:author="([^"]*)"/;
+  const INITIALS_ATTR_RE = /\bw:initials="([^"]*)"/;
+  const AUTHOR_ATTR_GLOBAL_RE = /\bw:author="([^"]*)"/g;
+
+  const elements = {
+    dropzone: document.getElementById("dropzone"),
+    fileInput: document.getElementById("fileInput"),
+    addFilesBtn: document.getElementById("addFilesBtn"),
+    downloadAllBtn: document.getElementById("downloadAllBtn"),
+    clearAllBtn: document.getElementById("clearAllBtn"),
+    uploadStatus: document.getElementById("uploadStatus"),
+    presetLabel: document.getElementById("presetLabel"),
+    presetValue: document.getElementById("presetValue"),
+    savePresetBtn: document.getElementById("savePresetBtn"),
+    presetStatus: document.getElementById("presetStatus"),
+    presetList: document.getElementById("presetList"),
+    documentList: document.getElementById("documentList"),
+    emptyState: document.getElementById("emptyState"),
+    sideSummary: document.getElementById("sideSummary"),
+    themeToggle: document.querySelector(".dark-toggle")
+  };
+
+  const state = {
+    documents: [],
+    nextId: 1,
+    presets: []
+  };
+
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function decodeXmlEntities(value) {
+    return String(value)
+      .replace(/&quot;/g, "\"")
+      .replace(/&apos;/g, "'")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&#(\d+);/g, (_, codePoint) => String.fromCodePoint(Number.parseInt(codePoint, 10)))
+      .replace(/&#x([0-9a-fA-F]+);/g, (_, codePoint) => String.fromCodePoint(Number.parseInt(codePoint, 16)))
+      .replace(/&amp;/g, "&");
+  }
+
+  function encodeXmlAttribute(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function normalizeOutputName(value) {
+    return String(value || "").trim();
+  }
+
+  function deriveInitials(name) {
+    const normalized = String(name || "").trim().replace(/\s+/g, " ");
+    if (!normalized) return "";
+
+    const asciiWords = normalized.match(/[A-Za-z0-9]+/g) || [];
+    if (asciiWords.length > 1) {
+      return asciiWords.slice(0, 4).map((word) => word[0].toUpperCase()).join("");
+    }
+
+    if (asciiWords.length === 1 && asciiWords[0].length <= 8) {
+      return asciiWords[0].slice(0, 8);
+    }
+
+    return Array.from(normalized.replace(/\s+/g, "")).slice(0, 4).join("");
+  }
+
+  function getXmlPartNames(zip) {
+    return Object.keys(zip.files).filter((name) => !zip.files[name].dir && name.toLowerCase().endsWith(XML_FILE_SUFFIX));
+  }
+
+  function summarizeAuthors(authors) {
+    const total = authors.reduce((sum, author) => sum + author.count, 0);
+    const authorLabel = authors.length === 1 ? "author" : "authors";
+    const refLabel = total === 1 ? "review reference" : "review references";
+    return `${authors.length} ${authorLabel}, ${total} ${refLabel}`;
+  }
+
+  function setUploadStatus(message, tone = "") {
+    elements.uploadStatus.textContent = message || "";
+    elements.uploadStatus.className = tone ? `status ${tone}` : "status";
+  }
+
+  function setPresetStatus(message, tone = "") {
+    elements.presetStatus.textContent = message || "";
+    elements.presetStatus.className = tone ? `status ${tone}` : "status";
+  }
+
+  function setSideSummary(title, body, tone = "ok") {
+    elements.sideSummary.className = `callout ${tone}`;
+    elements.sideSummary.innerHTML = `<strong>${escapeHtml(title)}</strong>${escapeHtml(body)}`;
+  }
+
+  function applyTheme(theme) {
+    const nextTheme = theme === "dark" ? "dark" : "light";
+    document.body.classList.toggle("dark", nextTheme === "dark");
+    if (elements.themeToggle) {
+      elements.themeToggle.textContent = nextTheme === "dark" ? "Light mode" : "Dark mode";
+    }
+    try {
+      window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+    } catch (error) {
+      // Ignore persistence failures; the current session theme still applies.
+    }
+  }
+
+  async function loadZipFromBuffer(buffer) {
+    return window.JSZip.loadAsync(buffer.slice(0));
+  }
+
+  function loadPresets() {
+    try {
+      const raw = window.localStorage.getItem(STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(parsed)) return [];
+      return parsed
+        .filter((preset) => preset && typeof preset.id === "string" && typeof preset.label === "string" && typeof preset.value === "string")
+        .map((preset) => ({
+          id: preset.id,
+          label: preset.label.trim(),
+          value: preset.value.trim()
+        }))
+        .filter((preset) => preset.label && preset.value);
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  }
+
+  function persistPresets() {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state.presets));
+  }
+
+  function createDocumentRecord(file, buffer, authors) {
+    return {
+      id: String(state.nextId++),
+      file,
+      originalBuffer: buffer,
+      authors,
+      statusMessage: "",
+      statusTone: "",
+      bulkName: "",
+      presetId: "",
+      mappings: Object.fromEntries(authors.map((author) => [author.name, ""])),
+      selected: Object.fromEntries(authors.map((author) => [author.name, false])),
+      isBusy: false,
+      isExpanded: true
+    };
+  }
+
+  function getDocumentById(id) {
+    return state.documents.find((document) => document.id === id) || null;
+  }
+
+  function getSelectedAuthors(documentRecord) {
+    return documentRecord.authors.filter((author) => documentRecord.selected[author.name]);
+  }
+
+  function getMappingEntries(documentRecord) {
+    return documentRecord.authors
+      .map((author) => {
+        const replacement = normalizeOutputName(documentRecord.mappings[author.name]);
+        return replacement && replacement !== author.name ? [author.name, replacement] : null;
+      })
+      .filter(Boolean);
+  }
+
+  function getFinalName(documentRecord, originalName) {
+    const replacement = normalizeOutputName(documentRecord.mappings[originalName]);
+    return replacement || originalName;
+  }
+
+  function computeMergeGroups(documentRecord) {
+    const groups = new Map();
+    for (const author of documentRecord.authors) {
+      const finalName = getFinalName(documentRecord, author.name);
+      const originals = groups.get(finalName) || [];
+      originals.push(author.name);
+      groups.set(finalName, originals);
+    }
+    return Array.from(groups.entries())
+      .filter(([, originals]) => originals.length > 1)
+      .sort((left, right) => right[1].length - left[1].length || left[0].localeCompare(right[0]));
+  }
+
+  function getDocumentElement(documentId) {
+    return elements.documentList.querySelector(`details[data-document-id="${CSS.escape(documentId)}"]`);
+  }
+
+  function updateDocumentPreview(documentRecord) {
+    const root = getDocumentElement(documentRecord.id);
+    if (!root) return;
+
+    const mergeGroups = computeMergeGroups(documentRecord);
+    const preview = root.querySelector("[data-role='merge-preview']");
+    const status = root.querySelector("[data-role='document-status']");
+
+    if (preview) {
+      preview.className = `callout ${mergeGroups.length ? "warn" : "info"}`;
+      preview.innerHTML = mergeGroups.length
+        ? `<strong>Merge preview</strong>${mergeGroups.map(([finalName, originals]) => {
+          const list = originals.map(escapeHtml).join(", ");
+          return `The output name <code>${escapeHtml(finalName)}</code> would combine ${originals.length} original identities: ${list}.`;
+        }).join("<br>")}`
+        : "<strong>Merge preview</strong>No merged identities are currently detected.";
+    }
+
+    if (status) {
+      status.className = documentRecord.statusTone ? `status ${documentRecord.statusTone}` : "status";
+      status.textContent = documentRecord.statusMessage;
+    }
+  }
+
+  function renderPresets() {
+    elements.presetList.replaceChildren();
+
+    if (!state.presets.length) {
+      const empty = document.createElement("div");
+      empty.className = "doc-empty muted";
+      empty.textContent = "No saved presets yet. Save a name you want to reuse later.";
+      elements.presetList.appendChild(empty);
+      return;
+    }
+
+    for (const preset of state.presets) {
+      const item = document.createElement("div");
+      item.className = "preset-item";
+      item.innerHTML = `
+        <div>
+          <strong>${escapeHtml(preset.label)}</strong>
+          <div class="muted">${escapeHtml(preset.value)}</div>
+        </div>
+        <button type="button" data-action="delete-preset" data-preset-id="${preset.id}">Delete</button>
+      `;
+      elements.presetList.appendChild(item);
+    }
+  }
+
+  function renderDocuments() {
+    elements.documentList.replaceChildren();
+    elements.emptyState.style.display = state.documents.length ? "none" : "block";
+
+    for (const documentRecord of state.documents) {
+      const mergeGroups = computeMergeGroups(documentRecord);
+      const mergeHtml = mergeGroups.length
+        ? mergeGroups.map(([finalName, originals]) => {
+          const list = originals.map(escapeHtml).join(", ");
+          return `The output name <code>${escapeHtml(finalName)}</code> would combine ${originals.length} original identities: ${list}.`;
+        }).join("<br>")
+        : "No merged identities are currently detected.";
+
+      const presetOptions = [
+        '<option value="">Choose a saved preset</option>',
+        ...state.presets.map((preset) => `
+          <option value="${escapeHtml(preset.id)}" ${documentRecord.presetId === preset.id ? "selected" : ""}>
+            ${escapeHtml(preset.label)}
+          </option>
+        `)
+      ].join("");
+
+      const rowsHtml = documentRecord.authors.map((author) => `
+        <tr>
+          <td class="checkbox-cell">
+            <label class="checkbox-wrap">
+              <input
+                type="checkbox"
+                data-action="toggle-author"
+                data-document-id="${documentRecord.id}"
+                data-author="${escapeHtml(author.name)}"
+                ${documentRecord.selected[author.name] ? "checked" : ""}
+              >
+              <span>Select</span>
+            </label>
+          </td>
+          <td>
+            <strong>${escapeHtml(author.name)}</strong>
+            <div class="muted">Leave the replacement blank to keep this name unchanged.</div>
+          </td>
+          <td>
+            <input
+              type="text"
+              value="${escapeHtml(documentRecord.mappings[author.name] || "")}"
+              placeholder="Leave blank to keep original"
+              autocomplete="off"
+              data-action="mapping-input"
+              data-document-id="${documentRecord.id}"
+              data-author="${escapeHtml(author.name)}"
+            >
+          </td>
+          <td class="count-cell">${author.count}</td>
+        </tr>
+      `).join("");
+
+      const details = document.createElement("details");
+      details.className = "doc-card";
+      details.dataset.documentId = documentRecord.id;
+      if (documentRecord.isExpanded) details.open = true;
+
+      details.innerHTML = `
+        <summary>
+          <div class="doc-heading">
+            <div class="doc-title">${escapeHtml(documentRecord.file.name)}</div>
+            <div class="doc-subtitle">${escapeHtml(summarizeAuthors(documentRecord.authors))}</div>
+          </div>
+          <span class="doc-caret"></span>
+        </summary>
+        <div class="doc-body">
+          <div class="mini-toolbar">
+            <div class="field">
+              <label for="bulk-name-${documentRecord.id}">Unified name for selected people</label>
+              <input
+                id="bulk-name-${documentRecord.id}"
+                type="text"
+                value="${escapeHtml(documentRecord.bulkName)}"
+                placeholder="Example: NYU Law Review or Professor Smith"
+                autocomplete="off"
+                data-action="bulk-input"
+                data-document-id="${documentRecord.id}"
+              >
+            </div>
+            <button type="button" data-action="apply-bulk" data-document-id="${documentRecord.id}">Apply typed name</button>
+          </div>
+
+          <div class="mini-toolbar">
+            <div class="field">
+              <label for="preset-select-${documentRecord.id}">Saved preset</label>
+              <select id="preset-select-${documentRecord.id}" data-action="preset-select" data-document-id="${documentRecord.id}">
+                ${presetOptions}
+              </select>
+            </div>
+            <button type="button" data-action="apply-preset" data-document-id="${documentRecord.id}">Apply preset</button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th class="checkbox-cell">Select</th>
+                  <th>Original name</th>
+                  <th>Replacement name</th>
+                  <th class="count-cell">Count</th>
+                </tr>
+              </thead>
+              <tbody>${rowsHtml}</tbody>
+            </table>
+          </div>
+
+          <div class="callout ${mergeGroups.length ? "warn" : "info"}" data-role="merge-preview">
+            <strong>Merge preview</strong>
+            ${mergeHtml}
+          </div>
+
+          <div class="toolbar">
+            <div class="toolbar-group">
+              <button type="button" data-action="select-all" data-document-id="${documentRecord.id}">Select all</button>
+              <button type="button" data-action="select-none" data-document-id="${documentRecord.id}">Select none</button>
+              <button type="button" data-action="clear-mappings" data-document-id="${documentRecord.id}">Clear replacement names</button>
+              <button type="button" data-action="remove-document" data-document-id="${documentRecord.id}">Remove file</button>
+            </div>
+            <button type="button" class="primary" data-action="download-document" data-document-id="${documentRecord.id}" ${documentRecord.isBusy ? "disabled" : ""}>
+              ${documentRecord.isBusy ? "Working…" : "Apply changes and download"}
+            </button>
+          </div>
+
+          <div class="status ${documentRecord.statusTone}" data-role="document-status">${escapeHtml(documentRecord.statusMessage)}</div>
+        </div>
+      `;
+
+      elements.documentList.appendChild(details);
+    }
+  }
+
+  function updateOverallStatus() {
+    if (!state.documents.length) {
+      setSideSummary("Ready", "Upload files to start building per-document name mappings.");
+      return;
+    }
+    const totalFiles = state.documents.length;
+    const totalAuthors = state.documents.reduce((sum, doc) => sum + doc.authors.length, 0);
+    setSideSummary(
+      "Files loaded",
+      `${totalFiles} file${totalFiles === 1 ? "" : "s"} loaded with ${totalAuthors} detected name identities in total.`
+    );
+  }
+
+  function updateDocumentStatus(documentRecord, message, tone = "") {
+    documentRecord.statusMessage = message;
+    documentRecord.statusTone = tone;
+    renderDocuments();
+  }
+
+  async function parseFiles(fileList) {
+    const files = Array.from(fileList || []);
+    if (!files.length) return;
+
+    setUploadStatus("Reading document metadata…");
+    const messages = [];
+
+    for (const file of files) {
+      if (!file.name.toLowerCase().endsWith(".docx")) {
+        messages.push(`${file.name}: skipped because it is not a .docx file.`);
+        continue;
+      }
+
+      if (state.documents.some((record) => record.file.name === file.name && record.file.size === file.size && record.file.lastModified === file.lastModified)) {
+        messages.push(`${file.name}: skipped because this file is already loaded.`);
+        continue;
+      }
+
+      try {
+        const buffer = await file.arrayBuffer();
+        const zip = await loadZipFromBuffer(buffer);
+        const counts = new Map();
+
+        for (const partName of getXmlPartNames(zip)) {
+          const xml = await zip.file(partName).async("string");
+          for (const match of xml.matchAll(AUTHOR_ATTR_GLOBAL_RE)) {
+            const authorName = decodeXmlEntities(match[1]).trim();
+            if (!authorName) continue;
+            counts.set(authorName, (counts.get(authorName) || 0) + 1);
+          }
+        }
+
+        if (!counts.size) {
+          messages.push(`${file.name}: no comment or revision names were found.`);
+          continue;
+        }
+
+        const authors = Array.from(counts.entries())
+          .map(([name, count]) => ({ name, count }))
+          .sort((left, right) => right.count - left.count || left.name.localeCompare(right.name));
+
+        const documentRecord = createDocumentRecord(file, buffer, authors);
+        for (const record of state.documents) record.isExpanded = false;
+        state.documents.push(documentRecord);
+        messages.push(`${file.name}: loaded successfully.`);
+      } catch (error) {
+        console.error(error);
+        messages.push(`${file.name}: could not be opened as a valid .docx archive.`);
+      }
+    }
+
+    renderDocuments();
+    updateOverallStatus();
+    const hasProblem = messages.some((message) => message.includes("skipped") || message.includes("could not") || message.includes("no comment"));
+    setUploadStatus(messages.join(" "), hasProblem ? "err" : "ok");
+  }
+
+  function savePreset() {
+    const label = normalizeOutputName(elements.presetLabel.value);
+    const value = normalizeOutputName(elements.presetValue.value);
+
+    if (!label || !value) {
+      setPresetStatus("Enter both a preset label and a replacement name.", "err");
+      return;
+    }
+
+    const existing = state.presets.find((preset) => preset.label.toLowerCase() === label.toLowerCase());
+    if (existing) {
+      existing.value = value;
+    } else {
+      state.presets.unshift({
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        label,
+        value
+      });
+    }
+
+    persistPresets();
+    renderPresets();
+    renderDocuments();
+    elements.presetLabel.value = "";
+    elements.presetValue.value = "";
+    setPresetStatus(`Saved preset "${label}" in this browser.`, "ok");
+  }
+
+  function applyBulkName(documentId) {
+    const documentRecord = getDocumentById(documentId);
+    if (!documentRecord) return;
+
+    const bulkName = normalizeOutputName(documentRecord.bulkName);
+    if (!bulkName) {
+      updateDocumentStatus(documentRecord, "Enter a unified name before applying it.", "err");
+      return;
+    }
+
+    const selectedAuthors = getSelectedAuthors(documentRecord);
+    if (!selectedAuthors.length) {
+      updateDocumentStatus(documentRecord, "Select at least one person before applying the name.", "err");
+      return;
+    }
+
+    for (const author of selectedAuthors) {
+      documentRecord.mappings[author.name] = bulkName;
+    }
+
+    updateDocumentStatus(
+      documentRecord,
+      `Applied ${bulkName} to ${selectedAuthors.length} selected ${selectedAuthors.length === 1 ? "person" : "people"}.`,
+      "ok"
+    );
+  }
+
+  function applySavedPreset(documentId) {
+    const documentRecord = getDocumentById(documentId);
+    if (!documentRecord) return;
+
+    const preset = state.presets.find((item) => item.id === documentRecord.presetId);
+    if (!preset) {
+      updateDocumentStatus(documentRecord, "Choose a saved preset before applying it.", "err");
+      return;
+    }
+
+    documentRecord.bulkName = preset.value;
+    applyBulkName(documentId);
+  }
+
+  async function buildUpdatedBlob(documentRecord) {
+    const mappingEntries = getMappingEntries(documentRecord);
+    if (!mappingEntries.length) {
+      throw new Error("No name changes are currently queued for this file.");
+    }
+
+    const mapping = new Map(mappingEntries);
+    const workingZip = await loadZipFromBuffer(documentRecord.originalBuffer);
+    let replacementCount = 0;
+    let changedPartCount = 0;
+
+    for (const partName of getXmlPartNames(workingZip)) {
+      const originalXml = await workingZip.file(partName).async("string");
+      let partWasChanged = false;
+
+      const updatedXml = originalXml.replace(AUTHOR_TAG_RE, (tag) => {
+        const authorMatch = tag.match(AUTHOR_ATTR_RE);
+        if (!authorMatch) return tag;
+
+        const currentAuthor = decodeXmlEntities(authorMatch[1]).trim();
+        const replacementAuthor = mapping.get(currentAuthor);
+        if (!replacementAuthor) return tag;
+
+        partWasChanged = true;
+        replacementCount += 1;
+
+        let updatedTag = tag.replace(
+          AUTHOR_ATTR_RE,
+          `w:author="${encodeXmlAttribute(replacementAuthor)}"`
+        );
+
+        if (INITIALS_ATTR_RE.test(updatedTag)) {
+          updatedTag = updatedTag.replace(
+            INITIALS_ATTR_RE,
+            `w:initials="${encodeXmlAttribute(deriveInitials(replacementAuthor))}"`
+          );
+        }
+
+        return updatedTag;
+      });
+
+      if (partWasChanged) {
+        changedPartCount += 1;
+        workingZip.file(partName, updatedXml);
+      }
+    }
+
+    if (!replacementCount) {
+      throw new Error("No matching author metadata entries were found to update.");
+    }
+
+    const blob = await workingZip.generateAsync({
+      type: "blob",
+      compression: "DEFLATE",
+      mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    });
+
+    return {
+      blob,
+      replacementCount,
+      changedPartCount,
+      downloadName: documentRecord.file.name.replace(/\.docx$/i, "") + "_cleaned.docx"
+    };
+  }
+
+  async function downloadDocument(documentId) {
+    const documentRecord = getDocumentById(documentId);
+    if (!documentRecord) return;
+
+    documentRecord.isBusy = true;
+    documentRecord.statusMessage = "Rewriting comment and revision names…";
+    documentRecord.statusTone = "";
+    renderDocuments();
+
+    try {
+      const { blob, replacementCount, changedPartCount, downloadName } = await buildUpdatedBlob(documentRecord);
+      const objectUrl = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = downloadName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(objectUrl), 2000);
+
+      documentRecord.statusMessage = `Done. Updated ${replacementCount} review references across ${changedPartCount} XML part${changedPartCount === 1 ? "" : "s"}.`;
+      documentRecord.statusTone = "ok";
+      setSideSummary("Download complete", `${documentRecord.file.name} was exported as ${downloadName}.`, "ok");
+    } catch (error) {
+      console.error(error);
+      documentRecord.statusMessage = `Failed to apply changes: ${error && error.message ? error.message : String(error)}`;
+      documentRecord.statusTone = "err";
+      setSideSummary("Processing failed", `Something went wrong while rewriting ${documentRecord.file.name}.`, "warn");
+    } finally {
+      documentRecord.isBusy = false;
+      renderDocuments();
+    }
+  }
+
+  async function downloadAllEditedFiles() {
+    const eligibleDocuments = state.documents.filter((documentRecord) => getMappingEntries(documentRecord).length > 0);
+    if (!eligibleDocuments.length) {
+      setUploadStatus("There are no queued edits to batch-download yet.", "err");
+      return;
+    }
+
+    elements.downloadAllBtn.disabled = true;
+    setUploadStatus("Building a zip of all edited files…");
+
+    try {
+      const batchZip = new window.JSZip();
+      for (const documentRecord of eligibleDocuments) {
+        const { blob, downloadName } = await buildUpdatedBlob(documentRecord);
+        batchZip.file(downloadName, blob);
+      }
+
+      const zipBlob = await batchZip.generateAsync({ type: "blob", compression: "DEFLATE" });
+      const objectUrl = URL.createObjectURL(zipBlob);
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = "docx-redline-name-cleaner-batch.zip";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(objectUrl), 2000);
+
+      setUploadStatus(`Downloaded ${eligibleDocuments.length} edited file${eligibleDocuments.length === 1 ? "" : "s"} as one zip archive.`, "ok");
+      setSideSummary("Batch download complete", `${eligibleDocuments.length} edited files were bundled into one zip archive.`, "ok");
+    } catch (error) {
+      console.error(error);
+      setUploadStatus(`Batch download failed: ${error && error.message ? error.message : String(error)}`, "err");
+      setSideSummary("Batch download failed", "The edited files could not be bundled successfully.", "warn");
+    } finally {
+      elements.downloadAllBtn.disabled = false;
+    }
+  }
+
+  function clearAllDocuments() {
+    state.documents = [];
+    elements.fileInput.value = "";
+    renderDocuments();
+    updateOverallStatus();
+    setUploadStatus("All loaded documents have been cleared.");
+  }
+
+  function handleDocumentListClick(event) {
+    const target = event.target.closest("[data-action]");
+    if (!target) return;
+
+    const { action, documentId } = target.dataset;
+    const documentRecord = getDocumentById(documentId);
+
+    if (action === "remove-document" && documentRecord) {
+      state.documents = state.documents.filter((item) => item.id !== documentId);
+      if (state.documents.length === 1) state.documents[0].isExpanded = true;
+      renderDocuments();
+      updateOverallStatus();
+      return;
+    }
+
+    if (!documentRecord) return;
+
+    if (action === "select-all") {
+      for (const author of documentRecord.authors) documentRecord.selected[author.name] = true;
+      renderDocuments();
+      return;
+    }
+
+    if (action === "select-none") {
+      for (const author of documentRecord.authors) documentRecord.selected[author.name] = false;
+      renderDocuments();
+      return;
+    }
+
+    if (action === "clear-mappings") {
+      for (const author of documentRecord.authors) documentRecord.mappings[author.name] = "";
+      documentRecord.bulkName = "";
+      documentRecord.statusMessage = "Replacement names cleared for this file.";
+      documentRecord.statusTone = "";
+      renderDocuments();
+      return;
+    }
+
+    if (action === "apply-bulk") {
+      applyBulkName(documentId);
+      return;
+    }
+
+    if (action === "apply-preset") {
+      applySavedPreset(documentId);
+      return;
+    }
+
+    if (action === "download-document") {
+      downloadDocument(documentId);
+    }
+  }
+
+  function handleDocumentListInput(event) {
+    const target = event.target;
+    const action = target.dataset.action;
+    const documentId = target.dataset.documentId;
+    const documentRecord = getDocumentById(documentId);
+    if (!documentRecord) return;
+
+    if (action === "mapping-input") {
+      documentRecord.mappings[target.dataset.author] = target.value;
+      documentRecord.statusMessage = "";
+      documentRecord.statusTone = "";
+      updateDocumentPreview(documentRecord);
+      return;
+    }
+
+    if (action === "bulk-input") {
+      documentRecord.bulkName = target.value;
+      return;
+    }
+
+    if (action === "preset-select") {
+      documentRecord.presetId = target.value;
+      return;
+    }
+
+    if (action === "toggle-author") {
+      documentRecord.selected[target.dataset.author] = Boolean(target.checked);
+      updateDocumentPreview(documentRecord);
+    }
+  }
+
+  function handleDocumentToggle(event) {
+    const details = event.target.closest("details[data-document-id]");
+    if (!details) return;
+    const documentRecord = getDocumentById(details.dataset.documentId);
+    if (!documentRecord) return;
+    documentRecord.isExpanded = details.open;
+  }
+
+  function handlePresetListClick(event) {
+    const target = event.target.closest("[data-action='delete-preset']");
+    if (!target) return;
+
+    const presetId = target.dataset.presetId;
+    state.presets = state.presets.filter((preset) => preset.id !== presetId);
+    persistPresets();
+
+    for (const documentRecord of state.documents) {
+      if (documentRecord.presetId === presetId) {
+        documentRecord.presetId = "";
+      }
+    }
+
+    renderPresets();
+    renderDocuments();
+    setPresetStatus("Preset removed from this browser.");
+  }
+
+  elements.dropzone.addEventListener("click", () => elements.fileInput.click());
+  elements.addFilesBtn.addEventListener("click", () => elements.fileInput.click());
+  elements.downloadAllBtn.addEventListener("click", downloadAllEditedFiles);
+  elements.clearAllBtn.addEventListener("click", clearAllDocuments);
+  elements.savePresetBtn.addEventListener("click", savePreset);
+  elements.themeToggle?.addEventListener("click", () => {
+    applyTheme(document.body.classList.contains("dark") ? "light" : "dark");
+  });
+
+  elements.dropzone.addEventListener("dragover", (event) => {
+    event.preventDefault();
+    elements.dropzone.classList.add("dragover");
+  });
+
+  elements.dropzone.addEventListener("dragleave", () => {
+    elements.dropzone.classList.remove("dragover");
+  });
+
+  elements.dropzone.addEventListener("drop", (event) => {
+    event.preventDefault();
+    elements.dropzone.classList.remove("dragover");
+    parseFiles(event.dataTransfer.files);
+  });
+
+  elements.fileInput.addEventListener("change", (event) => {
+    parseFiles(event.target.files);
+    elements.fileInput.value = "";
+  });
+
+  elements.documentList.addEventListener("click", handleDocumentListClick);
+  elements.documentList.addEventListener("input", handleDocumentListInput);
+  elements.documentList.addEventListener("change", handleDocumentListInput);
+  elements.documentList.addEventListener("toggle", handleDocumentToggle, true);
+  elements.presetList.addEventListener("click", handlePresetListClick);
+
+  state.presets = loadPresets();
+  applyTheme(document.body.classList.contains("dark") ? "dark" : "light");
+  renderPresets();
+  renderDocuments();
+  updateOverallStatus();
+
+  if (!window.JSZip) {
+    elements.dropzone.disabled = true;
+    elements.addFilesBtn.disabled = true;
+    elements.downloadAllBtn.disabled = true;
+    elements.savePresetBtn.disabled = true;
+    setUploadStatus("JSZip failed to load. Confirm that assets/vendor/jszip.min.js is present in the repository.", "err");
+    setSideSummary("Library unavailable", "The page could not load JSZip, so .docx processing is currently disabled.", "warn");
+  }
+})();
+</script>
+<!-- ══ lawreview.tools author section ══════════════════════ -->
+<section id="lrt-author">
+  <div id="lrt-author-inner">
+    <div id="lrt-author-divider"></div>
+    <div id="lrt-author-flex">
+      <img
+        src="https://lawreview.tools/avatar.jpeg"
+        alt="Kirin Chang"
+        id="lrt-avatar"
+        width="80" height="80"
+        onerror="this.style.display='none';document.getElementById('lrt-avatar-fallback').style.display='flex';"
+      />
+      <div id="lrt-avatar-fallback" aria-hidden="true">KC</div>
+      <div>
+        <h2 id="lrt-author-name">Built by Kirin Chang</h2>
+        <p id="lrt-author-roles">
+          Research Fellow, U.S.-Asia Law Institute · NYU School of Law<br>
+          Affiliate Research Fellow, AI &amp; the Future of Work · Emory Law<br>
+          Member of the New York and Texas Bars
+        </p>
+        <p id="lrt-author-pubs">
+          Appeared or is forthcoming in print and online journals and books with the
+          <em>NYU Law Review</em>, <em>UCLA Law Review</em>,
+          <em>Georgetown Law Journal</em>, <em>Minnesota Law Review</em>,
+          <em>University of Illinois Law Review</em>, <em>Wisconsin Law Review</em>,
+          <em>University of Pennsylvania Journal of International Law</em>,
+          among others.
+        </p>
+        <div id="lrt-author-links">
+          <a href="https://kirinchang.com" target="_blank" rel="noopener" class="lrt-alink">kirinchang.com</a>
+          <span class="lrt-asep">·</span>
+          <a href="https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=5438024" target="_blank" rel="noopener" class="lrt-alink">SSRN</a>
+          <span class="lrt-asep">·</span>
+          <a href="https://scholar.google.com/citations?user=D-z05L0AAAAJ&amp;hl=en" target="_blank" rel="noopener" class="lrt-alink">Google Scholar</a>
+          <span class="lrt-asep">·</span>
+          <a href="https://github.com/kirinccchang" target="_blank" rel="noopener" class="lrt-alink">GitHub</a>
+          <span class="lrt-asep">·</span>
+          <a href="https://twitter.com/chengchi_chang" target="_blank" rel="noopener" class="lrt-alink">@chengchi_chang</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ══ end author section ═══════════════════════════════════ -->
+<!-- ══ lawreview.tools footer ══════════════════════════════ -->
+<footer id="lrt-footer">
+  <div id="lrt-footer-inner">
+    <div id="lrt-footer-grid">
+      <div class="lrt-fbrand">
+        <a href="https://lawreview.tools/" class="lrt-flogo">
+          <span aria-hidden="true">⚖</span> lawreview.tools
+        </a>
+        <p class="lrt-ftagline">Free, private Bluebook tools<br>for law review editors<br>and legal scholars.</p>
+      </div>
+      <div class="lrt-fcol">
+        <div class="lrt-fheading">Tools</div>
+        <a href="https://lawreview.tools/zotero" class="lrt-flink">Zotero Plugin</a>
+        <a href="https://lawreview.tools/permadrop/" class="lrt-flink">PermaDrop</a>
+        <a href="https://lawreview.tools/supradrop/" class="lrt-flink">SupraDrop</a>
+        <a href="https://lawreview.tools/docx-redline-name-cleaner/" class="lrt-flink">Redline Cleaner</a>
+      </div>
+      <div class="lrt-fcol">
+        <div class="lrt-fheading">This Tool</div>
+        <a href="https://github.com/kirinccchang/docx-redline-name-cleaner" target="_blank" rel="noopener" class="lrt-flink">Source Code</a>
+        <a href="https://github.com/kirinccchang/docx-redline-name-cleaner/releases" target="_blank" rel="noopener" class="lrt-flink">Releases</a>
+        <a href="https://github.com/kirinccchang/docx-redline-name-cleaner/issues" target="_blank" rel="noopener" class="lrt-flink">Report a Bug</a>
+      </div>
+      <div class="lrt-fcol">
+        <div class="lrt-fheading">Legal</div>
+        <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener" class="lrt-flink">AGPL v3 License</a>
+        <a href="https://lawreview.tools/privacy" class="lrt-flink">Privacy Policy</a>
+      </div>
+    </div>
+    <div id="lrt-footer-bottom">
+      © 2026 <a href="https://kirinchang.com/" target="_blank" rel="noopener">Kirin Chang</a> · <a href="https://lawreview.tools/">lawreview.tools</a> · Open source under AGPL v3
+      <div style="margin-top:6px; font-size:11px; opacity:0.6;">Not affiliated with or endorsed by The Bluebook, Zotero, or perma.cc.</div>
+    </div>
+  </div>
+</footer>
+<!-- ══ end footer ═══════════════════════════════════════════ -->
+</body>
+</html>
