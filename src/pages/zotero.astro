@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Navbar from '../layouts/Navbar.astro';
+import Footer from '../layouts/Footer.astro';
 import release from '../data/zotero-release.json';
 const ver    = release.version ?? '1.3.2';
 const xpiUrl = release.xpiUrl;
@@ -544,38 +545,7 @@ const jsonLd = {
   </div>
 </section>
 
-<!-- ── FOOTER ──────────────────────────────────────────────── -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <a href="/" class="footer-logo"><span aria-hidden="true">⚖</span> lawreview.tools</a>
-        <p class="footer-tagline">Free, private Bluebook tools<br>for law review editors<br>and legal scholars.</p>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-title">Tools</div>
-        <a href="/permadrop/" class="footer-link">PermaDrop</a>
-        <a href="/supradrop/" class="footer-link">SupraDrop</a>
-        <a href="/zotero" class="footer-link">Zotero Plugin</a>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-title">Resources</div>
-        <a href="https://github.com/kirinccchang" target="_blank" rel="noopener" class="footer-link">GitHub</a>
-        <a href="/zotero" class="footer-link">Docs</a>
-        <a href="https://github.com/kirinccchang/zotero-perma-archiver/releases" target="_blank" rel="noopener" class="footer-link">Changelog</a>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-title">Legal</div>
-        <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener" class="footer-link">AGPL v3 License</a>
-        <a href="/privacy" class="footer-link">Privacy Policy</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      © 2026 <a href="https://kirinchang.com/" target="_blank" rel="noopener">Kirin Chang</a> · <a href="/">lawreview.tools</a> · Open source under AGPL v3
-      <div style="margin-top:6px; font-size:11px; color:var(--text-subtle); opacity:0.6;">Not affiliated with or endorsed by The Bluebook, Zotero, or perma.cc.</div>
-    </div>
-  </div>
-</footer>
+<Footer currentId="zotero" />
 
 </Base>
 

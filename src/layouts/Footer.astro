@@ -1,0 +1,46 @@
+---
+import { siteTools } from '../data/tools.js';
+
+export interface Props {
+  /** If provided, shows a Resources column with links for that tool */
+  currentId?: string;
+}
+
+const { currentId } = Astro.props;
+const currentTool = currentId ? siteTools.find(t => t.id === currentId) : null;
+const repoUrl = currentTool ? `https://github.com/${currentTool.repo}` : null;
+---
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="footer-logo"><span aria-hidden="true">⚖</span> lawreview.tools</a>
+        <p class="footer-tagline">Free, private Bluebook tools<br>for law review editors<br>and legal scholars.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Tools</div>
+        {siteTools.map(t => (
+          <a href={t.href} class="footer-link">{t.navLabel}</a>
+        ))}
+      </div>
+      {currentTool && repoUrl && (
+        <div class="footer-col">
+          <div class="footer-col-title">Resources</div>
+          <a href={currentTool.href} class="footer-link">This Tool</a>
+          <a href={repoUrl} target="_blank" rel="noopener" class="footer-link">Source Code</a>
+          <a href={`${repoUrl}/releases`} target="_blank" rel="noopener" class="footer-link">Releases</a>
+          <a href={`${repoUrl}/issues`} target="_blank" rel="noopener" class="footer-link">Report a Bug</a>
+        </div>
+      )}
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener" class="footer-link">AGPL v3 License</a>
+        <a href="/privacy" class="footer-link">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 <a href="https://kirinchang.com/" target="_blank" rel="noopener">Kirin Chang</a> · <a href="/">lawreview.tools</a> · Open source under AGPL v3
+      <div style="margin-top:6px; font-size:11px; color:var(--text-subtle); opacity:0.6;">Not affiliated with or endorsed by The Bluebook, Zotero, or perma.cc.</div>
+    </div>
+  </div>
+</footer>
