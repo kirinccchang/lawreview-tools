@@ -789,9 +789,10 @@ function transform(html, tool) {
     );
 
   if (tool.id === 'docx-redline-name-cleaner') {
-    html = html
-      .replace(/<header class="site-header">[\s\S]*?<\/header>\s*/i, '')
-      .replace(/\s*<section class="footer-card">[\s\S]*?<\/section>\s*/i, '\n');
+    // Strip native slim footer (shell injects its own)
+    html = html.replace(/<footer id="tool-footer">[\s\S]*?<\/footer>\s*/i, '');
+    // Strip inline theme-init script (shell SYNC_SCRIPT handles theme sync)
+    html = html.replace(/<script>\s*\(\(\) => \{[\s\S]*?document\.body\.classList\.add\("dark"\)[\s\S]*?\}\)\(\);\s*<\/script>\s*/i, '');
   }
 
   html = html.replace('</head>', SHELL_CSS + '\n</head>');

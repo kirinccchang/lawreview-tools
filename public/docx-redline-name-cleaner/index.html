@@ -1424,20 +1424,28 @@ body.dark .toast-success { background: #EEEEEE !important; color: #111111 !impor
 }());
 </script>
 
-<script>
-(() => {
-  try {
-    const stored = window.localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const theme = stored || (prefersDark ? "dark" : "light");
-    if (theme === "dark") {
-      document.body.classList.add("dark");
-    }
-  } catch (error) {
-    // Ignore localStorage or media-query failures and fall back to light mode.
-  }
-})();
-</script>
+<header class="site-header">
+  <div class="shell site-header-inner">
+    <a class="site-brand" href="https://lawreview.tools/">
+      <span class="site-brand-mark">⚖</span>
+      <span class="site-brand-text">
+        <strong>lawreview.tools</strong>
+        <span>Free, private Bluebook tools</span>
+      </span>
+    </a>
+    <nav class="site-nav" aria-label="Tool navigation">
+      <a class="nav-pill" href="https://lawreview.tools/zotero-perma-archiver/">Zotero Plugin</a>
+      <a class="nav-pill" href="https://lawreview.tools/permadrop/">PermaDrop</a>
+      <a class="nav-pill" href="https://lawreview.tools/supradrop/">SupraDrop</a>
+      <span class="nav-pill is-current">Redline Name Cleaner</span>
+    </nav>
+    <div class="site-actions">
+      <button type="button" class="dark-toggle" aria-label="Toggle dark mode">Dark mode</button>
+      <a class="ghost-link" href="https://github.com/kirinccchang/docx-redline-name-cleaner">GitHub</a>
+    </div>
+  </div>
+</header>
+
 <main class="page">
   <div class="shell">
     <section class="hero">
@@ -1601,7 +1609,43 @@ body.dark .toast-success { background: #EEEEEE !important; color: #111111 !impor
         </section>
       </aside>
     </section>
-</div>
+
+    <section class="footer-card">
+      <div class="footer-grid">
+        <div>
+          <h2>lawreview.tools</h2>
+          <p>Free, private Bluebook tools for law review editors and legal scholars.</p>
+        </div>
+        <div>
+          <h2>Tools</h2>
+          <ul>
+            <li><a href="https://lawreview.tools/zotero-perma-archiver/">Zotero Plugin</a></li>
+            <li><a href="https://lawreview.tools/permadrop/">PermaDrop</a></li>
+            <li><a href="https://lawreview.tools/supradrop/">SupraDrop</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>This Tool</h2>
+          <ul>
+            <li><a href="https://github.com/kirinccchang/docx-redline-name-cleaner">Source Code</a></li>
+            <li><a href="https://github.com/kirinccchang/docx-redline-name-cleaner/releases">Releases</a></li>
+            <li><a href="https://github.com/kirinccchang/docx-redline-name-cleaner/issues">Report a Bug</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Legal</h2>
+          <ul>
+            <li><a href="LICENSE">AGPL v3 License</a></li>
+            <li><a href="THIRD_PARTY_LICENSES.md">Third-party Licenses</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        © 2026 <a href="https://kirinchang.com">Kirin Chang</a> · <a href="https://lawreview.tools/">lawreview.tools</a> · Open source under AGPL v3
+      </div>
+    </section>
+  </div>
 </main>
 
 <script>
