@@ -76,7 +76,7 @@ export const siteTools = [
     href: '/docx-redline-name-cleaner/',
     fullUrl: 'https://lawreview.tools/docx-redline-name-cleaner/',
     repo: 'kirinccchang/docx-redline-name-cleaner',
-    phase: 'SUBMISSION PHASE · CLEANUP',
+    phase: 'REVIEW PHASE · IDENTITY CLEANUP',
     tagline: 'Standardize visible review identities before circulation.',
     statusLabel: 'Live',
     statusVariant: 'live',
