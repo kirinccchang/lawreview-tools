@@ -212,52 +212,40 @@ const jsonLd = [
             <span><strong>Reply Draft.docx</strong> — 3 review identities found</span>
           </div>
           <div class="mock-word-layout">
-            <div class="mock-word-body" aria-hidden="true">
-              <div class="mock-word-text-row mock-word-text-row-long"></div>
-              <div class="mock-word-text-row mock-word-text-row-mid"></div>
-
-              <div class="mock-word-anchor-row">
-                <span class="mock-word-anchor-del">Jane Editor</span>
-                <span class="mock-word-anchor-ins">Princeton Law Review</span>
-                <span class="mock-word-connector"></span>
+            <!-- Document body -->
+            <div class="mock-word-body">
+              <div class="mock-word-line mock-word-line-full"></div>
+              <div class="mock-word-line mock-word-line-full"></div>
+              <div class="mock-word-line mock-word-line-med"></div>
+              <div class="mock-word-inline">
+                <span class="mock-word-del">Jane Editor</span><span class="mock-word-ins">Princeton Law Review</span>
               </div>
-
-              <div class="mock-word-text-row mock-word-text-row-mid"></div>
-
-              <div class="mock-word-anchor-row">
-                <span class="mock-word-anchor-del">Research Assistant 2</span>
-                <span class="mock-word-anchor-ins">Princeton Law Review</span>
-                <span class="mock-word-connector"></span>
+              <div class="mock-word-line mock-word-line-full"></div>
+              <div class="mock-word-line mock-word-line-short"></div>
+              <div class="mock-word-inline">
+                <span class="mock-word-del">Research Assistant 2</span><span class="mock-word-ins">Princeton Law Review</span>
               </div>
-
-              <div class="mock-word-text-row mock-word-text-row-short"></div>
-
-              <div class="mock-word-anchor-row">
-                <span class="mock-word-anchor-del">Prof. Smith</span>
-                <span class="mock-word-anchor-ins">Princeton Law Review</span>
-                <span class="mock-word-connector"></span>
-              </div>
+              <div class="mock-word-line mock-word-line-full"></div>
+              <div class="mock-word-line mock-word-line-med"></div>
             </div>
-
-            <div class="mock-word-sidebar" aria-hidden="true">
-              <div class="mock-word-comment-card">
-                <div class="mock-word-comment-author">Law Review Editorial Team</div>
-                <div class="mock-word-comment-body"><strong>Deleted:</strong> Jane Editor</div>
+            <!-- Sidebar bubbles -->
+            <div class="mock-word-sidebar">
+              <div class="mock-bubble mock-bubble-edit">
+                <div class="mock-bubble-author">J. Editor</div>
+                <div class="mock-bubble-action">Formatted: Author → <em>Princeton Law Review</em></div>
               </div>
-
-              <div class="mock-word-comment-card">
-                <div class="mock-word-comment-author">Law Review Editorial Team</div>
-                <div class="mock-word-comment-body"><strong>Deleted:</strong> Research Assistant 2</div>
+              <div class="mock-bubble mock-bubble-edit">
+                <div class="mock-bubble-author">RA2</div>
+                <div class="mock-bubble-action">Formatted: Author → <em>Princeton Law Review</em></div>
               </div>
-
-              <div class="mock-word-comment-card">
-                <div class="mock-word-comment-author">Law Review Editorial Team</div>
-                <div class="mock-word-comment-body"><strong>Deleted:</strong> Prof. Smith</div>
+              <div class="mock-bubble mock-bubble-keep">
+                <div class="mock-bubble-author">Prof. Smith</div>
+                <div class="mock-bubble-action">Unchanged</div>
               </div>
             </div>
           </div>
           <div class="mock-card-footer">
-            <span class="mock-status">Redline Name Cleaner · Review-phase identity cleanup</span>
+            <span class="mock-status">Redline Name Cleaner · Private .docx cleanup</span>
           </div>
         </div>
       </div>
