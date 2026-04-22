@@ -734,6 +734,125 @@
   font-family: var(--font-body);
 }
 
+/* -- Redline Cleaner Mock (Word sidebar style) ------------ */
+.mock-card-word .mock-word-layout {
+  display: flex;
+  gap: 0;
+  min-height: 130px;
+}
+
+.mock-word-body {
+  flex: 1;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border-right: 2px solid #D0CEC9;
+  min-width: 0;
+}
+
+[data-theme="dark"] .mock-word-body {
+  border-right-color: rgba(255,255,255,0.1);
+}
+
+.mock-word-line {
+  height: 7px;
+  border-radius: 3px;
+  background: var(--border);
+}
+.mock-word-line-full { width: 100%; }
+.mock-word-line-med  { width: 72%; }
+.mock-word-line-short{ width: 45%; }
+
+.mock-word-inline {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+
+.mock-word-del {
+  font-size: 10px;
+  color: #DC2626;
+  text-decoration: line-through;
+  font-family: var(--font-mono);
+}
+
+.mock-word-ins {
+  font-size: 10px;
+  color: #1D6AE5;
+  text-decoration: underline;
+  font-family: var(--font-mono);
+}
+
+[data-theme="dark"] .mock-word-ins { color: #60A5FA; }
+[data-theme="dark"] .mock-word-del { color: #F87171; }
+
+.mock-word-sidebar {
+  width: 130px;
+  flex-shrink: 0;
+  padding: 8px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #F9F9F8;
+}
+
+[data-theme="dark"] .mock-word-sidebar {
+  background: rgba(255,255,255,0.03);
+}
+
+.mock-bubble {
+  border-radius: 3px;
+  padding: 5px 7px;
+  border-left: 3px solid transparent;
+  font-family: var(--font-body);
+}
+
+.mock-bubble-edit {
+  background: #EFF6FF;
+  border-left-color: #1D6AE5;
+}
+
+[data-theme="dark"] .mock-bubble-edit {
+  background: rgba(29,106,229,0.12);
+  border-left-color: #60A5FA;
+}
+
+.mock-bubble-keep {
+  background: #F3F4F6;
+  border-left-color: #9CA3AF;
+}
+
+[data-theme="dark"] .mock-bubble-keep {
+  background: rgba(255,255,255,0.04);
+  border-left-color: #6B7280;
+}
+
+.mock-bubble-author {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+
+.mock-bubble-action {
+  font-size: 10px;
+  color: var(--text-subtle);
+  line-height: 1.3;
+}
+
+.mock-bubble-action em {
+  font-style: italic;
+  color: #1D6AE5;
+}
+
+[data-theme="dark"] .mock-bubble-action em {
+  color: #60A5FA;
+}
+
 /* -- TOOL LAUNCHER ---------------------------------------- */
 .tools-section {
   padding: 80px 0 96px;

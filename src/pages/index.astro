@@ -54,13 +54,13 @@ const jsonLd = [
     <!-- Left column: copy -->
     <div class="hero-copy">
       <h1 class="hero-h1 anim-1">
-        Stop Losing Citations<br>
-        to <span class="accent-text">Human Error.</span>
+        Stop Letting Manual Work<br>
+        Break Your <span class="accent-text">Manuscript.</span>
       </h1>
 
       <p class="hero-subtitle anim-2">
-        A free, open-source suite of Bluebook tools for law review editors and legal scholars.
-        No account. No upload. No tracking.
+        Free tools for legal scholars, professors, research assistants, and journal editors.
+        Archive citations, audit footnotes, clean redline identities — entirely in your browser.
         <a href="https://kirinchang.com" target="_blank" rel="noopener" class="built-at-nyu">Built at NYU Law.</a>
       </p>
 
@@ -206,28 +206,43 @@ const jsonLd = [
 
       <!-- Panel 3: Redline Name Cleaner -->
       <div class="mock-panel" data-panel="3">
-        <div class="mock-card">
+        <div class="mock-card mock-card-word">
           <div class="mock-card-header">
             <span style="font-size:15px;line-height:1">✎</span>
             <span><strong>Reply Draft.docx</strong> — 3 review identities found</span>
           </div>
-          <div class="mock-card-body">
-            <div class="mock-url-row">
-              <span class="mock-checkbox">☑</span>
-              <span class="mock-fn">edit</span>
-              <span class="mock-url-text">Jane Editor → NYU Law Review</span>
+          <div class="mock-word-layout">
+            <!-- Document body -->
+            <div class="mock-word-body">
+              <div class="mock-word-line mock-word-line-full"></div>
+              <div class="mock-word-line mock-word-line-full"></div>
+              <div class="mock-word-line mock-word-line-med"></div>
+              <div class="mock-word-inline">
+                <span class="mock-word-del">Jane Editor</span><span class="mock-word-ins">NYU Law Review</span>
+              </div>
+              <div class="mock-word-line mock-word-line-full"></div>
+              <div class="mock-word-line mock-word-line-short"></div>
+              <div class="mock-word-inline">
+                <span class="mock-word-del">Research Assistant 2</span><span class="mock-word-ins">NYU Law Review</span>
+              </div>
+              <div class="mock-word-line mock-word-line-full"></div>
+              <div class="mock-word-line mock-word-line-med"></div>
             </div>
-            <div class="mock-url-row">
-              <span class="mock-checkbox">☑</span>
-              <span class="mock-fn">edit</span>
-              <span class="mock-url-text">Research Assistant 2 → NYU Law Review</span>
+            <!-- Sidebar bubbles -->
+            <div class="mock-word-sidebar">
+              <div class="mock-bubble mock-bubble-edit">
+                <div class="mock-bubble-author">J. Editor</div>
+                <div class="mock-bubble-action">Formatted: Author → <em>NYU Law Review</em></div>
+              </div>
+              <div class="mock-bubble mock-bubble-edit">
+                <div class="mock-bubble-author">RA2</div>
+                <div class="mock-bubble-action">Formatted: Author → <em>NYU Law Review</em></div>
+              </div>
+              <div class="mock-bubble mock-bubble-keep">
+                <div class="mock-bubble-author">Prof. Smith</div>
+                <div class="mock-bubble-action">Unchanged</div>
+              </div>
             </div>
-            <div class="mock-url-row mock-url-row-dim">
-              <span class="mock-checkbox mock-checkbox-empty">☐</span>
-              <span class="mock-fn">keep</span>
-              <span class="mock-url-text">Professor Smith remains unchanged</span>
-            </div>
-            <div class="mock-perma-btn">Apply unified review name →</div>
           </div>
           <div class="mock-card-footer">
             <span class="mock-status">Redline Name Cleaner · Private .docx cleanup</span>
