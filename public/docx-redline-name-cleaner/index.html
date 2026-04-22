@@ -1,798 +1,279 @@
-<!doctype html>
+<!--
+  Redline Name Cleaner — Standardize reviewer names in Word redlines before circulation
+  Copyright (C) 2026 Kirin Chang <https://kirinchang.com>
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published
+  by the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU Affero General Public License for more details.
+
+  https://www.gnu.org/licenses/agpl-3.0.html
+-->
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Redline Name Cleaner — Review Identity Cleanup for Word</title>
-<meta name="description" content="Standardize comment and tracked-change names in Word documents before external circulation. Fully client-side, private, and open source.">
-<meta name="author" content="Kirin Chang">
-<link rel="canonical" href="https://lawreview.tools/docx-redline-name-cleaner/">
-<meta name="theme-color" content="#0C0C0B" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#F5F3EE" media="(prefers-color-scheme: light)">
-
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="lawreview.tools">
-<meta property="og:title" content="Redline Name Cleaner — Review Identity Cleanup for Word">
-<meta property="og:description" content="Standardize comment and tracked-change names in Word redlines before external circulation. 100% private and fully in-browser.">
-<meta property="og:url" content="https://lawreview.tools/docx-redline-name-cleaner/">
-<meta property="og:image" content="https://lawreview.tools/og-redline-name-cleaner.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Redline Name Cleaner — standardize Word review identities before sharing">
-<meta property="og:locale" content="en_US">
-
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:site" content="@chengchi_chang">
-<meta name="twitter:creator" content="@chengchi_chang">
-<meta name="twitter:title" content="Redline Name Cleaner — Review Identity Cleanup for Word">
-<meta name="twitter:description" content="Standardize comment and tracked-change names in Word redlines before external circulation. 100% private and fully in-browser.">
-<meta name="twitter:image" content="https://lawreview.tools/og-redline-name-cleaner.png">
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "Redline Name Cleaner",
-  "url": "https://lawreview.tools/docx-redline-name-cleaner/",
-  "description": "Standardize comment and tracked-change names in Word documents before external circulation. Fully client-side, private, and open source.",
-  "applicationCategory": "LegalApplication",
-  "applicationSubCategory": "Document Cleanup",
-  "operatingSystem": "Windows, macOS, Linux",
-  "browserRequirements": "Requires a modern web browser with JavaScript enabled",
-  "featureList": [
-    "Standardizes comment and tracked-change names in .docx files",
-    "Processes multiple Word documents in one batch",
-    "Stores reusable replacement-name presets in your browser",
-    "Exports cleaned files individually or as a zip archive",
-    "100% client-side — files never leave your browser"
-  ],
-  "image": "https://lawreview.tools/og-redline-name-cleaner.png",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  },
-  "license": "https://www.gnu.org/licenses/agpl-3.0.html",
-  "author": {
-    "@type": "Person",
-    "name": "Kirin Chang",
-    "url": "https://kirinchang.com"
-  }
-}
-</script>
-<script src="assets/vendor/jszip.min.js"></script>
-<style>
-  :root {
-    --bg: #f5f3ee;
-    --surface: #ffffff;
-    --surface-muted: #fcfaf6;
-    --ink: #171717;
-    --muted: #5f5b55;
-    --line: #ddd5c9;
-    --line-strong: #cfc3b2;
-    --brand: #102a43;
-    --brand-soft: #eaf1f8;
-    --accent: #7b2f2f;
-    --accent-soft: #f8eaea;
-    --ok: #155e3b;
-    --ok-soft: #e7f4ec;
-    --warn: #7a4b04;
-    --warn-soft: #fff4db;
-    --button-text: #171717;
-    --shadow: 0 18px 44px rgba(16, 42, 67, 0.08);
-    --radius: 18px;
-    --radius-sm: 12px;
-    --max: 1180px;
-    --font-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
-    --font-ui: "SF Pro Text", "Segoe UI", system-ui, sans-serif;
-  }
-
-  body.dark {
-    --bg: #111111;
-    --surface: #1a1a1a;
-    --surface-muted: #181818;
-    --ink: #eeeeee;
-    --muted: #aaaaaa;
-    --line: #333333;
-    --line-strong: #444444;
-    --brand: #eeeeee;
-    --brand-soft: #202020;
-    --accent: #f0b4b4;
-    --accent-soft: #2a1818;
-    --ok: #86efac;
-    --ok-soft: #052e16;
-    --warn: #facc15;
-    --warn-soft: #1c1408;
-    --button-text: #111111;
-    --shadow: none;
-    color-scheme: dark;
-  }
-
-  * { box-sizing: border-box; }
-
-  html, body {
-    margin: 0;
-    min-height: 100%;
-    background:
-      radial-gradient(circle at top left, rgba(16, 42, 67, 0.06), transparent 24%),
-      linear-gradient(180deg, #f8f5f0 0%, #f3efe8 100%);
-    color: var(--ink);
-    font-family: var(--font-ui);
-  }
-
-  body.dark {
-    background:
-      radial-gradient(circle at top left, rgba(255, 255, 255, 0.04), transparent 24%),
-      linear-gradient(180deg, #111111 0%, #171717 100%);
-  }
-
-  a {
-    color: inherit;
-  }
-
-  .shell {
-    width: min(var(--max), calc(100% - 24px));
-    margin: 0 auto;
-  }
-
-  .site-header {
-    padding: 18px 0;
-    border-bottom: 1px solid rgba(207, 195, 178, 0.8);
-    background: rgba(245, 243, 238, 0.82);
-    backdrop-filter: blur(10px);
-    position: sticky;
-    top: 0;
-    z-index: 20;
-  }
-
-  .site-header-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-
-  .site-brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-    font-weight: 700;
-  }
-
-  .site-brand-mark {
-    width: 34px;
-    height: 34px;
-    border-radius: 999px;
-    display: grid;
-    place-items: center;
-    color: var(--brand);
-    background: var(--brand-soft);
-    border: 1px solid rgba(16, 42, 67, 0.12);
-    font-size: 18px;
-  }
-
-  .site-brand-text {
-    display: grid;
-    gap: 2px;
-  }
-
-  .site-brand-text strong {
-    font-size: 1rem;
-  }
-
-  .site-brand-text span {
-    font-size: 0.8rem;
-    color: var(--muted);
-  }
-
-  .site-nav,
-  .site-actions {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .nav-pill,
-  .ghost-link,
-  .dark-toggle {
-    text-decoration: none;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    padding: 8px 12px;
-    background: rgba(255, 255, 255, 0.75);
-    font-size: 0.92rem;
-    color: inherit;
-  }
-
-  .dark-toggle {
-    appearance: none;
-    cursor: pointer;
-  }
-
-  .nav-pill.is-current {
-    border-color: rgba(16, 42, 67, 0.2);
-    background: var(--brand-soft);
-    color: var(--brand);
-    font-weight: 700;
-  }
-
-  body.dark .site-header {
-    background: rgba(17, 17, 17, 0.82);
-    border-bottom-color: rgba(51, 51, 51, 0.85);
-  }
-
-  body.dark .site-brand-mark {
-    color: #eeeeee;
-    background: #202020;
-    border-color: rgba(255, 255, 255, 0.08);
-  }
-
-  body.dark .nav-pill,
-  body.dark .ghost-link,
-  body.dark .dark-toggle {
-    background: rgba(26, 26, 26, 0.92);
-  }
-
-  .page {
-    padding: 28px 0 56px;
-  }
-
-  .hero {
-    display: grid;
-    grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.95fr);
-    gap: 18px;
-    margin-bottom: 22px;
-  }
-
-  .hero-card,
-  .panel,
-  .footer-card {
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(221, 213, 201, 0.95);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-  }
-
-  body.dark .hero-card,
-  body.dark .panel,
-  body.dark .footer-card,
-  body.dark .doc-card,
-  body.dark .preset-item,
-  body.dark .doc-empty,
-  body.dark .table-wrap,
-  body.dark .callout,
-  body.dark .dropzone,
-  body.dark .doc-caret,
-  body.dark input[type="text"],
-  body.dark select,
-  body.dark button,
-  body.dark .button-link {
-    background: var(--surface);
-    border-color: var(--line);
-    color: var(--ink);
-    box-shadow: none;
-  }
-
-  body.dark .preset-item,
-  body.dark .doc-empty,
-  body.dark .doc-card,
-  body.dark .footer-card {
-    background: var(--surface-muted);
-  }
-
-  .hero-copy {
-    padding: 28px;
-  }
-
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--brand);
-    font-weight: 700;
-    font-size: 0.82rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  h1, h2, h3 {
-    margin: 0;
-    font-family: var(--font-serif);
-    letter-spacing: -0.02em;
-  }
-
-  h1 {
-    margin-top: 14px;
-    font-size: clamp(2.2rem, 5vw, 3.7rem);
-    line-height: 1.02;
-  }
-
-  .hero-copy p {
-    margin: 16px 0 0;
-    max-width: 65ch;
-    color: var(--muted);
-    font-size: 1.05rem;
-    line-height: 1.65;
-  }
-
-  .hero-meta {
-    margin-top: 18px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .meta-pill {
-    border: 1px solid var(--line);
-    background: var(--surface-muted);
-    border-radius: 999px;
-    padding: 9px 13px;
-    font-size: 0.9rem;
-    color: var(--muted);
-  }
-
-  .hero-side {
-    padding: 22px;
-    display: grid;
-    gap: 16px;
-    align-content: start;
-  }
-
-  .hero-side h2,
-  .panel-head h2,
-  .footer-card h2 {
-    font-size: 1.05rem;
-  }
-
-  .hero-side p,
-  .hero-side li,
-  .panel-copy,
-  .callout,
-  .footer-card,
-  .status,
-  .helper {
-    font-size: 0.96rem;
-    line-height: 1.6;
-  }
-
-  .hero-side ul,
-  .panel ul {
-    margin: 0;
-    padding-left: 18px;
-  }
-
-  .hero-side li,
-  .panel li {
-    margin: 8px 0;
-    color: var(--muted);
-  }
-
-  body.dark .doc-card summary:hover {
-    background: rgba(255, 255, 255, 0.03);
-  }
-
-  .layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.9fr);
-    gap: 22px;
-  }
-
-  .tool-stack,
-  .info-stack {
-    display: grid;
-    gap: 18px;
-  }
-
-  .panel {
-    overflow: hidden;
-  }
-
-  .panel-head {
-    padding: 20px 22px;
-    border-bottom: 1px solid rgba(221, 213, 201, 0.85);
-    display: flex;
-    justify-content: space-between;
-    gap: 14px;
-    align-items: start;
-    flex-wrap: wrap;
-  }
-
-  .panel-head small,
-  .muted {
-    color: var(--muted);
-  }
-
-  .panel-body {
-    padding: 20px 22px 22px;
-  }
-
-  .toolbar {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .toolbar-group {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-
-  button,
-  select,
-  input[type="text"],
-  input[type="file"] {
-    font: inherit;
-  }
-
-  button,
-  .button-link {
-    appearance: none;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    background: #fff;
-    color: var(--ink);
-    padding: 10px 15px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: transform 150ms ease, background 150ms ease, border-color 150ms ease;
-  }
-
-  button:hover:not(:disabled),
-  .button-link:hover,
-  button:focus-visible,
-  .button-link:focus-visible {
-    transform: translateY(-1px);
-    border-color: var(--brand);
-    outline: none;
-  }
-
-  button.primary {
-    background: var(--brand);
-    border-color: var(--brand);
-    color: var(--button-text);
-  }
-
-  button.primary:hover:not(:disabled),
-  button.primary:focus-visible {
-    background: #0a2238;
-    border-color: #0a2238;
-    color: #fff;
-  }
-
-  body.dark button.primary {
-    background: #eeeeee;
-    border-color: #eeeeee;
-    color: #111111;
-  }
-
-  body.dark button.primary:hover:not(:disabled),
-  body.dark button.primary:focus-visible {
-    background: #d6d6d6;
-    border-color: #d6d6d6;
-    color: #111111;
-  }
-
-  button:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-    transform: none;
-  }
-
-  .dropzone {
-    width: 100%;
-    border: 2px dashed var(--line-strong);
-    border-radius: 16px;
-    padding: 30px 22px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(248, 245, 239, 0.9));
-    text-align: center;
-  }
-
-  .dropzone.dragover {
-    border-color: var(--brand);
-    background: linear-gradient(180deg, rgba(234, 241, 248, 0.95), rgba(255, 255, 255, 0.96));
-  }
-
-  body.dark .dropzone {
-    background: linear-gradient(180deg, rgba(26, 26, 26, 0.98), rgba(20, 20, 20, 0.98));
-  }
-
-  body.dark .dropzone.dragover {
-    background: linear-gradient(180deg, rgba(42, 42, 42, 0.98), rgba(24, 24, 24, 0.98));
-  }
-
-  .dropzone strong {
-    display: block;
-    font-size: 1.02rem;
-    margin-bottom: 8px;
-  }
-
-  .status {
-    min-height: 24px;
-    color: var(--muted);
-  }
-
-  .status.err { color: #8f1d1d; }
-  .status.ok { color: var(--ok); }
-
-  .split-fields {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-
-  .field {
-    min-width: 0;
-  }
-
-  label {
-    display: block;
-    font-weight: 600;
-    font-size: 0.94rem;
-    margin-bottom: 6px;
-  }
-
-  input[type="text"],
-  select {
-    width: 100%;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 11px 12px;
-    background: #fff;
-    color: var(--ink);
-  }
-
-  input[type="text"]:focus-visible,
-  select:focus-visible {
-    outline: 2px solid rgba(16, 42, 67, 0.15);
-    border-color: var(--brand);
-  }
-
-  .helper {
-    color: var(--muted);
-  }
-
-  .preset-list {
-    display: grid;
-    gap: 10px;
-    margin-top: 14px;
-  }
-
-  .preset-item,
-  .doc-empty {
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    background: var(--surface-muted);
-    padding: 14px 15px;
-  }
-
-  .preset-item {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .preset-item strong {
-    display: block;
-    margin-bottom: 2px;
-  }
-
-  .doc-list {
-    display: grid;
-    gap: 14px;
-  }
-
-  .doc-card {
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    background: var(--surface-muted);
-    overflow: hidden;
-  }
-
-  .doc-card summary {
-    list-style: none;
-    cursor: pointer;
-    padding: 16px 18px;
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    align-items: center;
-  }
-
-  .doc-card summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .doc-card summary:hover {
-    background: rgba(16, 42, 67, 0.03);
-  }
-
-  .doc-heading {
-    min-width: 0;
-  }
-
-  .doc-title {
-    font-weight: 700;
-    word-break: break-word;
-  }
-
-  .doc-subtitle {
-    color: var(--muted);
-    font-size: 0.9rem;
-    margin-top: 4px;
-  }
-
-  .doc-caret {
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    padding: 8px 11px;
-    font-size: 0.86rem;
-    white-space: nowrap;
-    background: #fff;
-  }
-
-  .doc-card[open] .doc-caret::before {
-    content: "Collapse";
-  }
-
-  .doc-card:not([open]) .doc-caret::before {
-    content: "Expand";
-  }
-
-  .doc-body {
-    padding: 0 18px 18px;
-    display: grid;
-    gap: 14px;
-  }
-
-  .mini-toolbar {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    align-items: end;
-  }
-
-  .mini-toolbar .field {
-    flex: 1 1 240px;
-  }
-
-  .table-wrap {
-    overflow-x: auto;
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    background: #fff;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  th, td {
-    padding: 12px 14px;
-    border-bottom: 1px solid rgba(221, 213, 201, 0.85);
-    text-align: left;
-    vertical-align: top;
-  }
-
-  th {
-    color: var(--muted);
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  body.dark th,
-  body.dark td,
-  body.dark .footer-bottom {
-    border-color: rgba(51, 51, 51, 0.9);
-  }
-
-  tbody tr:last-child td {
-    border-bottom: none;
-  }
-
-  .checkbox-cell {
-    width: 92px;
-    white-space: nowrap;
-  }
-
-  .checkbox-wrap {
-    display: inline-flex;
-    gap: 8px;
-    align-items: center;
-  }
-
-  .count-cell {
-    width: 110px;
-    text-align: right;
-    color: var(--muted);
-    white-space: nowrap;
-  }
-
-  .callout {
-    border-radius: 14px;
-    border: 1px solid var(--line);
-    padding: 14px 15px;
-    background: #fff;
-  }
-
-  .callout strong {
-    display: block;
-    margin-bottom: 3px;
-  }
-
-  .callout.info {
-    background: var(--brand-soft);
-    border-color: rgba(16, 42, 67, 0.12);
-  }
-
-  .callout.warn {
-    background: var(--warn-soft);
-    border-color: rgba(122, 75, 4, 0.15);
-  }
-
-  .callout.ok {
-    background: var(--ok-soft);
-    border-color: rgba(21, 94, 59, 0.12);
-  }
-
-  .footer-card {
-    margin-top: 24px;
-    padding: 22px;
-    display: grid;
-    gap: 16px;
-  }
-
-  .footer-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 18px;
-  }
-
-  .footer-card p,
-  .footer-card li {
-    color: var(--muted);
-    margin: 0;
-  }
-
-  .footer-card ul {
-    margin: 0;
-    padding-left: 18px;
-  }
-
-  .footer-card a {
-    text-decoration: none;
-  }
-
-  .footer-bottom {
-    padding-top: 12px;
-    border-top: 1px solid rgba(221, 213, 201, 0.85);
-    color: var(--muted);
-    font-size: 0.92rem;
-  }
-
-  @media (max-width: 980px) {
-    .hero,
-    .layout,
-    .footer-grid,
-    .split-fields {
-      grid-template-columns: 1fr;
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Primary SEO -->
+  <title>Redline Name Cleaner — Review Identity Cleanup for Word</title>
+  <meta name="description" content="Standardize comment and tracked-change names in Word documents before external circulation. Fully client-side, private, and open source.">
+  <meta name="author" content="Kirin Chang">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://lawreview.tools/docx-redline-name-cleaner/">
+  <meta name="theme-color" content="#0C0C0B" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="lawreview.tools">
+  <meta property="og:title" content="Redline Name Cleaner — Review Identity Cleanup for Word">
+  <meta property="og:description" content="Standardize comment and tracked-change names in Word redlines before external circulation. 100% private and fully in-browser.">
+  <meta property="og:url" content="https://lawreview.tools/docx-redline-name-cleaner/">
+  <meta property="og:image" content="https://lawreview.tools/og-redline-name-cleaner.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Redline Name Cleaner — standardize Word review identities before sharing">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@chengchi_chang">
+  <meta name="twitter:creator" content="@chengchi_chang">
+  <meta name="twitter:title" content="Redline Name Cleaner — Review Identity Cleanup for Word">
+  <meta name="twitter:description" content="Standardize comment and tracked-change names in Word redlines before external circulation. 100% private and fully in-browser.">
+  <meta name="twitter:image" content="https://lawreview.tools/og-redline-name-cleaner.png">
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Redline Name Cleaner",
+    "url": "https://lawreview.tools/docx-redline-name-cleaner/",
+    "description": "Standardize comment and tracked-change names in Word documents before external circulation. Fully client-side, private, and open source.",
+    "applicationCategory": "LegalApplication",
+    "applicationSubCategory": "Document Cleanup",
+    "operatingSystem": "Windows, macOS, Linux",
+    "browserRequirements": "Requires a modern web browser with JavaScript enabled",
+    "featureList": [
+      "Standardizes comment and tracked-change names in .docx files",
+      "Processes multiple Word documents in one batch",
+      "Stores reusable replacement-name presets in your browser",
+      "Exports cleaned files individually or as a zip archive",
+      "100% client-side — files never leave your browser"
+    ],
+    "image": "https://lawreview.tools/og-redline-name-cleaner.png",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "license": "https://www.gnu.org/licenses/agpl-3.0.html",
+    "author": { "@type": "Person", "name": "Kirin Chang", "url": "https://kirinchang.com" }
+  }
+  </script>
+
+  <script src="assets/vendor/jszip.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Theme tokens (matches PermaDrop / SupraDrop) ──────────────────── */
+    :root {
+      --bg:             #f4f4f5;
+      --surface:        #ffffff;
+      --border:         #e4e4e7;
+      --border-input:   #d4d4d8;
+      --text:           #18181b;
+      --text-2:         #3f3f46;
+      --text-muted:     #71717a;
+      --text-faint:     #a1a1aa;
+      --hover-bg:       #fafafa;
+      --preview-bg:     #f9fafb;
+      --divider:        #f4f4f5;
+      --privacy-bg:     #f0fdf4;
+      --privacy-border: #bbf7d0;
+      --privacy-text:   #166534;
+      --note-bg:        #fffbeb;
+      --note-border:    #fde68a;
+      --note-text:      #78350f;
+      --error-bg:       #fef2f2;
+      --error-border:   #fecaca;
+      --error-text:     #991b1b;
+      --warn-bg:        #fffbeb;
+      --warn-border:    #fde68a;
+      --warn-text:      #92400e;
+      --ok-bg:          #f0fdf4;
+      --ok-border:      #bbf7d0;
+      --ok-text:        #166534;
+      --info-bg:        #eff6ff;
+      --info-border:    #bfdbfe;
+      --info-text:      #1e40af;
+    }
+    body.dark {
+      --bg:             #09090b;
+      --surface:        #18181b;
+      --border:         #27272a;
+      --border-input:   #3f3f46;
+      --text:           #fafafa;
+      --text-2:         #d4d4d8;
+      --text-muted:     #a1a1aa;
+      --text-faint:     #71717a;
+      --hover-bg:       #1c1c1f;
+      --preview-bg:     #111113;
+      --divider:        #27272a;
+      --privacy-bg:     #052e16;
+      --privacy-border: #14532d;
+      --privacy-text:   #86efac;
+      --note-bg:        #1c1408;
+      --note-border:    #78350f;
+      --note-text:      #fde68a;
+      --error-bg:       #1f0a0a;
+      --error-border:   #7f1d1d;
+      --error-text:     #fca5a5;
+      --warn-bg:        #1c1408;
+      --warn-border:    #78350f;
+      --warn-text:      #fde68a;
+      --ok-bg:          #052e16;
+      --ok-border:      #14532d;
+      --ok-text:        #86efac;
+      --info-bg:        #172554;
+      --info-border:    #1e3a8a;
+      --info-text:      #93c5fd;
     }
 
-    .page {
-      padding-top: 18px;
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg); color: var(--text);
+      min-height: 100vh; transition: background 0.2s, color 0.2s;
     }
-  }
-</style>
+    .container { max-width: 680px; margin: 0 auto; padding: 40px 20px 80px; }
+    h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+    .phase-label { display: inline-block; font-family: "IBM Plex Sans", system-ui, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); border: 1px solid var(--border); border-radius: 4px; padding: 3px 8px; margin-bottom: 14px; }
+    .subtitle { font-size: 14px; color: var(--text-muted); margin-top: 6px; line-height: 1.6; }
+    .trust-signals { font-size: 12px; color: var(--text-muted); margin-top: 10px; display: flex; align-items: center; gap: 0; flex-wrap: wrap; letter-spacing: 0.01em; }
+    .trust-signals .tsep { margin: 0 7px; opacity: 0.35; }
+
+    /* Cards */
+    .card { background: var(--surface); border-radius: 10px; padding: 22px 24px; margin-top: 16px; border: 1px solid var(--border); }
+    .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .card-title { font-size: 15px; font-weight: 600; flex: 1; }
+    .step-badge { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+    .step-badge.active   { background: var(--text); color: var(--surface); }
+    .step-badge.done     { background: #16a34a; color: white; }
+    .step-badge.inactive { background: var(--border); color: var(--text-faint); }
+
+    /* Buttons */
+    button {
+      padding: 6px 12px; border-radius: 7px; font-size: 12px; font-weight: 500;
+      cursor: pointer; border: 1px solid var(--border); background: var(--surface);
+      color: var(--text-muted); transition: background 0.15s, opacity 0.15s;
+      font-family: inherit;
+    }
+    button:hover:not(:disabled) { background: var(--hover-bg); }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-primary, button.primary {
+      background: var(--text); color: var(--surface); border-color: var(--text);
+      padding: 8px 16px; font-size: 13px;
+    }
+    .btn-primary:hover:not(:disabled), button.primary:hover:not(:disabled) { opacity: 0.85; }
+    .btn-primary:disabled, button.primary:disabled { background: var(--text-faint); border-color: var(--text-faint); cursor: not-allowed; opacity: 1; }
+    .btn-ghost {
+      background: transparent; color: var(--text-muted);
+      border: 1px solid var(--border); font-size: 12px; padding: 5px 10px;
+    }
+    .btn-ghost:hover:not(:disabled) { background: var(--hover-bg); }
+    .btn-ghost:disabled { opacity: 0.4; cursor: not-allowed; }
+    .dark-toggle { background: none; border: 1px solid var(--border); border-radius: 99px; padding: 4px 11px; font-size: 12px; color: var(--text-muted); cursor: pointer; }
+    .dark-toggle:hover { background: var(--hover-bg); }
+
+    /* Drop zone */
+    .drop-zone {
+      border: 2px dashed var(--border-input); border-radius: 8px; padding: 32px;
+      text-align: center; cursor: pointer; transition: border-color 0.15s, background 0.15s;
+      background: transparent; width: 100%; display: block;
+    }
+    .drop-zone:hover, .drop-zone.dragover { border-color: var(--text); background: var(--hover-bg); }
+    .drop-zone p { font-size: 14px; color: var(--text-muted); margin-top: 6px; }
+    .drop-zone strong { color: var(--text); font-size: 14px; display: block; }
+    .file-input { display: none; }
+
+    /* Privacy note */
+    .privacy-note { display: flex; align-items: flex-start; gap: 8px; background: var(--privacy-bg); border: 1px solid var(--privacy-border); border-radius: 7px; padding: 10px 13px; margin-top: 10px; }
+    .privacy-note p { font-size: 12px; color: var(--privacy-text); line-height: 1.5; }
+
+    /* Status messages */
+    .status { font-size: 13px; color: var(--text-muted); margin-top: 8px; min-height: 20px; line-height: 1.5; }
+    .status.err { color: #dc2626; }
+    .status.ok  { color: #16a34a; }
+
+    /* Callouts */
+    .callout { border-radius: 7px; border: 1px solid var(--border); padding: 10px 13px; font-size: 13px; line-height: 1.5; background: var(--preview-bg); color: var(--text-2); }
+    .callout strong { display: block; margin-bottom: 3px; font-size: 13px; font-weight: 600; }
+    .callout.info { background: var(--info-bg); border-color: var(--info-border); color: var(--info-text); }
+    .callout.warn { background: var(--warn-bg); border-color: var(--warn-border); color: var(--warn-text); }
+    .callout.ok   { background: var(--ok-bg);   border-color: var(--ok-border);   color: var(--ok-text); }
+
+    /* Misc */
+    .divider { height: 1px; background: var(--divider); margin: 14px 0; }
+    .hint { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+    .muted { color: var(--text-muted); }
+    .field-label { font-size: 13px; font-weight: 500; color: var(--text-2); margin-bottom: 5px; }
+    label { font-size: 12px; font-weight: 500; color: var(--text-2); display: block; margin-bottom: 4px; }
+
+    /* Inputs */
+    input[type=text], select {
+      width: 100%; padding: 8px 11px; border: 1px solid var(--border-input); border-radius: 7px;
+      font-size: 13px; outline: none; transition: border-color 0.15s, box-shadow 0.15s;
+      background: var(--surface); color: var(--text); font-family: inherit;
+    }
+    input[type=text]:focus, select:focus { border-color: var(--text); box-shadow: 0 0 0 3px rgba(128,128,128,0.12); }
+
+    /* Input grid for preset form */
+    .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 480px) { .input-row { grid-template-columns: 1fr; } }
+
+    /* Toolbar rows */
+    .toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+    .toolbar-group { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+    /* Preset list */
+    .preset-list { margin-top: 12px; display: grid; gap: 8px; }
+    .preset-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; background: var(--preview-bg); border: 1px solid var(--border); border-radius: 7px; font-size: 13px; flex-wrap: wrap; }
+    .preset-item strong { display: block; font-size: 13px; }
+    .preset-item .muted { font-size: 12px; margin-top: 1px; }
+
+    /* Document list */
+    .doc-list { display: grid; gap: 10px; }
+    .doc-empty { font-size: 13px; color: var(--text-muted); padding: 4px 0; line-height: 1.5; }
+    .doc-card { background: var(--preview-bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .doc-card summary { list-style: none; cursor: pointer; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .doc-card summary::-webkit-details-marker { display: none; }
+    .doc-card summary:hover { background: var(--hover-bg); }
+    .doc-heading { min-width: 0; flex: 1; }
+    .doc-title { font-size: 13px; font-weight: 600; word-break: break-word; }
+    .doc-subtitle { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .doc-caret { font-size: 11px; color: var(--text-faint); border: 1px solid var(--border); border-radius: 5px; padding: 3px 8px; background: var(--surface); white-space: nowrap; flex-shrink: 0; }
+    .doc-card[open] .doc-caret::before { content: "Collapse"; }
+    .doc-card:not([open]) .doc-caret::before { content: "Expand"; }
+    .doc-body { padding: 0 14px 14px; display: grid; gap: 10px; border-top: 1px solid var(--border); padding-top: 14px; }
+
+    /* Mini toolbar inside doc cards */
+    .mini-toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-end; }
+    .mini-toolbar .field { flex: 1 1 200px; min-width: 0; }
+
+    /* Table */
+    .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 9px 11px; border-bottom: 1px solid var(--divider); text-align: left; vertical-align: top; }
+    th { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; background: var(--preview-bg); }
+    tbody tr:last-child td { border-bottom: none; }
+    .checkbox-cell { width: 80px; }
+    .checkbox-wrap { display: inline-flex; gap: 6px; align-items: center; font-size: 12px; cursor: pointer; }
+    .count-cell { width: 70px; text-align: right; color: var(--text-muted); }
+  </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
@@ -1424,229 +905,128 @@ body.dark .toast-success { background: #EEEEEE !important; color: #111111 !impor
 }());
 </script>
 
-<header class="site-header">
-  <div class="shell site-header-inner">
-    <a class="site-brand" href="https://lawreview.tools/">
-      <span class="site-brand-mark">⚖</span>
-      <span class="site-brand-text">
-        <strong>lawreview.tools</strong>
-        <span>Free, private Bluebook tools</span>
-      </span>
-    </a>
-    <nav class="site-nav" aria-label="Tool navigation">
-      <a class="nav-pill" href="https://lawreview.tools/zotero-perma-archiver/">Zotero Plugin</a>
-      <a class="nav-pill" href="https://lawreview.tools/permadrop/">PermaDrop</a>
-      <a class="nav-pill" href="https://lawreview.tools/supradrop/">SupraDrop</a>
-      <span class="nav-pill is-current">Redline Name Cleaner</span>
-    </nav>
-    <div class="site-actions">
-      <button type="button" class="dark-toggle" aria-label="Toggle dark mode">Dark mode</button>
-      <a class="ghost-link" href="https://github.com/kirinccchang/docx-redline-name-cleaner">GitHub</a>
+<div class="container">
+
+  <!-- ── Page Header ──────────────────────────────────────────────────── -->
+  <div style="margin-bottom: 28px;">
+    <div class="phase-label">Submission Phase · Cleanup</div>
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+      <h1>Redline Name Cleaner</h1>
+      <button class="dark-toggle" aria-label="Toggle dark mode">Dark mode</button>
+    </div>
+    <p class="subtitle">
+      Standardize comment and tracked-change author names in Word documents before you share them
+      externally — rename internal editors or research assistants into a clean outward-facing label
+      without sending a single file to any server.
+    </p>
+    <p class="trust-signals">
+      <span>Free &amp; open source</span><span class="tsep">·</span>
+      <span>100% in-browser</span><span class="tsep">·</span>
+      <span>Nothing uploaded</span><span class="tsep">·</span>
+      <span>Multiple files</span>
+    </p>
+    <p style="margin-top:8px; font-size:13px; color:var(--text-muted);">
+      <a href="https://github.com/kirinccchang/docx-redline-name-cleaner" target="_blank" rel="noopener noreferrer"
+         style="color:var(--text-muted); text-decoration:underline; text-underline-offset:2px;">
+        GitHub — source &amp; documentation (AGPL-3.0) →
+      </a>
+    </p>
+  </div>
+
+  <!-- ── Step 1: Upload ───────────────────────────────────────────────── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="step-badge active">1</div>
+      <div class="card-title">Upload Word Document(s)</div>
+      <div style="display:flex; gap:6px; flex-wrap:wrap; margin-left:auto;">
+        <button class="btn-ghost" id="addFilesBtn">Add files</button>
+        <button class="btn-ghost" id="downloadAllBtn">Download all</button>
+        <button class="btn-ghost" id="clearAllBtn">Clear all</button>
+      </div>
+    </div>
+
+    <button type="button" class="drop-zone" id="dropzone">
+      <strong>Click to choose or drag &amp; drop .docx files</strong>
+      <p>Multiple files allowed &mdash; files stay in your browser.</p>
+    </button>
+    <input type="file" id="fileInput" accept=".docx" multiple class="file-input">
+    <div id="uploadStatus" class="status" aria-live="polite"></div>
+
+    <div class="privacy-note">
+      <svg width="14" height="14" viewBox="0 0 20 20" fill="none" style="flex-shrink:0;margin-top:1px;" aria-hidden="true">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M10 1.667a5 5 0 0 1 5 5v1.666h.833A1.667 1.667 0 0 1 17.5 10v6.667A1.667 1.667 0 0 1 15.833 18H4.167A1.667 1.667 0 0 1 2.5 16.667V10a1.667 1.667 0 0 1 1.667-1.667H5V6.667a5 5 0 0 1 5-5Zm0 8.333a1.667 1.667 0 1 0 0 3.333A1.667 1.667 0 0 0 10 10Zm0-6.667A3.333 3.333 0 0 0 6.667 6.667v1.666h6.666V6.667A3.333 3.333 0 0 0 10 3.333Z" fill="currentColor"/>
+      </svg>
+      <p>Your documents are processed entirely in your browser. No file is ever uploaded to any server.</p>
     </div>
   </div>
-</header>
 
-<main class="page">
-  <div class="shell">
-    <section class="hero">
-      <article class="hero-card hero-copy">
-        <div class="eyebrow">Submission Phase · Cleanup</div>
-        <h1>Redline Name Cleaner</h1>
-        <p>
-          Standardize comment and tracked-change names in Word documents before you share them
-          externally. Rename internal editors, research assistants, or other review identities into
-          a clean outward-facing label without sending the document to any server.
-        </p>
-        <div class="hero-meta">
-          <span class="meta-pill">Free &amp; open source</span>
-          <span class="meta-pill">100% in-browser</span>
-          <span class="meta-pill">Multiple files supported</span>
-        </div>
-      </article>
+  <!-- ── Step 2: Presets ──────────────────────────────────────────────── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="step-badge inactive">2</div>
+      <div class="card-title">Saved Presets</div>
+    </div>
 
-      <aside class="hero-card hero-side">
-        <div>
-          <h2>What It Does</h2>
-          <ul>
-            <li>Detects comment and revision names across one or more <code>.docx</code> files.</li>
-            <li>Lets you keep file-specific settings separate so different documents are never mixed together.</li>
-            <li>Makes author merges explicit before download, so no identity collapse happens by surprise.</li>
-          </ul>
-        </div>
-        <div class="callout info">
-          <strong>Privacy</strong>
-          Your documents are processed directly in your browser. No file is uploaded. No server receives your document content.
-        </div>
-      </aside>
-    </section>
-
-    <section class="layout">
-      <div class="tool-stack">
-        <section class="panel">
-          <div class="panel-head">
-            <div>
-              <small>1</small>
-              <h2>Upload Word Document(s)</h2>
-            </div>
-            <div class="toolbar-group">
-              <button type="button" id="addFilesBtn">Add files</button>
-              <button type="button" id="downloadAllBtn">Download all edited files</button>
-              <button type="button" id="clearAllBtn">Clear all</button>
-            </div>
-          </div>
-          <div class="panel-body">
-            <button type="button" class="dropzone" id="dropzone">
-              <strong>Click to choose or drag &amp; drop <code>.docx</code> files</strong>
-              <span class="muted">Multiple files allowed. Files stay in your browser.</span>
-            </button>
-            <input type="file" id="fileInput" accept=".docx" multiple hidden>
-            <div id="uploadStatus" class="status" aria-live="polite"></div>
-          </div>
-        </section>
-
-        <section class="panel">
-          <div class="panel-head">
-            <div>
-              <small>2</small>
-              <h2>Saved Presets In This Browser</h2>
-            </div>
-          </div>
-          <div class="panel-body">
-            <div class="split-fields">
-              <div class="field">
-                <label for="presetLabel">Preset label</label>
-                <input id="presetLabel" type="text" placeholder="Example: Public editor identity" autocomplete="off">
-              </div>
-              <div class="field">
-                <label for="presetValue">Replacement name</label>
-                <input id="presetValue" type="text" placeholder="Example: NYU Law Review" autocomplete="off">
-              </div>
-            </div>
-            <div class="toolbar" style="margin-top:14px;">
-              <div class="helper">Save a replacement name you use often, then apply it to selected people inside any file.</div>
-              <button type="button" id="savePresetBtn">Save preset</button>
-            </div>
-            <div id="presetStatus" class="status" aria-live="polite"></div>
-            <div id="presetList" class="preset-list"></div>
-          </div>
-        </section>
-
-        <section class="panel">
-          <div class="panel-head">
-            <div>
-              <small>3</small>
-              <h2>Review Detected Names</h2>
-            </div>
-            <div class="panel-copy muted">Each file keeps its own selections and replacement names.</div>
-          </div>
-          <div class="panel-body">
-            <div id="documentList" class="doc-list"></div>
-            <div id="emptyState" class="doc-empty muted">
-              No documents loaded yet. Add one or more <code>.docx</code> files to begin.
-            </div>
-          </div>
-        </section>
+    <div class="input-row">
+      <div>
+        <div class="field-label">Preset label</div>
+        <input id="presetLabel" type="text" placeholder="e.g. James Madison" autocomplete="off">
       </div>
-
-      <aside class="info-stack">
-        <section class="panel">
-          <div class="panel-head">
-            <div>
-              <h2>How To Use</h2>
-            </div>
-          </div>
-          <div class="panel-body">
-            <ul>
-              <li>Upload one file or a batch of files.</li>
-              <li>Open a file card to review the names Word found in comments and tracked changes.</li>
-              <li>Select only the people you want to unify, then apply a typed name or a saved preset.</li>
-              <li>Download each edited file separately, or bundle all edited files into one zip.</li>
-            </ul>
-          </div>
-        </section>
-
-        <section class="panel">
-          <div class="panel-head">
-            <div>
-              <h2>Important Merge Behavior</h2>
-            </div>
-          </div>
-          <div class="panel-body">
-            <div class="callout warn">
-              <strong>Word treats exact output matches as one visible identity.</strong>
-              If two or more original names in the same document are changed to the exact same replacement name,
-              Word will display those comments and revisions as coming from the same visible author identity.
-            </div>
-          </div>
-        </section>
-
-        <section class="panel">
-          <div class="panel-head">
-            <div>
-              <h2>Sister Tools</h2>
-            </div>
-          </div>
-          <div class="panel-body">
-            <ul>
-              <li><a href="https://lawreview.tools/permadrop/">PermaDrop</a> batch-archives URLs in Word documents to perma.cc.</li>
-              <li><a href="https://lawreview.tools/supradrop/">SupraDrop</a> audits Bluebook citation logic across footnotes.</li>
-            </ul>
-          </div>
-        </section>
-
-        <section class="panel">
-          <div class="panel-head">
-            <div>
-              <h2>Status</h2>
-            </div>
-          </div>
-          <div class="panel-body">
-            <div id="sideSummary" class="callout ok">
-              <strong>Ready</strong>
-              Upload files to start building per-document name mappings.
-            </div>
-          </div>
-        </section>
-      </aside>
-    </section>
-
-    <section class="footer-card">
-      <div class="footer-grid">
-        <div>
-          <h2>lawreview.tools</h2>
-          <p>Free, private Bluebook tools for law review editors and legal scholars.</p>
-        </div>
-        <div>
-          <h2>Tools</h2>
-          <ul>
-            <li><a href="https://lawreview.tools/zotero-perma-archiver/">Zotero Plugin</a></li>
-            <li><a href="https://lawreview.tools/permadrop/">PermaDrop</a></li>
-            <li><a href="https://lawreview.tools/supradrop/">SupraDrop</a></li>
-          </ul>
-        </div>
-        <div>
-          <h2>This Tool</h2>
-          <ul>
-            <li><a href="https://github.com/kirinccchang/docx-redline-name-cleaner">Source Code</a></li>
-            <li><a href="https://github.com/kirinccchang/docx-redline-name-cleaner/releases">Releases</a></li>
-            <li><a href="https://github.com/kirinccchang/docx-redline-name-cleaner/issues">Report a Bug</a></li>
-          </ul>
-        </div>
-        <div>
-          <h2>Legal</h2>
-          <ul>
-            <li><a href="LICENSE">AGPL v3 License</a></li>
-            <li><a href="THIRD_PARTY_LICENSES.md">Third-party Licenses</a></li>
-            <li><a href="privacy.html">Privacy Policy</a></li>
-          </ul>
-        </div>
+      <div>
+        <div class="field-label">Replacement name</div>
+        <input id="presetValue" type="text" placeholder="e.g. Princeton Law Review" autocomplete="off">
       </div>
-      <div class="footer-bottom">
-        © 2026 <a href="https://kirinchang.com">Kirin Chang</a> · <a href="https://lawreview.tools/">lawreview.tools</a> · Open source under AGPL v3
-      </div>
-    </section>
+    </div>
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:10px; flex-wrap:wrap;">
+      <p class="hint">Save a name you reuse often, then apply it per-file below.</p>
+      <button class="btn-primary" id="savePresetBtn">Save preset</button>
+    </div>
+    <div id="presetStatus" class="status" aria-live="polite"></div>
+    <div id="presetList" class="preset-list"></div>
   </div>
-</main>
+
+  <!-- ── Step 3: Review names ─────────────────────────────────────────── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="step-badge inactive">3</div>
+      <div class="card-title">Review Detected Names</div>
+    </div>
+    <div id="emptyState" class="doc-empty">No documents loaded yet. Add one or more .docx files above to begin.</div>
+    <div id="documentList" class="doc-list"></div>
+  </div>
+
+  <!-- ── Status + merge warning ───────────────────────────────────────── -->
+  <div class="card" style="margin-top:16px;">
+    <div id="sideSummary" class="callout ok">
+      <strong>Ready</strong>Upload files to start building per-document name mappings.
+    </div>
+    <div class="divider"></div>
+    <div class="callout warn">
+      <strong>About identity merging</strong>
+      If two names in the same document are mapped to the exact same replacement name,
+      Word will treat those comments and revisions as coming from the same visible author.
+    </div>
+  </div>
+
+</div><!-- /.container -->
+
+<!-- ── Footer ───────────────────────────────────────────────────────── -->
+<footer id="tool-footer" style="max-width:680px; margin:0 auto; padding:28px 20px 48px; display:flex; align-items:center; justify-content:center;">
+  <p style="font-size:12px; color:var(--text-faint); text-align:center; line-height:1.8;">
+    Made by <a href="https://kirinchang.com" target="_blank" rel="noopener noreferrer"
+               style="color:var(--text-muted); text-decoration:underline; text-underline-offset:2px;">Kirin Chang</a>
+    &nbsp;·&nbsp;
+    <a href="https://github.com/kirinccchang/docx-redline-name-cleaner" target="_blank" rel="noopener noreferrer"
+       style="color:var(--text-muted); text-decoration:underline; text-underline-offset:2px;">GitHub</a>
+    &nbsp;·&nbsp; Free &amp; Open Source (AGPL-3.0)
+    &nbsp;·&nbsp;
+    <a href="https://lawreview.tools/permadrop/" target="_blank" rel="noopener noreferrer"
+       style="color:var(--text-muted); text-decoration:underline; text-underline-offset:2px;">PermaDrop</a>
+    &nbsp;·&nbsp;
+    <a href="https://lawreview.tools/supradrop/" target="_blank" rel="noopener noreferrer"
+       style="color:var(--text-muted); text-decoration:underline; text-underline-offset:2px;">SupraDrop</a>
+  </p>
+</footer>
 
 <script>
 (() => {
@@ -1941,7 +1321,7 @@ body.dark .toast-success { background: #EEEEEE !important; color: #111111 !impor
           </td>
           <td>
             <strong>${escapeHtml(author.name)}</strong>
-            <div class="muted">Leave the replacement blank to keep this name unchanged.</div>
+            <div class="muted" style="font-size:11px;margin-top:2px;">Leave blank to keep unchanged.</div>
           </td>
           <td>
             <input
@@ -1979,7 +1359,7 @@ body.dark .toast-success { background: #EEEEEE !important; color: #111111 !impor
                 id="bulk-name-${documentRecord.id}"
                 type="text"
                 value="${escapeHtml(documentRecord.bulkName)}"
-                placeholder="Example: NYU Law Review or Professor Smith"
+                placeholder="e.g. Princeton Law Review or Professor Smith"
                 autocomplete="off"
                 data-action="bulk-input"
                 data-document-id="${documentRecord.id}"
@@ -2021,11 +1401,11 @@ body.dark .toast-success { background: #EEEEEE !important; color: #111111 !impor
             <div class="toolbar-group">
               <button type="button" data-action="select-all" data-document-id="${documentRecord.id}">Select all</button>
               <button type="button" data-action="select-none" data-document-id="${documentRecord.id}">Select none</button>
-              <button type="button" data-action="clear-mappings" data-document-id="${documentRecord.id}">Clear replacement names</button>
+              <button type="button" data-action="clear-mappings" data-document-id="${documentRecord.id}">Clear names</button>
               <button type="button" data-action="remove-document" data-document-id="${documentRecord.id}">Remove file</button>
             </div>
             <button type="button" class="primary" data-action="download-document" data-document-id="${documentRecord.id}" ${documentRecord.isBusy ? "disabled" : ""}>
-              ${documentRecord.isBusy ? "Working…" : "Apply changes and download"}
+              ${documentRecord.isBusy ? "Working…" : "Apply &amp; download"}
             </button>
           </div>
 
