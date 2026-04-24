@@ -9,6 +9,7 @@ Source code for **[lawreview.tools](https://lawreview.tools)** — a free, open-
 | **[Zotero Perma Archiver](https://lawreview.tools/zotero)** | [zotero-perma-archiver](https://github.com/kirinccchang/zotero-perma-archiver) | Auto-archives URLs to perma.cc as you save items in Zotero |
 | **[PermaDrop](https://lawreview.tools/permadrop/)** | [permadrop](https://github.com/kirinccchang/permadrop) | Batch-archives all URLs in a `.docx` to perma.cc |
 | **[SupraDrop](https://lawreview.tools/supradrop/)** | [supradrop](https://github.com/kirinccchang/supradrop) | Audits supra, Id., signal parentheticals, and pincites across all footnotes |
+| **[cite.review](https://cite.review)** | [cite.review](https://github.com/kirinccchang/cite.review) | Verify citations in legal writing: catch hallucinated authorities before filing |
 | **[Redline Name Cleaner](https://lawreview.tools/docx-redline-name-cleaner/)** | [docx-redline-name-cleaner](https://github.com/kirinccchang/docx-redline-name-cleaner) | Standardizes comment and tracked-change names across Word redlines before external circulation |
 
 Each tool has its own repository with full documentation.
